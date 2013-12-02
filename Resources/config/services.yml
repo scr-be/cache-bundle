@@ -1,0 +1,16 @@
+parameters:
+    scribe.cache.class:      Scribe\SwimBundle\Component\Caching\ApcCache
+    scribe.cache.twig.class: Scribe\SwimBundle\Templating\Extension\CacheExtension
+
+services:
+    scribe.cache:
+        class: %scribe.cache.class%
+        arguments: [ "@service_container" ]
+        tags:
+            - { name: caching }
+
+    scribe.cache.twig:
+        class:     "%scribe.cache.twig.class%"
+        arguments: [ "@service_container" ]
+        tags:
+            - { name: twig.extension, alias: cache.twig }

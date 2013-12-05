@@ -1,16 +1,17 @@
 parameters:
-    scribe.cache.class:      Scribe\SwimBundle\Component\Caching\ApcCache
-    scribe.cache.twig.class: Scribe\SwimBundle\Templating\Extension\CacheExtension
+
+    scribe.cache.userland.class:      Scribe\CacheBundle\Component\Caching\UserlandApcuCache
+    scribe.cache.userland.twig.class: Scribe\CacheBundle\Templating\Extension\UserlandCacheExtension
 
 services:
-    scribe.cache:
-        class: %scribe.cache.class%
-        arguments: [ "@service_container" ]
+
+    scribe.cache.userland:
+        class:     %scribe.cache.userland.class%
         tags:
             - { name: caching }
 
-    scribe.cache.twig:
-        class:     "%scribe.cache.twig.class%"
-        arguments: [ "@service_container" ]
+    scribe.cache.userland.twig:
+        class:     "%scribe.cache.userland.twig.class%"
+        arguments: [ "@scribe.cache.userland" ]
         tags:
             - { name: twig.extension, alias: cache.twig }

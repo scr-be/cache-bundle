@@ -1,7 +1,7 @@
 {
     "name": "scribe/cache-bundle",
     "description": "Simple and extendable userland caching abstraction layer with default support for apcu",
-    "keywords": ["Symfony2", "Cache", "APC", "APCU"],
+    "keywords": ["symfony2", "cache", "apc", "apcu", "userland cache"],
     "type": "symfony-bundle",
     "homepage": "https://github.com/scribenet/ScribeCacheBundle",
     "license": "MIT",

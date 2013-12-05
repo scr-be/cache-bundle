@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\SwimBundle\DependencyInjection;
+namespace Scribe\CacheBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader;

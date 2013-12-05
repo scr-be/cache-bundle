@@ -17,10 +17,5 @@
     "autoload": {
         "psr-0": { "Scribe\\CacheBundle": "" }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.x-dev"
-        }
-    },
     "target-dir": "Scribe/CacheBundle"
 }

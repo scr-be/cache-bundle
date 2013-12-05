@@ -19,7 +19,7 @@ interface UserlandCacheInterface {
 	/**
 	 * default time (in seconds) to store cached values
 	 */
-	const TTL_DEFAULT = 120;
+	const TTL_DEFAULT = 6000;
 
 	/**
 	 * attempts to retrieve the requested key

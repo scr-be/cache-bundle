@@ -14,8 +14,8 @@ namespace Scribe\CacheBundle\Component\Caching;
  * UserlandApcuCache
  * Simple 
  */
-class UserlandApcuCache implements UserlandCacheInterface {
-
+class UserlandApcuCache implements UserlandCacheInterface 
+{
 	/**
 	 * attempts to retrieve the requested key
 	 * @param  string $key

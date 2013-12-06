@@ -17,5 +17,5 @@
     "autoload": {
         "psr-0": { "Scribe\\CacheBundle": "src/" }
     },
-    "target-dir": ""
+    "target-dir": "src/"
 }

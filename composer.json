@@ -15,7 +15,7 @@
         "symfony/monolog-bridge"   : ">=2.0"
     },
     "autoload": {
-        "psr-0": { "Scribe\\CacheBundle": "" }
+        "psr-0": { "Scribe\\CacheBundle": "src/" }
     },
-    "target-dir": "Scribe/CacheBundle"
+    "target-dir": ""
 }

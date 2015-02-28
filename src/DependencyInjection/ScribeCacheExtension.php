@@ -39,7 +39,7 @@ class ScribeCacheExtension extends Extension
         $container->setParameter('s.cache.service', $config['service']);
 
         if (true === in_array('enabled', $config) && $config['enabled'] == true) {
-            $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+            $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
             $loader->load('services.yml');
 
             if (false === $container->has($config['service'])) {

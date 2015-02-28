@@ -1,13 +1,5 @@
 language: php
 
-env:
-    global:
-        secure: "eqfuY1+8J0iMntn21ug9H9DQ9cgil/kyrmGPcU7SjoQfh+MyD4tpI0XJFyvXtLeTPYt0JT9UwvQDJLLRrSqQ5k3Tz3sspleXzTiVc1f1hHhlgcKh+YN5u+kx724tCeuIO/jileArBbjyLYe6CH4weTrQgKWF49/1cisJogqmtrI="
-
-notifications:
-    slack:
-        secure: "HuIz/xcPEACJvah+/h5jX4JX8Z22wgK0ZBIwn/v1KDnbl3m62EdJAfGN3jvGD+n9njmYUOCjslLHAooAC1MNntUcB9D2PJAArjD3mb9e34VtSwZ7NMfHkHZSksuaWg+nEDJrFSChvxHBp03/4JoVWjJMM2cm1TdpOMR0a/eFY1s="
-
 branches:
     except:
         - gh-pages
@@ -39,4 +31,3 @@ script:
 after_script:
     - bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml
     - bin/coveralls
-    - bin/test-reporter

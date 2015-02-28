@@ -32,14 +32,14 @@ trait KeyGeneratorTrait
      *
      * @var mixed[]
      */
-    protected $keyValues = [ ];
+    protected $keyValues = [];
 
     /**
      * An array of values to create the cache key from
      *
      * @var string[]
      */
-    protected $keyValuesTranslated = [ ];
+    protected $keyValuesTranslated = [];
 
     /**
      * The key values translation method to use prior
@@ -108,7 +108,7 @@ trait KeyGeneratorTrait
     {
         return (bool) (
             null !== $this->keyString &&
-            true === ( strlen($this->keyString ) > 0)
+            true === (strlen($this->keyString) > 0)
         );
     }
 
@@ -120,8 +120,8 @@ trait KeyGeneratorTrait
      */
     public function setKeyValues(...$values)
     {
-        if (false === is_array($values) || false === ( count($values) > 0 )) {
-            $this->keyValues = [ ];
+        if (false === is_array($values) || false === (count($values) > 0)) {
+            $this->keyValues = [];
         }
         else {
             $this->keyValues = $values;
@@ -138,7 +138,7 @@ trait KeyGeneratorTrait
      */
     public function addKeyValues(...$values)
     {
-        if (true === is_array($values) || true === ( count($values) > 0 )) {
+        if (true === is_array($values) || true === (count($values) > 0)) {
             $this->keyValues = array_merge($this->keyValues, $values);
         }
 
@@ -152,7 +152,7 @@ trait KeyGeneratorTrait
      */
     public function getKeyValues()
     {
-        return $this->keyValues;
+        return (array) $this->keyValues;
     }
 
     /**
@@ -164,7 +164,7 @@ trait KeyGeneratorTrait
     {
         return (bool) (
             true === is_array($this->keyValues) &&
-            true === ( count($this->keyValues) > 0 )
+            true === (count($this->keyValues) > 0)
         );
     }
 
@@ -176,8 +176,8 @@ trait KeyGeneratorTrait
      */
     public function setKeyValuesTranslated(...$values)
     {
-        if (false === is_array($values) || false === ( count($values) > 0 )) {
-            $this->keyValuesTranslated = [ ];
+        if (false === is_array($values) || false === (count($values) > 0)) {
+            $this->keyValuesTranslated = [];
         }
         else {
             $this->validateKeyValuesTranslated(...$values);
@@ -195,7 +195,7 @@ trait KeyGeneratorTrait
      */
     public function addKeyValuesTranslated(...$values)
     {
-        if (true === is_array($values) || true === ( count($values) > 0 )) {
+        if (true === is_array($values) || true === (count($values) > 0)) {
             $this->validateKeyValuesTranslated(...$values);
             $this->keyValuesTranslated = array_merge($this->keyValuesTranslated, $values);
         }
@@ -230,7 +230,7 @@ trait KeyGeneratorTrait
      */
     public function getKeyValuesTranslated()
     {
-        return $this->keyValuesTranslated;
+        return (array) $this->keyValuesTranslated;
     }
 
     /**
@@ -242,7 +242,7 @@ trait KeyGeneratorTrait
     {
         return (bool) (
             true === is_array($this->keyValuesTranslated) &&
-            true === ( count($this->keyValuesTranslated) > 0 )
+            true === (count($this->keyValuesTranslated) > 0)
         );
     }
 
@@ -359,7 +359,7 @@ trait KeyGeneratorTrait
      */
     public function getKeyHashMode()
     {
-        return $this->keyHashMode;
+        return (int) $this->keyHashMode;
     }
 
     /**
@@ -403,7 +403,7 @@ trait KeyGeneratorTrait
      */
     public function getKey(...$values)
     {
-        if (true === is_array($values) && (true === ( count($values)) > 0) ) {
+        if (true === is_array($values) && (true === (count($values)) > 0)) {
             $this->setKeyValues(...$values);
         }
 
@@ -412,7 +412,7 @@ trait KeyGeneratorTrait
             ->handleKeyValuesTranslatedHashing()
         ;
 
-        return $this->getKeyString();
+        return (string) $this->getKeyString();
     }
 
     /**
@@ -458,7 +458,7 @@ trait KeyGeneratorTrait
      */
     protected function handleKeyValuesTranslationInternal(...$values)
     {
-        $valuesTranslated = [ ];
+        $valuesTranslated = [];
 
         foreach ($values as $v) {
             if (true === is_resource($v)) {
@@ -467,7 +467,7 @@ trait KeyGeneratorTrait
                 );
             }
 
-            $valuesTranslated[ ] = serialize($v);
+            $valuesTranslated[] = serialize($v);
         }
 
         return (array) $valuesTranslated;
@@ -567,7 +567,7 @@ trait KeyGeneratorTrait
         $closure = $this->getKeyHashClosure();
         $key     = $closure(...$values);
 
-        return $key;
+        return (string) $key;
     }
 }
 

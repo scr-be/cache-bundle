@@ -452,7 +452,7 @@ trait KeyGeneratorTrait
     /**
      * Handle translation of the provided key values to a string format via PHP's serialize function (default)
      *
-     * @param  ...mixed  $values
+     * @param  ...mixed $values
      * @return string[]
      * @throws RuntimeException
      */

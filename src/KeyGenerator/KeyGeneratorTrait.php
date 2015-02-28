@@ -92,7 +92,7 @@ trait KeyGeneratorTrait
     /**
      * Get the final key string
      *
-     * @return null|string
+     * @return string|null
      */
     public function getKeyString()
     {
@@ -115,7 +115,7 @@ trait KeyGeneratorTrait
     /**
      * Set the values used to generate the key
      *
-     * @param  mixed[] $values
+     * @param  ...mixed $values
      * @return $this
      */
     public function setKeyValues(...$values)
@@ -133,7 +133,7 @@ trait KeyGeneratorTrait
     /**
      * Add to the values used to generate the key
      *
-     * @param  mixed[] $values
+     * @param  ...mixed $values
      * @return $this
      */
     public function addKeyValues(...$values)
@@ -171,7 +171,7 @@ trait KeyGeneratorTrait
     /**
      * Set the translated values used to generate the key
      *
-     * @param  string[] $values
+     * @param  ...string $values
      * @return $this
      */
     public function setKeyValuesTranslated(...$values)
@@ -190,7 +190,7 @@ trait KeyGeneratorTrait
     /**
      * Add to the translated values used to generate the key
      *
-     * @param  string[] $values
+     * @param  ...string $values
      * @return $this
      */
     public function addKeyValuesTranslated(...$values)
@@ -206,7 +206,7 @@ trait KeyGeneratorTrait
     /**
      * Validate that all supposedly translated key values are in fact strings
      *
-     * @param  string[] $values
+     * @param  ...string $values
      * @return $this
      * @throws InvalidArgumentException
      */
@@ -303,7 +303,7 @@ trait KeyGeneratorTrait
     /**
      * Get the callable (closure) used to traverse over and translate the passed key values to strings
      *
-     * @return null|callable
+     * @return callable|null
      */
     public function getKeyValuesTranslationClosure()
     {
@@ -365,7 +365,7 @@ trait KeyGeneratorTrait
     /**
      * Set callable (closure) used to hash values to generate the final cache key
      *
-     * @param  callable $closure
+     * @param  callable|null $closure
      * @return $this
      */
     public function setKeyHashClosure(callable $closure = null)
@@ -398,7 +398,7 @@ trait KeyGeneratorTrait
     /**
      * Get cache key, overwriting previously set values to generate key if provided
      *
-     * @param  mixed[] $values
+     * @param  ...mixed $values
      * @return string
      */
     public function getKey(...$values)
@@ -452,7 +452,7 @@ trait KeyGeneratorTrait
     /**
      * Handle translation of the provided key values to a string format via PHP's serialize function (default)
      *
-     * @param  mixed[]  $values
+     * @param  ...mixed  $values
      * @return string[]
      * @throws RuntimeException
      */
@@ -476,7 +476,7 @@ trait KeyGeneratorTrait
     /**
      * Handle translation of the provided key values to a string format via a user-defined closure
      *
-     * @param  mixed[] $values
+     * @param  ...mixed $values
      * @return string[]
      * @throws RuntimeException
      */
@@ -534,8 +534,8 @@ trait KeyGeneratorTrait
     /**
      * Handle generating final key hash based on translated key values using a natively supported hash algorithm
      *
-     * @param  string   $hashAlgorithm
-     * @param  string[] $values
+     * @param  string    $hashAlgorithm
+     * @param  ...string $values
      * @return string
      */
     protected function handleKeyValuesTranslatedHashingInternal($hashAlgorithm, ...$values)
@@ -552,7 +552,7 @@ trait KeyGeneratorTrait
     /**
      * Handle generating final key hash based on translated key values using a passed closure function
      *
-     * @param  string[] $values
+     * @param  ...string $values
      * @return string
      * @throws RuntimeException
      */

@@ -70,27 +70,28 @@ interface KeyGeneratorInterface
      * Set the final translated and hashed key string
      *
      * @var string
+     * @return $this
      */
     public function setKeyString($key);
 
     /**
      * Get the final translated and hashed key string
      *
-     * @var string|null
+     * @return string|null
      */
     public function getKeyString();
 
     /**
      * Check if the final translated and hashed key string exists
      *
-     * @var bool
+     * @return bool
      */
     public function hasKeyString();
 
     /**
      * Set the values used to generate the key
      *
-     * @param  mixed[] $values
+     * @param  ...mixed $values
      * @return $this
      */
     public function setKeyValues(...$values);
@@ -98,7 +99,7 @@ interface KeyGeneratorInterface
     /**
      * Add to the values used to generate the key
      *
-     * @param  mixed[] $values
+     * @param  ...mixed $values
      * @return $this
      */
     public function addKeyValues(...$values);
@@ -120,7 +121,7 @@ interface KeyGeneratorInterface
     /**
      * Set the translated values used to generate the key
      *
-     * @param  string[] $values
+     * @param  ...string $values
      * @return $this
      */
     public function setKeyValuesTranslated(...$values);
@@ -128,7 +129,7 @@ interface KeyGeneratorInterface
     /**
      * Add to the translated values used to generate the key
      *
-     * @param  string[] $values
+     * @param  ...string $values
      * @return $this
      */
     public function addKeyValuesTranslated(...$values);
@@ -165,7 +166,7 @@ interface KeyGeneratorInterface
     /**
      * Set the callable (closure) used to traverse over and translate the passed key values to strings
      *
-     * @param  null|callable $closure
+     * @param  callable|null $closure
      * @return $this
      */
     public function setKeyValuesTranslationClosure(callable $closure = null);
@@ -173,7 +174,7 @@ interface KeyGeneratorInterface
     /**
      * Get the callable (closure) used to traverse over and translate the passed key values to strings
      *
-     * @return null|callable
+     * @return callable|null
      */
     public function getKeyValuesTranslationClosure();
 
@@ -203,7 +204,7 @@ interface KeyGeneratorInterface
     /**
      * Set callable (closure) used to hash values to generate the final cache key
      *
-     * @param  callable $closure
+     * @param  callable|null $closure
      * @return $this
      */
     public function setKeyHashClosure(callable $closure = null);
@@ -226,7 +227,7 @@ interface KeyGeneratorInterface
      * Get the key final key using the requested method for values translation and
      * hash generation.
      *
-     * @param  mixed[] $values
+     * @param  ...mixed $values
      * @return string
      */
     public function getKey(...$values);

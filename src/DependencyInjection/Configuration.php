@@ -21,7 +21,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * Build and return the config definition tree
+     *
+     * @return TreeBuilder
      */
     public function getConfigTreeBuilder()
     {
@@ -32,9 +34,14 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('enabled')
                     ->defaultFalse()
                 ->end()
+                ->scalarNode('service')
+                    ->defaultValue('s.cache.apcu')
+                ->end()
             ->end()
         ;
 
         return $treeBuilder;
     }
 }
+
+/* EOF */

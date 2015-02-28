@@ -1,23 +1,30 @@
 <?php
 /*
- * This file is part of the Scribe World Application.
+ * This file is part of the Scribe Cache Bundle.
  *
- * (c) Scribe Inc. <scribe@scribenet.com>
+ * (c) Scribe Inc. <source@scribe.software>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Component\Caching;
+namespace Scribe\CacheBundle\UserlandHandler;
+
+use Scribe\CacheBundle\KeyGenerator\KeyGeneratorTrait;
+use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 
 /**
- * UserlandApcuCache
- * Simple 
+ * Class UserlandApcuCache
+ *
+ * @package Scribe\CacheBundle\Component\Caching
  */
-class UserlandApcuCache implements UserlandCacheInterface 
+class UserlandApcuCache implements UserlandCacheInterface, KeyGeneratorInterface
 {
+    use KeyGeneratorTrait;
+
 	/**
 	 * attempts to retrieve the requested key
+     *
 	 * @param  string $key
 	 * @param  mixed  $default
 	 * @return mixed
@@ -35,6 +42,7 @@ class UserlandApcuCache implements UserlandCacheInterface
 
 	/**
 	 * attempts to add a value to the cache
+     *
 	 * @param  string $key
 	 * @param  mixed  $value
 	 * @param  int    $ttl
@@ -47,6 +55,7 @@ class UserlandApcuCache implements UserlandCacheInterface
 
 	/**
 	 * checks if the requested key(s) exist in cache
+     *
 	 * @param  string|array $key
 	 * @return bool
 	 */
@@ -55,3 +64,5 @@ class UserlandApcuCache implements UserlandCacheInterface
 		return (boolean)apc_exists($key);
 	}
 }
+
+/* EOF */

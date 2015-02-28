@@ -1,0 +1,20 @@
+parameters:
+
+    s.ucache.apcu.class:     Scribe\CacheBundle\Component\UserlandCache\UserlandCacheApcu
+    s.ucache.memcache.class: Scribe\CacheBundle\Component\UserlandCache\UserlandCacheMemcache
+    s.ucache.twig.class:     Scribe\CacheBundle\Templating\Extension\UserlandCacheExtension
+
+services:
+
+    s.ucache.apcu:
+        class:     %s.ucache.apcu.class%
+
+    s.ucache.memcache:
+        class:     %s.ucache.memcache.class%
+
+    s.ucache.twig:
+        class:     %s.ucache.twig.class%
+        arguments:
+            - @s.ucache.apcu
+        tags:
+            - { name: twig.extension, alias: cache.twig }

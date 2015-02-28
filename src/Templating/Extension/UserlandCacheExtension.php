@@ -10,9 +10,9 @@
 
 namespace Scribe\CacheBundle\Templating\Extension;
 
-use Scribe\CacheBundle\Component\Caching\UserlandCacheInterface;
-use Twig_Extension,
-    Twig_SimpleFunction;
+use Scribe\CacheBundle\UserlandHandler\UserlandCacheInterface;
+use Twig_Extension;
+use Twig_SimpleFunction;
 
 /**
  * UserlandCacheExtension

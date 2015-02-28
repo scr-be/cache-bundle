@@ -1,28 +1,32 @@
 <?php
 /*
- * This file is part of the Scribe World Application.
+ * This file is part of the Scribe Cache Bundle.
  *
- * (c) Scribe Inc. <scribe@scribenet.com>
+ * (c) Scribe Inc. <source@scribe.software>
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Component\Caching;
+namespace Scribe\CacheBundle\UserlandHandler;
 
 /**
- * UserlandCacheInterface
- * Simple userland cachine mechanism interface
+ * Interface UserlandCacheInterface
+ *
+ * @package Scribe\CacheBundle\UserlandHandler
  */
-interface UserlandCacheInterface {
-
+interface UserlandCacheInterface
+{
 	/**
 	 * default time (in seconds) to store cached values
+     *
+     * @var int
 	 */
 	const TTL_DEFAULT = 6000;
 
 	/**
 	 * attempts to retrieve the requested key
+     *
 	 * @param  string $key
 	 * @param  mixed  $default
 	 * @return mixed
@@ -31,6 +35,7 @@ interface UserlandCacheInterface {
 
 	/**
 	 * attempts to add a value to the cache
+     *
 	 * @param  string $key
 	 * @param  mixed  $value
 	 * @param  int    $ttl
@@ -40,8 +45,11 @@ interface UserlandCacheInterface {
 
 	/**
 	 * checks if the requested key exist in cache
+     *
 	 * @param  string $key
 	 * @return bool
 	 */
 	public function has($key);
 }
+
+/* EOF */

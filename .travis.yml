@@ -29,8 +29,7 @@ before_script:
     - phpenv config-add .travis-php.ini
     - phpenv rehash
     - mkdir -p build/logs
-
-install:
+    - mkdir -p bin
     - travis_retry curl -s http://getcomposer.org/installer | php -- --install-dir=bin --filename=composer
     - travis_retry php bin/composer install --no-interaction
 

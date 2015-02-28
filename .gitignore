@@ -2,5 +2,6 @@
 /build/
 /.idea/
 /bin/
+/docs/_build/
 /atlassian-ide-plugin.xml
 *.DS_Store*

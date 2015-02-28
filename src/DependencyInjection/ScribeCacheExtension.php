@@ -35,16 +35,16 @@ class ScribeCacheExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('s.cache.enabled', $config['enabled']);
-        $container->setParameter('s.cache.service', $config['service']);
+        $container->setParameter('s.cache.enabled', $config[ 'enabled' ]);
+        $container->setParameter('s.cache.service', $config[ 'service' ]);
 
-        if (true === in_array('enabled', $config) && $config['enabled'] == true) {
+        if (true === in_array('enabled', $config) && $config[ 'enabled' ] == true) {
             $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
             $loader->load('services.yml');
 
-            if (false === $container->has($config['service'])) {
+            if (false === $container->has($config[ 'service' ])) {
                 throw new RuntimeException(
-                    sprintf("An invalid cache service %s has been configured.", $config['service'])
+                    sprintf("An invalid cache service %s has been configured.", $config[ 'service' ])
                 );
             }
         }

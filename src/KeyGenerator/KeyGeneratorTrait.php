@@ -32,14 +32,14 @@ trait KeyGeneratorTrait
      *
      * @var mixed[]
      */
-    protected $keyValues = [];
+    protected $keyValues = [ ];
 
     /**
      * An array of values to create the cache key from
      *
      * @var string[]
      */
-    protected $keyValuesTranslated = [];
+    protected $keyValuesTranslated = [ ];
 
     /**
      * The key values translation method to use prior
@@ -121,7 +121,7 @@ trait KeyGeneratorTrait
     public function setKeyValues(...$values)
     {
         if (false === is_array($values) || false === (count($values) > 0)) {
-            $this->keyValues = [];
+            $this->keyValues = [ ];
         }
         else {
             $this->keyValues = $values;
@@ -177,7 +177,7 @@ trait KeyGeneratorTrait
     public function setKeyValuesTranslated(...$values)
     {
         if (false === is_array($values) || false === (count($values) > 0)) {
-            $this->keyValuesTranslated = [];
+            $this->keyValuesTranslated = [ ];
         }
         else {
             $this->validateKeyValuesTranslated(...$values);
@@ -458,7 +458,7 @@ trait KeyGeneratorTrait
      */
     protected function handleKeyValuesTranslationInternal(...$values)
     {
-        $valuesTranslated = [];
+        $valuesTranslated = [ ];
 
         foreach ($values as $v) {
             if (true === is_resource($v)) {
@@ -467,7 +467,7 @@ trait KeyGeneratorTrait
                 );
             }
 
-            $valuesTranslated[] = serialize($v);
+            $valuesTranslated[ ] = serialize($v);
         }
 
         return (array) $valuesTranslated;

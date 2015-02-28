@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  *
  * @package Scribe\CacheBundle
  */
-class ScribeCacheBundle extends Bundle {}
+class ScribeCacheBundle extends Bundle
+{
+}
 
 /* EOF */

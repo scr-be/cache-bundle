@@ -15,6 +15,8 @@ namespace Scribe\CacheBundle\Exceptions;
  *
  * @package Scribe\CacheBundle\Exceptions
  */
-class InvalidArgumentException extends CacheBundleException {}
+class InvalidArgumentException extends CacheBundleException
+{
+}
 
 /* EOF */

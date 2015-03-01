@@ -47,7 +47,7 @@ copyright = u'2014 - 2015, Scribe Inc.'
 # built documents.
 #
 # The short X.Y version.
-version = '2.0.0-dev'
+version = '2.0.x-dev'
 # The full version, including alpha/beta/rc tags.
 release = version
 

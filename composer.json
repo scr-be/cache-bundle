@@ -3,7 +3,7 @@
     "description"      : "Simple and extensible userland caching abstraction layer with built-in support for APUu and Memcached.",
     "keywords"         : ["symfony2", "cache", "apc", "apcu", "memcache", "memcached", "userland cache"],
     "type"             : "project",
-    "homepage"         : "https://github.com/scribenet/symfony-cache-bundle",
+    "homepage"         : "https://symfony-cache-bundle.docs.scribe.tools/",
     "license"          : "MIT",
     "authors"          : [
         {
@@ -11,10 +11,16 @@
           "email" : "rmf@scribe.software"
         }
     ],
-    "require"          : {
-        "php" : ">=5.6"
+    "support" : {
+        "email"  : "open@scribe.tools",
+        "issues" : "https://symfony-cache-bundle.docs.scribe.tools/issues",
+        "source" : "https://symfony-cache-bundle.docs.scribe.tools/git"
     },
-    "require-dev"      : {
+    "require" : {
+        "php"                  : ">=5.6",
+        "scribe/shared-bundle" : "2.0.*@dev"
+    },
+    "require-dev" : {
         "ext-apcu"                         : "~4.0",
         "ext-memcached"                    : "~2.2",
         "ext-tidy"                         : "~2.0",
@@ -25,18 +31,23 @@
         "codeclimate/php-test-reporter"    : "~0.1.2",
         "sami/sami"                        : "~3.0"
     },
-    "suggest"          : {
+    "suggest" : {
         "ext-apcu"      : "Required to use APCu caching service.",
         "ext-memcached" : "Required to use Memcached caching service."
     },
-    "autoload"         : {
+    "autoload" : {
         "psr-4" : {
             "Scribe\\CacheBundle\\": "src/"
         }
     },
-    "config"          : {
+    "config" : {
         "bin-dir"           : "bin",
         "preferred-install" : "auto",
-        "minimum-stability" : "stable"
+        "minimum-stability" : "dev"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        }
     }
 }

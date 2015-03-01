@@ -1,8 +1,5 @@
 # Scribe / Cache Bundle
 
-[![License](https://img.shields.io/packagist/l/scribe/cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/license)
-[![RTD](https://readthedocs.org/projects/symfony-cache-bundle/badge/?version=latest&style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/docs)
-[![API](https://img.shields.io/badge/api-latest-ff69b4.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/api)
 [![Travis](https://img.shields.io/travis/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/ci) 
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/quality)
 [![Coveralls](https://img.shields.io/coveralls/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/coverage)
@@ -10,38 +7,17 @@
 
 *Scribe / Cache Bundle* is a simple and extensible caching abstraction layer with built-in support for APUu and Memcached.
 
-## Our Standards
+### Latest SensioLabs Insights Rating
 
-- *Auto-loading*: Conformance with the [PS4-4](http://www.php-fig.org/psr/psr-4/) 
-  standard, allowing for seamless inclusion in any [composer](https://getcomposer.org/)
-  project or any PSR-4 aware auto-loader implementation.
-- *Continuous Integration*: Utilization of [Travis CI](https://symfony-cache-bundle.docs.scribe.tools/ci)
-  to provide per-commit reports on the success or failure status of our builds.
-- *Tests and Coverage*: Automated testing against our comprehensive 
-  [PHPUnit](https://phpunit.de/) test suite, resulting code-coverage metrics
-  dispatched to [Coveralls](https://symfony-cache-bundle.docs.scribe.tools/coverage).
-- *Reports and Metrics*: Automated metrics pertaining to the defined code-styling
-  guidelines, general code quality reports, and other statistics using 
-  [Scrutinizer-CI](https://symfony-cache-bundle.docs.scribe.tools/quality).
-- *API and Documentation*: Comprehensive [API reference](https://symfony-cache-bundle.docs.scribe.tools/api) 
-  generated automatically using [Sami](https://github.com/fabpot/sami), as well 
-  as [documentation and examples](https://symfony-cache-bundle.docs.scribe.tools/docs)
-  compiled using [Read the Docs](https://readthedocs.org/).
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/a74fcd5f-6e34-4bc9-a790-7b29efa44741/big.png)](https://insight.sensiolabs.com/projects/a74fcd5f-6e34-4bc9-a790-7b29efa44741)
 
-## Installation
+## License, Usage, Documentation
 
-To include this bundle in your project, simply add it as a dependency to your `composer.json` file within the `require` block.
+[![License](https://img.shields.io/packagist/l/scribe/cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/license)
+[![RTD](https://readthedocs.org/projects/symfony-cache-bundle/badge/?version=latest&style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/docs)
+[![API](https://img.shields.io/badge/api-latest-ff69b4.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/api)
 
-```json
-    "require" : {
-        "scribe/cache-bundle" : "dev-master"
-    }
-```
+This project is licensed under the [MIT License](https://symfony-cache-bundle.docs.scribe.tools/license).
+User documentation as well as API reference is available via the above buttons.
 
-After adding Scribe's Cache Bundle as a dependency, simply run composer to update your vendor files and composer auto-loader includes.
-
-```bash
-composer.phar update
-```
-
-## More to come shortly...
+**Visit our [Read the Docs page](https://symfony-cache-bundle.docs.scribe.tools/docs) for additional documentation.**

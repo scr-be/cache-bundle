@@ -1,7 +1,7 @@
 #################################
 Scribe Cache Bundle Documentation
 #################################
-|license-info| |docs-status| |build-status| |scrutinizer-status| |coverage-status| |dependency-status| |packagist-info|
+|license-info| |docs-status| |api-status| |build-status| |scrutinizer-status| |coverage-status| |dependency-status|
 
 :Release:       |version|
 :Git Source:    https://symfony-cache-bundle.docs.scribe.tools/git
@@ -35,6 +35,9 @@ More documentation to follow soon...
 .. |docs-status| image:: https://readthedocs.org/projects/symfony-cache-bundle/badge/?version=latest&style=flat-square
    :target: https://symfony-cache-bundle.docs.scribe.tools/docs
    :alt: Read the Docs Build Status
+.. |api-status| image:: https://img.shields.io/badge/api-latest-green.svg?style=flat-square
+   :target: https://symfony-cache-bundle.docs.scribe.tools/api
+   :alt: Sami API Reference
 .. |build-status| image:: https://img.shields.io/travis/scribenet/symfony-cache-bundle.svg?style=flat-square
    :target: https://symfony-cache-bundle.docs.scribe.tools/ci
    :alt: Travis Build Status

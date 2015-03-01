@@ -2,11 +2,11 @@
 
 [![License](https://img.shields.io/packagist/l/scribe/cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/license)
 [![RTD](https://readthedocs.org/projects/symfony-cache-bundle/badge/?version=latest&style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/docs)
+[![API](https://img.shields.io/badge/api-latest-green.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/api)
 [![Travis](https://img.shields.io/travis/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/ci) 
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/quality)
 [![Coveralls](https://img.shields.io/coveralls/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/coverage)
 [![Gemnasium](https://img.shields.io/gemnasium/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/deps)
-[![Packagist](https://img.shields.io/packagist/v/scribe/cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/pkg/cache-bundle)
 
 *Scribe / Cache Bundle* is a simple and extensible caching abstraction layer with built-in support for APUu and Memcached.
 

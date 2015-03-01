@@ -2,15 +2,17 @@
     "name"             : "scribe/cache-bundle",
     "description"      : "Simple and extensible userland caching abstraction layer with built-in support for APUu and Memcached.",
     "keywords"         : ["symfony2", "cache", "apc", "apcu", "memcache", "memcached", "userland cache"],
-    "type"             : "symfony-bundle",
+    "type"             : "project",
     "homepage"         : "https://github.com/scribenet/symfony-cache-bundle",
     "license"          : "MIT",
-    "authors"          : [{
-        "name"  : "Rob Frawley 2nd",
-        "email" : "rmf@scribe.software"
-    }],
+    "authors"          : [
+        {
+          "name"  : "Rob Frawley 2nd",
+          "email" : "rmf@scribe.software"
+        }
+    ],
     "require"          : {
-        "php"                    : ">=5.6"
+        "php" : ">=5.6"
     },
     "require-dev"      : {
         "ext-apcu"                         : "~4.0",
@@ -25,15 +27,15 @@
     },
     "suggest"          : {
         "ext-apcu"      : "Required to use APCu caching service.",
-        "ext-memcached" : "Required to use Memcachd caching service."
+        "ext-memcached" : "Required to use Memcached caching service."
     },
     "autoload"         : {
         "psr-4" : {
-            "Scribe\\CacheBundle\\": "./src/"
+            "Scribe\\CacheBundle\\": "src/"
         }
     },
     "config"          : {
-      "bin-dir" : "bin"
+        "bin-dir" : "bin"
     },
     "preferred-install": "dist",
     "minimum-stability": "stable"

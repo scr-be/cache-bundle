@@ -1,6 +1,6 @@
 parameters:
 
-    s.cache.keygenerator:    Scribe\CacheBundle\KeyGenerator\KeyGenerator
+    s.cache.keygenerator:   Scribe\CacheBundle\KeyGenerator\KeyGenerator
     s.cache.apcu.class:     Scribe\CacheBundle\CacheHandler\UserlandCacheApcu
     s.cache.memcache.class: Scribe\CacheBundle\CacheHandler\UserlandCacheMemcache
     s.cache.twig.class:     Scribe\CacheBundle\Templating\Extension\UserlandCacheExtension

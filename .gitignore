@@ -1,7 +1,7 @@
 /vendor/
-/build/
-/.idea/
 /bin/
+/build/
 /docs/_build/
+/.idea/
 /atlassian-ide-plugin.xml
 *.DS_Store*

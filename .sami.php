@@ -23,7 +23,7 @@ $iterator = Finder::create()
 
 return new Sami($iterator, [
     'theme'                => 'default',
-    'title'                => 'scribe/symfony-cache-bundle',
+    'title'                => 'scribe/cache-bundle',
     'build_dir'            => $projectRootPath . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'api',
     'cache_dir'            => $projectRootPath . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'sami',
     'default_opened_level' => 2,

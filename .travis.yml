@@ -28,4 +28,4 @@ script:
 
 after_script:
     - bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml
-    - bin/coveralls
+    - bin/coveralls -vvv

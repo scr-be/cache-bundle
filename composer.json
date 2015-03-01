@@ -1,11 +1,11 @@
 {
-    "name"             : "scribe/cache-bundle",
-    "description"      : "Simple and extensible userland caching abstraction layer with built-in support for APUu and Memcached.",
-    "keywords"         : ["symfony2", "cache", "apc", "apcu", "memcache", "memcached", "userland cache"],
-    "type"             : "project",
-    "homepage"         : "https://symfony-cache-bundle.docs.scribe.tools/",
-    "license"          : "MIT",
-    "authors"          : [
+    "name"        : "scribe/cache-bundle",
+    "description" : "Simple and extensible userland caching abstraction layer with built-in support for APUu and Memcached.",
+    "keywords"    : ["symfony2", "cache", "apc", "apcu", "memcache", "memcached", "userland cache"],
+    "type"        : "symfony-bundle",
+    "homepage"    : "https://symfony-cache-bundle.docs.scribe.tools/",
+    "license"     : "MIT",
+    "authors"     : [
         {
           "name"  : "Rob Frawley 2nd",
           "email" : "rmf@scribe.software"

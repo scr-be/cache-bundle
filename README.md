@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/packagist/l/scribe/cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/license)
 [![RTD](https://readthedocs.org/projects/symfony-cache-bundle/badge/?version=latest&style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/docs)
-[![API](https://img.shields.io/badge/api-latest-green.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/api)
+[![API](https://img.shields.io/badge/api-latest-ff69b4.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/api)
 [![Travis](https://img.shields.io/travis/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/ci) 
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/quality)
 [![Coveralls](https://img.shields.io/coveralls/scribenet/symfony-cache-bundle.svg?style=flat-square)](https://symfony-cache-bundle.docs.scribe.tools/coverage)
@@ -43,3 +43,5 @@ After adding Scribe's Cache Bundle as a dependency, simply run composer to updat
 ```bash
 composer.phar update
 ```
+
+## More to come shortly...

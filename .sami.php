@@ -28,3 +28,5 @@ return new Sami($iterator, [
     'cache_dir'            => $projectRootPath . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'sami',
     'default_opened_level' => 2,
 ]);
+
+/* EOF */

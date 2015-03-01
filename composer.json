@@ -35,8 +35,8 @@
         }
     },
     "config"          : {
-        "bin-dir" : "bin"
-    },
-    "preferred-install": "dist",
-    "minimum-stability": "stable"
+        "bin-dir"           : "bin",
+        "preferred-install" : "auto",
+        "minimum-stability" : "stable"
+    }
 }

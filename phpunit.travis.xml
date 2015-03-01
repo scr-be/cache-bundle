@@ -8,8 +8,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
-         bootstrap="test/bootstrap.php"
-        >
+         bootstrap="test/bootstrap.php">
     <testsuites>
         <testsuite name="Scribe Cache Bundle Test Suite">
             <directory>./src/Tests</directory>

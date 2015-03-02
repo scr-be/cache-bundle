@@ -8,7 +8,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
-         bootstrap="test/bootstrap.php">
+         bootstrap="src/Tests/bootstrap.php">
     <testsuites>
         <testsuite name="Scribe Cache Bundle Test Suite">
             <directory>./src/Tests</directory>
@@ -30,4 +30,7 @@
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
+    <php>
+        <server name="KERNEL_DIR" value="./src/Tests/Fixtures/App/app" />
+    </php>
 </phpunit>

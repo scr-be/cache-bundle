@@ -20,20 +20,25 @@ use Symfony\Component\DependencyInjection\Reference;
  * @package Scribe\CacheBundle\DependencyInjection\Compiler
  */
 
-class CacheMethodCompilerPass implements CompilerPassInterface
+class CacheHandlerCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('scribe_cache.method_chain')) {
+        if (false === $container->hasDefinition('scribe_cache.handler_chain')) {
             return;
         }
 
-        $definition = $container->getDefinition('scribe_cache.method_chain');
+        $definition = $container->getDefinition('scribe_cache.handler_chain');
 
-        foreach ($container->findTaggedServiceIds('scribe_cache.handler') as $id => $attributes) {
+        $unset_priority = 100;
+        foreach ($container->findTaggedServiceIds('scribe_cache.handler_type') as $id => $attributes) {
+            if (false === ($priority = array_search('default_priority', $attributes))) {
+                $priority = $unset_priority++;
+            }
+
             $definition->addMethodCall(
                 'addHandler',
-                [ new Reference($id) ]
+                [ new Reference($id), $priority ]
             );
         }
     }

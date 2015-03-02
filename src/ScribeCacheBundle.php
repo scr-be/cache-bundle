@@ -12,7 +12,7 @@ namespace Scribe\CacheBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Scribe\CacheBundle\DependencyInjection\Compiler\CacheMethodCompilerPass;
+use Scribe\CacheBundle\DependencyInjection\Compiler\CacheHandlerCompilerPass;
 
 /**
  * Class ScribeCacheBundle
@@ -21,11 +21,16 @@ use Scribe\CacheBundle\DependencyInjection\Compiler\CacheMethodCompilerPass;
  */
 class ScribeCacheBundle extends Bundle
 {
+    /**
+     * Fresh container to build on specific to this bundle (later merge info global container)
+     *
+     * @param ContainerBuilder $container
+     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
 
-        $container->addCompilerPass(new CacheMethodCompilerPass());
+        $container->addCompilerPass(new CacheHandlerCompilerPass());
     }
 }
 

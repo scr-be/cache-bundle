@@ -34,7 +34,6 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->append($this->getGlobalNode())
-                ->append($this->getMethodsNode())
             ->end()
         ;
 
@@ -56,25 +55,14 @@ class Configuration implements ConfigurationInterface
                     ->defaultTrue()
                     ->info('If this bundle is loaded in the kernel it is enabled by default for whatever mechanisms choose to use it.')
                 ->end()
-            ->end()
-        ;
-    }
-
-    /**
-     * Create cache method selection mode
-     *
-     * @return NodeDefinition
-     */
-    private function getMethodsNode()
-    {
-        return (new TreeBuilder)
-            ->root('methods')
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->arrayNode('priority')
+                ->arrayNode('excluded_cache_methods')
                     ->defaultValue([])
-                    ->info('If empty, attempt to use all available cache methods using their default priority.')
+                    ->info('If empty, attempt to use all available cache methods using their default priority. Set the class name of any cache handlers to exclude from running.')
                     ->prototype('scalar')->end()
+                ->end()
+                ->integerNode('ttl')
+                    ->defaultValue(600)
+                    ->info('The default ttl (time to live) for cached values.')
                 ->end()
             ->end()
         ;

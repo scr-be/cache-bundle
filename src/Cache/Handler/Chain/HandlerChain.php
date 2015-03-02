@@ -8,14 +8,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Cache\Handlers;
+namespace Scribe\CacheBundle\Cache\Handler\Chain;
+
+use Scribe\CacheBundle\Cache\Handler\HandlerInterface;
 
 /**
- * Class MemcachedHandler
+ * HandlerChain
  *
- * @package Scribe\CacheBundle\Cache\Handlers
+ * @package Scribe\CacheBundle\Cache\Handler\Chain
  */
-class MemcachedHandler extends AbstractHandler
+class HandlerChain extends AbstractHandlerChain
 {
 }
 

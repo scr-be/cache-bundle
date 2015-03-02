@@ -8,29 +8,26 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Cache\Handlers;
-
-use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
+namespace Scribe\CacheBundle\Cache\Handler;
 
 /**
  * Interface HandlerInterface
  *
- * @package Scribe\CacheBundle\Cache\Handlers
+ * @package Scribe\CacheBundle\Cache\Handler
  */
 interface HandlerInterface
 {
-    public function __construct(KeyGeneratorInterface $keyGenerator = null);
-    public function isSupported();
     public function setEnabled($cacheEnabled = true);
     public function isEnabled();
     public function isDisabled();
+    public function setTtl($seconds);
+    public function getTtl();
     public function setKey(...$keyValues);
     public function getKey();
     public function hasKey();
     public function get(...$keyValues);
     public function set($data, ...$keyValues);
     public function has(...$keyValues);
-    public function del(...$keyValues);
 }
 
 /* EOF */

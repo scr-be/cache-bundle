@@ -1,36 +1,39 @@
 parameters:
 
-    scribe_cache.key_generator.class:      Scribe\CacheBundle\KeyGenerator\KeyGenerator
-    scribe_cache.method_chain.class:       Scribe\CacheBundle\Cache\Chain\MethodChain
-    scribe_cache.handler.apcu.class:       Scribe\CacheBundle\Cache\Handlers\ApcuHandler
-    scribe_cache.handler.memcached.class:  Scribe\CacheBundle\Cache\Handlers\MemcachedHandler
-    scribe_cache.handler.filesystem.class: Scribe\CacheBundle\Cache\Handlers\FilesystemHandler
+    scribe_cache.key_generator.class:           Scribe\CacheBundle\KeyGenerator\KeyGenerator
+    scribe_cache.handler_chain.class:           Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain
+    scribe_cache.handler_type.apcu.class:       Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeApcu
+    scribe_cache.handler_type.memcached.class:  Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached
+    scribe_cache.handler_type.filesystem.class: Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem
 
 services:
 
     scribe_cache.key_generator:
         class: %scribe_cache.key_generator.class%
 
-    scribe_cache.method_chain:
-        class: %scribe_cache.method_chain.class%
+    scribe_cache.handler_chain:
+        class: %scribe_cache.handler_chain.class%
 
-    scribe_cache.handler.apcu:
-        class: %scribe_cache.handler.apcu.class%
+    scribe_cache.handler_type.apcu:
+        class: %scribe_cache.handler_type.apcu.class%
         arguments:
             - @scribe_cache.key_generator
+            - %s.cache.global.ttl%
         tags:
-            - { name: scribe_cache.handler, default_priority: 1 }
+            - { name: scribe_cache.handler_type, default_priority: 1 }
 
-    scribe_cache.handler.memcached:
-        class: %scribe_cache.handler.memcached.class%
+    scribe_cache.handler_type.memcached:
+        class: %scribe_cache.handler_type.memcached.class%
         arguments:
             - @scribe_cache.key_generator
+            - %s.cache.global.ttl%
         tags:
-            - { name: scribe_cache.handler, default_priority: 2 }
+            - { name: scribe_cache.handler_type, default_priority: 2 }
 
-    scribe_cache.handler.filesystem:
-        class: %scribe_cache.handler.filesystem.class%
+    scribe_cache.handler_type.filesystem:
+        class: %scribe_cache.handler_type.filesystem.class%
         arguments:
             - @scribe_cache.key_generator
+            - %s.cache.global.ttl%
         tags:
-            - { name: scribe_cache.handler, default_priority: 3 }
+            - { name: scribe_cache.handler_type, default_priority: 3 }

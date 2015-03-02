@@ -18,6 +18,7 @@
     },
     "require" : {
         "php"                  : ">=5.6",
+        "symfony/http-kernel"  : "~2.6",
         "scribe/mantle-bundle" : "2.0.*@dev"
     },
     "require-dev" : {
@@ -37,7 +38,7 @@
     },
     "autoload" : {
         "psr-4" : {
-            "Scribe\\CacheBundle\\": "src/"
+            "Scribe\\CacheBundle\\" : "src/"
         }
     },
     "config" : {

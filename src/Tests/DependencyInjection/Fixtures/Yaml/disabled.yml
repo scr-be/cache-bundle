@@ -1,2 +1,3 @@
 scribe_cache:
-    enabled: false
+    global:
+        enabled: false

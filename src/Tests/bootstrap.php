@@ -13,13 +13,22 @@ function includeIfExists($file)
     if (file_exists($file)) {
         return include $file;
     }
+
+    return false;
 }
 
-if (false === ($loader = includeIfExists(__DIR__.'/../vendor/autoload.php'))) {
-    die(
+if (false === ($loader = includeIfExists(__DIR__.'/../../vendor/autoload.php'))) {
+    throw new \LogicException(
         'You must set up the project dependencies, run the following commands:' . PHP_EOL .
         'curl -s http://getcomposer.org/installer | php' . PHP_EOL.
         'php composer.phar install' . PHP_EOL
+    );
+}
+
+if (false === includeIfExists(__DIR__ . '/Fixtures/app/AppKernel.php')) {
+    throw new \LogicException(
+        'Your testing AppKernel.php could not be found! This must be implemented prior ' .
+        'To the tests running properly.'
     );
 }
 

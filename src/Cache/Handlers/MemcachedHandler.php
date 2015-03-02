@@ -8,16 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\CacheMethod;
+namespace Scribe\CacheBundle\Cache\Handlers;
 
 /**
- * Interface CacheMethodInterface
+ * Class MemcachedHandler
  *
- * @package Scribe\CacheBundle\CacheMethod
+ * @package Scribe\CacheBundle\Cache\Handlers
  */
-interface CacheMethodInterface
+class MemcachedHandler extends AbstractHandler
 {
-
 }
 
 /* EOF */

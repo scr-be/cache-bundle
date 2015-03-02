@@ -39,9 +39,8 @@ abstract class AbstractScribeCacheExtensionTest extends PHPUnit_Framework_TestCa
         $this->container->loadFromExtension($this->extension->getAlias());
         $this->container->compile();
 
-        $this->assertTrue($this->container->hasParameter('s.cache.enabled'));
-        $this->assertFalse($this->container->getParameter('s.cache.enabled'));
-        $this->assertFalse($this->container->has('s.cache.apcu'));
+        $this->assertTrue($this->container->hasParameter('s.cache.global.enabled'));
+        $this->assertTrue($this->container->getParameter('s.cache.global.enabled'));
     }
 
     public function testDisabledConfiguration()
@@ -49,9 +48,8 @@ abstract class AbstractScribeCacheExtensionTest extends PHPUnit_Framework_TestCa
         $this->loadConfiguration($this->container, 'disabled');
         $this->container->compile();
 
-        $this->assertTrue($this->container->hasParameter('s.cache.enabled'));
-        $this->assertFalse($this->container->getParameter('s.cache.enabled'));
-        $this->assertFalse($this->container->has('s.cache.apcu'));
+        $this->assertTrue($this->container->hasParameter('s.cache.global.enabled'));
+        $this->assertFalse($this->container->getParameter('s.cache.global.enabled'));
     }
 
     public function testEnabledConfiguration()
@@ -59,9 +57,8 @@ abstract class AbstractScribeCacheExtensionTest extends PHPUnit_Framework_TestCa
         $this->loadConfiguration($this->container, 'enabled');
         $this->container->compile();
 
-        $this->assertTrue($this->container->hasParameter('s.cache.enabled'));
-        $this->assertTrue($this->container->getParameter('s.cache.enabled'));
-        $this->assertTrue($this->container->has('s.cache.apcu'));
+        $this->assertTrue($this->container->hasParameter('s.cache.global.enabled'));
+        $this->assertTrue($this->container->getParameter('s.cache.global.enabled'));
     }
 }
 

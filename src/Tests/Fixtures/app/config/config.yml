@@ -1,0 +1,7 @@
+framework:
+    secret:          "Secret for tests!"
+    router:          { resource: "%kernel.root_dir%/config/routing.yml" }
+    session:         ~
+    default_locale:  en
+    translator:      { fallback: en }
+    profiler:        { only_exceptions: false }

@@ -13,6 +13,7 @@ namespace Scribe\CacheBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+
 /**
  * Class Configuration
  *
@@ -21,26 +22,62 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * Build and return the config definition tree
+     * Create the config tree builder object
      *
      * @return TreeBuilder
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder
-            ->root('scribe_cache')
+        $rootNode = $treeBuilder->root('scribe_cache');
+
+        $rootNode
             ->children()
-                ->booleanNode('enabled')
-                    ->defaultFalse()
-                ->end()
-                ->scalarNode('service')
-                    ->defaultValue('s.cache.apcu')
-                ->end()
+                ->append($this->getGlobalNode())
+                ->append($this->getMethodsNode())
             ->end()
         ;
 
         return $treeBuilder;
+    }
+
+    /**
+     * Create global cache config
+     *
+     * @return NodeDefinition
+     */
+    private function getGlobalNode()
+    {
+        return (new TreeBuilder)
+            ->root('global')
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->booleanNode('enabled')
+                    ->defaultTrue()
+                    ->info('If this bundle is loaded in the kernel it is enabled by default for whatever mechanisms choose to use it.')
+                ->end()
+            ->end()
+        ;
+    }
+
+    /**
+     * Create cache method selection mode
+     *
+     * @return NodeDefinition
+     */
+    private function getMethodsNode()
+    {
+        return (new TreeBuilder)
+            ->root('methods')
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->arrayNode('priority')
+                    ->defaultValue([])
+                    ->info('If empty, attempt to use all available cache methods using their default priority.')
+                    ->prototype('scalar')->end()
+                ->end()
+            ->end()
+        ;
     }
 }
 

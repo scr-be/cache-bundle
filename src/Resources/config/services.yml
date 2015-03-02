@@ -1,21 +1,36 @@
 parameters:
 
-    s.cache.keygenerator:   Scribe\CacheBundle\KeyGenerator\KeyGenerator
-    s.cache.apcu.class:     Scribe\CacheBundle\CacheHandler\UserlandCacheApcu
-    s.cache.memcache.class: Scribe\CacheBundle\CacheHandler\UserlandCacheMemcache
-    s.cache.twig.class:     Scribe\CacheBundle\Templating\Extension\UserlandCacheExtension
+    scribe_cache.key_generator.class:      Scribe\CacheBundle\KeyGenerator\KeyGenerator
+    scribe_cache.method_chain.class:       Scribe\CacheBundle\Cache\Chain\MethodChain
+    scribe_cache.handler.apcu.class:       Scribe\CacheBundle\Cache\Handlers\ApcuHandler
+    scribe_cache.handler.memcached.class:  Scribe\CacheBundle\Cache\Handlers\MemcachedHandler
+    scribe_cache.handler.filesystem.class: Scribe\CacheBundle\Cache\Handlers\FilesystemHandler
 
 services:
 
-    s.cache.apcu:
-        class:     %s.cache.apcu.class%
+    scribe_cache.key_generator:
+        class: %scribe_cache.key_generator.class%
 
-    s.cache.memcache:
-        class:     %s.cache.memcache.class%
+    scribe_cache.method_chain:
+        class: %scribe_cache.method_chain.class%
 
-    s.cache.twig:
-        class:     %s.cache.twig.class%
+    scribe_cache.handler.apcu:
+        class: %scribe_cache.handler.apcu.class%
         arguments:
-            - @s.cache.apcu
+            - @scribe_cache.key_generator
         tags:
-            - { name: twig.extension, alias: cache.twig }
+            - { name: scribe_cache.handler, default_priority: 1 }
+
+    scribe_cache.handler.memcached:
+        class: %scribe_cache.handler.memcached.class%
+        arguments:
+            - @scribe_cache.key_generator
+        tags:
+            - { name: scribe_cache.handler, default_priority: 2 }
+
+    scribe_cache.handler.filesystem:
+        class: %scribe_cache.handler.filesystem.class%
+        arguments:
+            - @scribe_cache.key_generator
+        tags:
+            - { name: scribe_cache.handler, default_priority: 3 }

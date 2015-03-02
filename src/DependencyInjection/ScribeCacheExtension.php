@@ -11,43 +11,44 @@
 namespace Scribe\CacheBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Scribe\CacheBundle\Exceptions\RuntimeException;
+use Scribe\Component\DependencyInjection\AbstractExtension;
 
 /**
  * Class ScribeCacheExtension
  *
  * @package Scribe\CacheBundle\DependencyInjection
  */
-class ScribeCacheExtension extends Extension
+class ScribeCacheExtension extends AbstractExtension
 {
     /**
      * Load the configuration directives/files for this bundle
      *
      * @param array            $configs
      * @param ContainerBuilder $container
-     * @throws RuntimeException
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $this->setContainer($container);
+
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration(
+            $configuration,
+            $configs
+        );
 
-        $container->setParameter('s.cache.enabled', $config[ 'enabled' ]);
-        $container->setParameter('s.cache.service', $config[ 'service' ]);
+        $this
+            ->setIndexPrefix('s.cache')
+            ->processConfigToParameter($config)
+        ;
 
-        if (true === in_array('enabled', $config) && $config[ 'enabled' ] === true) {
-            $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-            $loader->load('services.yml');
+        $loader = new YamlFileLoader(
+            $container,
+            new FileLocator(__DIR__.'/../Resources/config')
+        );
 
-            if (false === $container->has($config[ 'service' ])) {
-                throw new RuntimeException(
-                    sprintf("An invalid cache service %s has been configured.", $config[ 'service' ])
-                );
-            }
-        }
+        $loader->load('services.yml');
     }
 }
 

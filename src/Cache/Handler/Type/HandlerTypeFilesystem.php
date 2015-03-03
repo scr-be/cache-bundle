@@ -142,7 +142,7 @@ class HandlerTypeFilesystem extends AbstractHandlerType
         $filePath = $this->getCacheFilePath($key);
 
         if (true === file_exists($filePath)) {
-            if (true === ((time() - filemtime($filePath)) <= $this->getTtl())) {
+            if (true === ((time() - filemtime($filePath)) < $this->getTtl())) {
 
                 return true;
             }
@@ -167,34 +167,14 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     /**
      * Flush all cached data within this cache mechanism-type
      *
-     * @return bool|int
+     * @return bool
      */
     protected function flushAllUsingHandler()
     {
-        $cacheDirectory         = $this->getCacheDirectory();
-        $cacheDirectoryContents = scandir($cacheDirectory);
-        $removedFilesIteration  = 0;
-        $removedFilesCount      = 0;
+        $cacheFiles = glob($this->getCacheDirectory() . '/'.$this->getKeyGenerator()->getKeyPrefix().'*');
 
-        foreach ($cacheDirectoryContents as $file) {
-            if (substr($file, 0, 1) == '.') {
-                continue;
-            }
-
-            if (true === unlink($cacheDirectory . DIRECTORY_SEPARATOR . $file)) {
-                $removedFilesCount++;
-            }
-
-            $removedFilesIteration++;
-        }
-
-        if ($removedFilesCount === 0) {
-
-            return false;
-        }
-        else if ($removedFilesCount < $removedFilesIteration) {
-
-            return -1;
+        foreach ($cacheFiles as $file) {
+            unlink($file);
         }
 
         return true;

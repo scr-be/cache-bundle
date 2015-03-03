@@ -35,7 +35,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
 
     protected function getNewHandlerChain($disabled = false)
     {
-        return new HandlerChain($disabled = false);
+        return new HandlerChain($disabled);
     }
 
     protected function setHandlerTypesToChain($chain, ...$types)
@@ -47,10 +47,22 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         return $chain;
     }
 
+    protected function getNewHandlerChainWithAllHandlerTypes($disabled = false)
+    {
+        $chain = $this->setHandlerTypesToChain(
+            $this->getNewHandlerChain($disabled),
+            new HandlerTypeApcu(new KeyGenerator, 1800, 10),
+            new HandlerTypeMemcached(new KeyGenerator, 1800, 11),
+            new HandlerTypeFilesystem(new KeyGenerator, 1800, 20)
+        );
+
+        return $chain;
+    }
+
     protected function getNewHandlerChainWithConflictingHandlerPriorities($disabled = false)
     {
         $chain = $this->setHandlerTypesToChain(
-            $this->getNewHandlerChain($disabled = false),
+            $this->getNewHandlerChain($disabled),
             new HandlerTypeApcu(new KeyGenerator, 1800, 1),
             new HandlerTypeMemcached(new KeyGenerator, 1800, 2),
             new HandlerTypeFilesystem(new KeyGenerator, 1800, 2)
@@ -59,22 +71,10 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         return $chain;
     }
 
-    protected function getNewHandlerChainWithAllHandlerTypes($disabled = false)
-    {
-        $chain = $this->setHandlerTypesToChain(
-            $this->getNewHandlerChain($disabled = false),
-            new HandlerTypeApcu(new KeyGenerator),
-            new HandlerTypeMemcached(new KeyGenerator),
-            new HandlerTypeFilesystem(new KeyGenerator)
-        );
-
-        return $chain;
-    }
-
     protected function getNewHandlerChainWithApcuHandlerType($disabled = false)
     {
         $chain = $this->setHandlerTypesToChain(
-            $this->getNewHandlerChain($disabled = false),
+            $this->getNewHandlerChain($disabled),
             new HandlerTypeApcu(new KeyGenerator)
         );
 
@@ -84,7 +84,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     protected function getNewHandlerChainWithMemcachedHandlerType($disabled = false)
     {
         $chain = $this->setHandlerTypesToChain(
-            $this->getNewHandlerChain($disabled = false),
+            $this->getNewHandlerChain($disabled),
             new HandlerTypeMemcached(new KeyGenerator)
         );
 
@@ -97,7 +97,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $filesystemHandlerType->proposeCacheDirectory('/tmp');
 
         $chain = $this->setHandlerTypesToChain(
-            $this->getNewHandlerChain($disabled = false),
+            $this->getNewHandlerChain($disabled),
             $filesystemHandlerType
         );
 
@@ -107,10 +107,17 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     protected function getNewHandlerChainWithNoHandlerTypes($disabled = false)
     {
         $chain = $this->setHandlerTypesToChain(
-            $this->getNewHandlerChain($disabled = false)
+            $this->getNewHandlerChain($disabled)
         );
 
         return $chain;
+    }
+
+    public function testHasPriority()
+    {
+        $chain = $this->getNewHandlerChainWithAllHandlerTypes();
+
+        $this->assertTrue($chain->getActiveHandler()->hasPriority());
     }
 
     public function testEnsureDefaultChainHasHandler()
@@ -127,9 +134,19 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
 
     public function testNoActiveHandler()
     {
-        $chain = $this->getNewHandlerChainWithNoHandlerTypes();
+        $chain = $this->getNewHandlerChainWithNoHandlerTypes(true);
 
+        $this->assertFalse($chain->isEnabled());
         $this->assertFalse($chain->hasHandlers());
+        $this->assertFalse($chain->del(1, 2, 3));
+        $this->assertFalse($chain->flushAll());
+    }
+
+    public function testNoActiveHandlerIsSupported()
+    {
+        $chain = $this->getNewHandlerChainWithNoHandlerTypes(true);
+
+        $this->assertTrue($chain->getActiveHandler()->isSupported());
     }
 
     /**
@@ -290,6 +307,29 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
 
         $chain->del();
         $this->assertNull($chain->get());
+    }
+
+    public function testFilesystemHandlerCanCacheAndFlushAll()
+    {
+        $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
+
+        $val1 = $key1 = [1, 2, 3];
+        $val2 = $key2 = [2, 3, 4];
+        $val3 = $key3 = [3, 4, 5];
+
+        $chain->set($val1, ...$key1);
+        $chain->set($val2, ...$key2);
+        $chain->set($val3, ...$key3);
+
+        $this->assertEquals($val1, $chain->get(...$key1));
+        $this->assertEquals($val2, $chain->get(...$key2));
+        $this->assertEquals($val3, $chain->get(...$key3));
+
+        $chain->flushAll();
+
+        $this->assertNull($chain->get(...$key1));
+        $this->assertNull($chain->get(...$key2));
+        $this->assertNull($chain->get(...$key3));
     }
 
     public function tearDown()

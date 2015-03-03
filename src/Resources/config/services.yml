@@ -10,6 +10,8 @@ services:
 
     scribe_cache.key_generator:
         class: %scribe_cache.key_generator.class%
+        calls:
+            - [setKeyPrefix, [%s.cache.global.prefix%]]
 
     scribe_cache.handler_chain:
         class: %scribe_cache.handler_chain.class%
@@ -18,22 +20,30 @@ services:
         class: %scribe_cache.handler_type.apcu.class%
         arguments:
             - @scribe_cache.key_generator
-            - %s.cache.global.ttl%
+            - %s.cache.handlers.apcu.general.ttl%
+            - %s.cache.handlers.apcu.general.priority%
+            - %s.cache.handlers.apcu.general.disabled%
         tags:
-            - { name: scribe_cache.handler_type, default_priority: 1 }
+            - { name: scribe_cache.handler_type }
 
     scribe_cache.handler_type.memcached:
         class: %scribe_cache.handler_type.memcached.class%
         arguments:
             - @scribe_cache.key_generator
-            - %s.cache.global.ttl%
+            - %s.cache.handlers.memcached.general.ttl%
+            - %s.cache.handlers.memcached.general.priority%
+            - %s.cache.handlers.memcached.general.disabled%
         tags:
-            - { name: scribe_cache.handler_type, default_priority: 2 }
+            - { name: scribe_cache.handler_type }
 
     scribe_cache.handler_type.filesystem:
         class: %scribe_cache.handler_type.filesystem.class%
         arguments:
             - @scribe_cache.key_generator
-            - %s.cache.global.ttl%
+            - %s.cache.handlers.filesystem.general.ttl%
+            - %s.cache.handlers.filesystem.general.priority%
+            - %s.cache.handlers.filesystem.general.disabled%
+        calls:
+            - [proposeCacheDirectory, [%s.cache.handlers.filesystem.cache_dir%]]
         tags:
-            - { name: scribe_cache.handler_type, default_priority: 3 }
+            - { name: scribe_cache.handler_type }

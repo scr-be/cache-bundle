@@ -8,24 +8,54 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
 /**
- * Class HandlerTypeApcu
+ * Class HandlerTypeMockery
  *
  * @package Scribe\CacheBundle\Cache\Handler\Type
  */
-class HandlerTypeApcu extends AbstractHandlerType
+class HandlerTypeMockery extends AbstractHandlerType
 {
     /**
-     * Determine if this handler type is supported in the current PHP/OS env
+     * Check if the handler type is supported by the current environment
      *
      * @return bool
      */
     public function isSupported()
     {
-        return (bool) (true === extension_loaded('apcu'));
+        return (bool) true;
+    }
+
+    /**
+     * Overwrite parent implementation of set key for mockery handler type
+     *
+     * @param  ...mixed $keyValues
+     * @return $this
+     */
+    public function setKey(...$values)
+    {
+        return $this;
+    }
+
+    /**
+     * Overwrite parent implementation of get key for mockery handler type
+     *
+     * @return string|null
+     */
+    public function getKey()
+    {
+        return null;
+    }
+
+    /**
+     * Overwrite parent implementation of has key for mockery handler type
+     *
+     * @return bool
+     */
+    public function hasKey()
+    {
+        return true;
     }
 
     /**
@@ -36,7 +66,7 @@ class HandlerTypeApcu extends AbstractHandlerType
      */
     protected function getUsingHandler($key)
     {
-
+        return null;
     }
 
     /**
@@ -48,7 +78,7 @@ class HandlerTypeApcu extends AbstractHandlerType
      */
     protected function setUsingHandler($data, $key)
     {
-
+        return false;
     }
 
     /**
@@ -59,7 +89,7 @@ class HandlerTypeApcu extends AbstractHandlerType
      */
     protected function hasUsingHandler($key)
     {
-
+        return false;
     }
 
     /**
@@ -70,7 +100,7 @@ class HandlerTypeApcu extends AbstractHandlerType
      */
     protected function delUsingHandler($key)
     {
-
+        return false;
     }
 
     /**
@@ -80,7 +110,7 @@ class HandlerTypeApcu extends AbstractHandlerType
      */
     protected function flushAllUsingHandler()
     {
-
+        return false;
     }
 }
 

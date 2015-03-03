@@ -19,15 +19,12 @@ interface HandlerInterface
 {
     public function setEnabled($cacheEnabled = true);
     public function isEnabled();
-    public function isDisabled();
-    public function setTtl($seconds);
-    public function getTtl();
     public function setKey(...$keyValues);
-    public function getKey();
-    public function hasKey();
     public function get(...$keyValues);
     public function set($data, ...$keyValues);
     public function has(...$keyValues);
+    public function del(...$keyValues);
+    public function flushAll();
 }
 
 /* EOF */

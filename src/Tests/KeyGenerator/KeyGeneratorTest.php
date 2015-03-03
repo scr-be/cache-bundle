@@ -339,9 +339,9 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
             's:12:"string-value";',
             'i:123456789;'
         ];
-        $expectedKeyMd5     = 'f0c6725c36ddad00b38fbcb33091cb42';
-        $expectedKeySha1    = '3dbd1e522892224feef44c15f133160a3ed9e28e';
-        $expectedKeyClosure = '4b34db72c9c2ac028722c967f0c3646f5588cf43f3bb59c45254fbfe16295bbd1f5bb54b54a45455d181769a56ab2173fbe0c0605b2996f04655e8443e7f61da';
+        $expectedKeyMd5     = 'scribe_cache---f0c6725c36ddad00b38fbcb33091cb42';
+        $expectedKeySha1    = 'scribe_cache---3dbd1e522892224feef44c15f133160a3ed9e28e';
+        $expectedKeyClosure = 'scribe_cache---4b34db72c9c2ac028722c967f0c3646f5588cf43f3bb59c45254fbfe16295bbd1f5bb54b54a45455d181769a56ab2173fbe0c0605b2996f04655e8443e7f61da';
 
         $key = $kg->getKey(
             ...$expectedKeyValues
@@ -385,9 +385,9 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
             'i:67890;',
             'O:8:"stdClass":1:{s:4:"desc";s:37:"This is a standard class! The second!";}',
         ];
-        $expectedKeyMd5     = 'f3534fbc6095aa262204a1c6d8668cc4';
-        $expectedKeySha1    = '06578213c350dcfe8cfb5720916bdbfebbb247c7';
-        $expectedKeyClosure = '2b0068d219630c8b21fc47f999c1bf238e5a38944a9ccaba0300a9dd8c012de736eef3bb74b22e2664b44bb1587f451010d8eebfc4d1293d66836b5f021aa70e';
+        $expectedKeyMd5     = 'scribe_cache---f3534fbc6095aa262204a1c6d8668cc4';
+        $expectedKeySha1    = 'scribe_cache---06578213c350dcfe8cfb5720916bdbfebbb247c7';
+        $expectedKeyClosure = 'scribe_cache---2b0068d219630c8b21fc47f999c1bf238e5a38944a9ccaba0300a9dd8c012de736eef3bb74b22e2664b44bb1587f451010d8eebfc4d1293d66836b5f021aa70e';
 
         $kg = $this->getNewKeyGenerator();
         $key = $kg
@@ -552,11 +552,6 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
         $method->invokeArgs($kg, []);
     }
 
-    protected function tearDown()
-    {
-        fclose($this->testResource);
-    }
-
     /**
      * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
      * @expectedExceptionMessage Could not handle key hashing as closure mode was set but no closure was defined.
@@ -569,6 +564,11 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
             ->setKeyHashMode(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_CLOSURE)
             ->getKey()
         ;
+    }
+
+    protected function tearDown()
+    {
+        fclose($this->testResource);
     }
 }
 

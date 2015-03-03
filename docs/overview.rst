@@ -51,16 +51,16 @@ while automatically generated API documentation is available for those looking t
 understand the code structure and possibly implement this software within their
 own project.
 
-.. |license| image:: https://img.shields.io/packagist/l/scribe/cache-bundle.svg?style=flat-square
+.. |license| image:: https://img.shields.io/badge/license-MIT-008ac6.svg?style=flat-square
    :target: https://symfony-cache-bundle.docs.scribe.tools/license
    :alt: The MIT License (MIT)
-.. |travis| image:: https://img.shields.io/travis/scribenet/symfony-cache-bundle.svg?style=flat-square
+.. |travis| image:: https://img.shields.io/travis/scribenet/symfony-cache-bundle/master.svg?style=flat-square
    :target: https://symfony-cache-bundle.docs.scribe.tools/ci
    :alt: Travis Build Status
-.. |scrutinizer| image:: https://img.shields.io/scrutinizer/g/scribenet/symfony-cache-bundle.svg?style=flat-square
+.. |scrutinizer| image:: https://img.shields.io/scrutinizer/g/scribenet/symfony-cache-bundle/master.svg?style=flat-square
    :target: https://symfony-cache-bundle.docs.scribe.tools/quality
    :alt: Scrutinizer Code Quality Metrics
-.. |coverage| image:: https://img.shields.io/coveralls/scribenet/symfony-cache-bundle.svg?style=flat-square
+.. |coverage| image:: https://img.shields.io/coveralls/scribenet/symfony-cache-bundle/master.svg?style=flat-square
    :target: https://symfony-cache-bundle.docs.scribe.tools/coverage
    :alt: Test Coverage Metrics
 .. |dependencies| image:: https://img.shields.io/gemnasium/scribenet/symfony-cache-bundle.svg?style=flat-square
@@ -75,6 +75,6 @@ own project.
 .. |docs| image:: https://readthedocs.org/projects/symfony-cache-bundle/badge/?version=latest&style=flat-square
    :target: https://symfony-cache-bundle.docs.scribe.tools/docs
    :alt: Read the Docs Build Status
-.. |docsapi| image:: https://img.shields.io/badge/api-latest-ff69b4.svg?style=flat-square
+.. |docsapi| image:: https://img.shields.io/badge/docs-reference%20api-c75ec1.svg?style=flat-square
    :target: https://symfony-cache-bundle.docs.scribe.tools/api
    :alt: Sami API Reference

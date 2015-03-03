@@ -15,6 +15,7 @@ use ReflectionClass;
 use Scribe\CacheBundle\ScribeCacheBundle;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ScribeCacheBundleTest
@@ -64,6 +65,29 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals([ ], $methodChain->getHandlers());
         $this->assertTrue($methodChain->hasHandlers());
         $this->assertEquals(3, count($methodChain->getHandlers()));
+    }
+
+    protected function tearDown()
+    {
+        if (!$this->container instanceof ContainerInterface) {
+            return;
+        }
+
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+
+        if (true === is_dir($cacheDir)) {
+            $this->removeDirectoryRecursive($cacheDir);
+        }
+    }
+
+    protected function removeDirectoryRecursive($path)
+    {
+        $files = glob($path . '/*');
+        foreach ($files as $file) {
+            is_dir($file) ? $this->removeDirectoryRecursive($file) : unlink($file);
+        }
+
+        rmdir($path);
     }
 }
 

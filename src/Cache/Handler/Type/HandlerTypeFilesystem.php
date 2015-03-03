@@ -20,23 +20,11 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 class HandlerTypeFilesystem extends AbstractHandlerType
 {
     /**
-     * System temporary directory
+     * Directory to write cache data files to (generally your system temp dir)
      *
      * @var string|null
      */
-    protected $tempDir;
-
-    /**
-     * Setup the class instance with the required properties
-     *
-     * @param KeyGeneratorInterface $keyGenerator
-     */
-    public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 600)
-    {
-        parent::__construct($keyGenerator, $ttl);
-
-        $this->setAndValidateTempDir();
-    }
+    protected $cacheDirectory = null;
 
     /**
      * Check if the handler type is supported by the current environment
@@ -45,83 +33,84 @@ class HandlerTypeFilesystem extends AbstractHandlerType
      */
     public function isSupported()
     {
-        return (bool) (null !== $this->getTempDir());
+        return (bool) (true === $this->hasCacheDirectory());
     }
 
     /**
-     * Set, make, and validate temporary directory
+     * Directory set via DI setter injection, verifies the directory exists, is
+     * writable, and as a last resort attempts to create it.
      *
-     * @return $this
+     * @param string $directory
      */
-    protected function setAndValidateTempDir()
+    public function proposeCacheDirectory($directory)
     {
-        $tempDirBase = sys_get_temp_dir();
-        $tempDir     = $tempDirBase . DIRECTORY_SEPARATOR . 'scribe_cache';
+        $requiredSubDirectory = 'scribe_cache';
 
-        if (true === is_dir($tempDirBase) && true === is_writable($tempDirBase)) {
-            if ((true === is_dir($tempDir) && true === is_writable($tempDir)) ||
-                (false === is_dir($tempDir) &&  true === mkdir($tempDir)))
-            {
-                $this->setTempDir($tempDir);
-            }
+        if ($requiredSubDirectory !== substr($directory, -12) &&
+            $requiredSubDirectory !== substr($directory, -13))
+        {
+            $directory .= DIRECTORY_SEPARATOR . $requiredSubDirectory;
         }
 
-        return $this;
+        if ((true === is_dir($directory) && true === is_writable($directory)) ||
+            true === mkdir($directory, 0777, true))
+        {
+            $this->setCacheDirectory($directory);
+        }
     }
 
     /**
-     * Set the temp dir
+     * Set the cache directory path
      *
-     * @param $dir
+     * @param string|null $dir
      */
-    protected function setTempDir($dir)
+    protected function setCacheDirectory($dir)
     {
-        $this->tempDir = $dir;
+        $this->cacheDirectory = $dir;
     }
 
     /**
-     * Get temp dir
+     * Get the cache directory path
      *
      * @return string|null
      */
-    protected function getTempDir()
+    protected function getCacheDirectory()
     {
-        return $this->tempDir;
+        return $this->cacheDirectory;
     }
 
     /**
-     * Check if temp dir exists
+     * Determine if a cache directory was validated and set
      *
      * @return bool
      */
-    protected function hasTempDir()
+    protected function hasCacheDirectory()
     {
-        return (bool) (null !== $this->tempDir);
+        return (bool) (null !== $this->cacheDirectory);
     }
 
     /**
-     * Get the cache file path for a given key
+     * Get the fully-qualified file path for a given cache key
      *
      * @param  string $key
      * @return string
      */
     protected function getCacheFilePath($key)
     {
-        return (string) $this->getTempDir() . DIRECTORY_SEPARATOR . $key . '.cache';
+        return (string) $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $key . '.cache';
     }
 
+
     /**
-     * Get the cached value.
+     * Retrieve the cached data using the provided key
      *
      * @param  string $key
-     * @return string
+     * @return string|null
      */
-    protected function getValueViaHandlerImplementation($key)
+    protected function getUsingHandler($key)
     {
-        $filePath = $this->getCacheFilePath($key);
-
-        if (true === $this->hasValueViaHandlerImplementation($key) &&
-            false !== ($value = file_get_contents($filePath)))
+        if (true === $this->hasUsingHandler($key) &&
+            false !== ($value = file_get_contents($this->getCacheFilePath($key))))
         {
             return $value;
         }
@@ -130,36 +119,85 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     }
 
     /**
-     * Set the cached value.
+     * Set the cached data using the key (overwriting data that may exist already)
      *
      * @param  string $data
      * @param  string $key
-     * @return $this
+     * @return bool
      */
-    protected function setValueViaHandlerImplementation($data, $key)
+    protected function setUsingHandler($data, $key)
     {
-        file_put_contents($this->getCacheFilePath($key), $data);
-
-        return $this;
+        return (false !== file_put_contents($this->getCacheFilePath($key), $data, LOCK_EX));
     }
 
     /**
-     * Check for the cached value.
+     * Check if the cached data exists using the provided key (and clean stale
+     * file if exists).
      *
      * @param  string $key
      * @return bool
      */
-    protected function hasValueViaHandlerImplementation($key)
+    protected function hasUsingHandler($key)
     {
         $filePath = $this->getCacheFilePath($key);
 
-        if (true === file_exists($filePath) &&
-            true === ((time() - filemtime($filePath)) <= $this->getTtl()))
-        {
-            return true;
+        if (true === file_exists($filePath)) {
+            if (true === ((time() - filemtime($filePath)) <= $this->getTtl())) {
+
+                return true;
+            }
+
+            $this->delUsingHandler($key);
         }
 
         return false;
+    }
+
+    /**
+     * Delete the cached data using the provided key
+     *
+     * @param  string $key
+     * @return bool
+     */
+    protected function delUsingHandler($key)
+    {
+        return (bool) (true === unlink($this->getCacheFilePath($key)));
+    }
+
+    /**
+     * Flush all cached data within this cache mechanism-type
+     *
+     * @return bool|int
+     */
+    protected function flushAllUsingHandler()
+    {
+        $cacheDirectory         = $this->getCacheDirectory();
+        $cacheDirectoryContents = scandir($cacheDirectory);
+        $removedFilesIteration  = 0;
+        $removedFilesCount      = 0;
+
+        foreach ($cacheDirectoryContents as $file) {
+            if (substr($file, 0, 1) == '.') {
+                continue;
+            }
+
+            if (true === unlink($cacheDirectory . DIRECTORY_SEPARATOR . $file)) {
+                $removedFilesCount++;
+            }
+
+            $removedFilesIteration++;
+        }
+
+        if ($removedFilesCount === 0) {
+
+            return false;
+        }
+        else if ($removedFilesCount < $removedFilesIteration) {
+
+            return -1;
+        }
+
+        return true;
     }
 }
 

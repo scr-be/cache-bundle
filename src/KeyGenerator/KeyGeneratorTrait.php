@@ -21,6 +21,13 @@ use Scribe\CacheBundle\Exceptions\RuntimeException;
 trait KeyGeneratorTrait
 {
     /**
+     * The key prefix string
+     *
+     * @var string
+     */
+    protected $keyPrefix = 'scribe_cache';
+
+    /**
      * The final translated and hashed key string
      *
      * @var string|null
@@ -68,6 +75,29 @@ trait KeyGeneratorTrait
      * @var callable|null
      */
     protected $keyHashClosure = null;
+
+    /**
+     * Set the key prefix string
+     *
+     * @var    string
+     * @return $this
+     */
+    public function setKeyPrefix($prefix = '')
+    {
+        $this->keyPrefix = (string) $prefix;
+
+        return $this;
+    }
+
+    /**
+     * Set the key prefix string
+     *
+     * @return string
+     */
+    public function getKeyPrefix()
+    {
+        return $this->keyPrefix;
+    }
 
     /**
      * Set the final translated and hashed cache key based on the values provided
@@ -412,7 +442,7 @@ trait KeyGeneratorTrait
             ->handleKeyValuesTranslatedHashing()
         ;
 
-        return (string) $this->getKeyString();
+        return (string) $this->getKeyPrefix() . '---' . $this->getKeyString();
     }
 
     /**

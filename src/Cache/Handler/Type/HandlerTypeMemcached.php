@@ -24,40 +24,60 @@ class HandlerTypeMemcached extends AbstractHandlerType
      */
     public function isSupported()
     {
-        return false;
-        //return (bool) extension_loaded('memcached');
+        return (bool) (true === extension_loaded('memcached'));
     }
 
     /**
-     * Get the cached value.
+     * Retrieve the cached data using the provided key
      *
      * @param  string $key
-     * @return string
+     * @return string|null
      */
-    protected function getValueViaHandlerImplementation($key)
+    protected function getUsingHandler($key)
     {
 
     }
 
     /**
-     * Set the cached value.
+     * Set the cached data using the key (overwriting data that may exist already)
      *
      * @param  string $data
      * @param  string $key
-     * @return $this
+     * @return bool
      */
-    protected function setValueViaHandlerImplementation($data, $key)
+    protected function setUsingHandler($data, $key)
     {
 
     }
 
     /**
-     * Check for the cached value.
+     * Check if the cached data exists using the provided key
      *
      * @param  string $key
      * @return bool
      */
-    protected function hasValueViaHandlerImplementation($key)
+    protected function hasUsingHandler($key)
+    {
+
+    }
+
+    /**
+     * Delete the cached data using the provided key
+     *
+     * @param  string $key
+     * @return bool
+     */
+    protected function delUsingHandler($key)
+    {
+
+    }
+
+    /**
+     * Flush all cached data within this cache mechanism-type
+     *
+     * @return bool
+     */
+    protected function flushAllUsingHandler()
     {
 
     }

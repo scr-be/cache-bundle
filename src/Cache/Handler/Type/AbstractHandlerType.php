@@ -11,7 +11,6 @@
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
 use Scribe\CacheBundle\Cache\Handler\AbstractHandler;
-use Scribe\CacheBundle\Cache\Handler\HandlerInterface;
 use Scribe\CacheBundle\Exceptions\InvalidArgumentException;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorAwareTrait;
@@ -22,22 +21,46 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
  *
  * @package Scribe\CacheBundle\Cache\Handler\Type
  */
-abstract class AbstractHandlerType extends AbstractHandler implements HandlerInterface, HandlerTypeInterface
+abstract class AbstractHandlerType extends AbstractHandler implements HandlerTypeInterface
 {
     use KeyGeneratorAwareTrait;
 
-    protected $cacheTtl;
+    /**
+     * The number of seconds before a cache entry becomes stale
+     *
+     * @var int
+     */
+    protected $ttl;
+
+    /**
+     * Priority of this cache handler
+     *
+     * @var int|null
+     */
+    protected $priority;
+
+    /**
+     * Disable flag for this cache handler
+     *
+     * @var bool
+     */
+    protected $disabled;
 
     /**
      * Setup the class instance with the required properties
      *
      * @param KeyGeneratorInterface $keyGenerator
+     * @param int                   $ttl
+     * @param int|null              $priority
+     * @param bool                  $disabled
      */
-    public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 600)
+    public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
     {
         $this
             ->setKeyGenerator($keyGenerator)
             ->setTtl($ttl)
+            ->setPriority($priority)
+            ->setEnabled($disabled !== true)
         ;
     }
 
@@ -93,7 +116,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
      */
     public function setTtl($seconds)
     {
-        $this->cacheTtl = (int) $seconds;
+        $this->ttl = (int) $seconds;
 
         return $this;
     }
@@ -105,7 +128,40 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
      */
     public function getTtl()
     {
-        return (int) $this->cacheTtl;
+        return (int) $this->ttl;
+    }
+
+    /**
+     * Set the cache handler priority
+     *
+     * @param  int|null $priority
+     * @return $this
+     */
+    public function setPriority($priority = null)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get the cache handler priority
+     *
+     * @return mixed
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * Check if cache handler has a priority
+     *
+     * @return bool
+     */
+    public function hasPriority()
+    {
+        return (bool) ($this->priority !== null);
     }
 
     /**
@@ -117,8 +173,8 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
      */
     public function get(...$keyValues)
     {
-        $data = $this->getValueViaHandlerImplementation(
-            $this->getOrSetKey(...$keyValues)
+        $data = $this->getUsingHandler(
+            $this->getCurrentKey(...$keyValues)
         );
 
         return $this->sanitizeReturnedCacheData($data);
@@ -130,20 +186,20 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
      * @param  string $key
      * @return string
      */
-    abstract protected function getValueViaHandlerImplementation($key);
+    abstract protected function getUsingHandler($key);
 
     /**
      * Set a cached value; will overwrite a value with the same key silently
      *
      * @param  string|int|object|callable $data
      * @param  ...mixed                   $keyValues
-     * @return true
+     * @return bool
      */
     public function set($data, ...$keyValues)
     {
-        return $this->setValueViaHandlerImplementation(
+        return $this->setUsingHandler(
             $this->sanitizeSubmittedCacheData($data),
-            $this->getOrSetKey(...$keyValues)
+            $this->getCurrentKey(...$keyValues)
         );
     }
 
@@ -154,7 +210,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
      * @param  string $key
      * @return $this
      */
-    abstract protected function setValueViaHandlerImplementation($data, $key);
+    abstract protected function setUsingHandler($data, $key);
 
     /**
      * Check for non-stale existence of cached value with same key
@@ -164,8 +220,8 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
      */
     public function has(...$keyValues)
     {
-        return (bool) $this->hasValueViaHandlerImplementation(
-            $this->getOrSetKey(...$keyValues)
+        return (bool) $this->hasUsingHandler(
+            $this->getCurrentKey(...$keyValues)
         );
     }
 
@@ -175,7 +231,47 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
      * @param  string $key
      * @return bool
      */
-    abstract protected function hasValueViaHandlerImplementation($key);
+    abstract protected function hasUsingHandler($key);
+
+    /**
+     * Delete a cache value
+     *
+     * @param  ...mixed $keyValues
+     * @return bool
+     */
+    public function del(...$keyValues)
+    {
+        return (bool) $this->delUsingHandler(
+            $this->getCurrentKey(...$keyValues)
+        );
+    }
+
+    /**
+     * Check for the cached value. Implementation specific to the handler being used.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    abstract protected function delUsingHandler($key);
+
+    /**
+     * Flush all cached values (this could potentially be more than values stored
+     * using only this API, but also, for instance, Doctrine's APCu cache if using
+     * the APUc handler).
+     *
+     * @return bool
+     */
+    public function flushAll()
+    {
+        return (bool) $this->flushAllUsingHandler();
+    }
+
+    /**
+     * Flush all cached values
+     *
+     * @return bool
+     */
+    abstract protected function flushAllUsingHandler();
 
     /**
      * Get the previously set key or set the key based on the passed values
@@ -184,7 +280,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
      * @return string
      * @throws InvalidArgumentException
      */
-    protected function getOrSetKey(...$keyValues)
+    protected function getCurrentKey(...$keyValues)
     {
         if (true === (count($keyValues) > 0)) {
             $this->setKey(...$keyValues);
@@ -194,7 +290,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
 
         if (false === $this->hasKey()) {
             throw new InvalidArgumentException(
-                'Cannot attempt to get a cached value without a key to retrieve it using.'
+                'Cannot attempt to get a cached value without setting a key to retrieve it.'
             );
         }
 
@@ -236,23 +332,26 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerInt
     }
 
     /**
-     * Get the non-name-spaced class name
+     * Get the handler type
      *
      * @return string
      */
-    public function getClassName()
+    public function getType()
     {
-        return join('', array_slice(explode('\\', get_class($this)), -1));
+        return (string) strtolower(str_replace(
+            'HandlerType', '',
+            join('', array_slice(explode('\\', $this->__toString()), -1))
+        ));
     }
 
     /**
-     * __toString
+     * Type casting object will return its fully-qualified class name
      *
      * @return string
      */
     public function __toString()
     {
-        return $this->getClassName();
+        return (string) get_class($this);
     }
 }
 

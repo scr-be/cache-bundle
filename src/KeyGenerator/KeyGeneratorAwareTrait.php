@@ -30,7 +30,7 @@ trait KeyGeneratorAwareTrait
      * @param KeyGeneratorInterface|null $keyGenerator
      * @return $this
      */
-    protected function setKeyGenerator(KeyGeneratorInterface $keyGenerator = null)
+    public function setKeyGenerator(KeyGeneratorInterface $keyGenerator = null)
     {
         $this->keyGenerator = $keyGenerator;
 
@@ -42,19 +42,9 @@ trait KeyGeneratorAwareTrait
      *
      * @return KeyGeneratorInterface|null
      */
-    protected function getKeyGenerator()
+    public function getKeyGenerator()
     {
         return $this->keyGenerator;
-    }
-
-    /**
-     * Check if key generator instance has been assigned
-     *
-     * @return bool
-     */
-    protected function hasKeyGenerator()
-    {
-        return (bool) ($this->keyGenerator instanceof KeyGeneratorInterface);
     }
 }
 

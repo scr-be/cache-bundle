@@ -10,7 +10,7 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
-use Scribe\CacheBundle\Cache\Handler\HandlerInterface;
+use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
 
 /**
  * Interface HandlerChainInterface
@@ -19,10 +19,13 @@ use Scribe\CacheBundle\Cache\Handler\HandlerInterface;
  */
 interface HandlerChainInterface
 {
-    public function addHandler(HandlerInterface $handler, $priority);
+    public function addHandler(AbstractHandlerType $handler);
+    public function setHandlers(array $handlers = [ ]);
     public function getHandlers();
     public function hasHandlers();
-    public function getChosenHandlerName();
+    public function getActiveHandler();
+    public function hasActiveHandler();
+    public function getActiveHandlerType($fullyQualified = false);
 }
 
 /* EOF */

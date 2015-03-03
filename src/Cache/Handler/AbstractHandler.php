@@ -10,10 +10,6 @@
 
 namespace Scribe\CacheBundle\Cache\Handler;
 
-use Scribe\CacheBundle\Exceptions\InvalidArgumentException;
-use Scribe\CacheBundle\KeyGenerator\KeyGeneratorAwareTrait;
-use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
-
 /**
  * Class AbstractHandler
  *
@@ -26,17 +22,17 @@ abstract class AbstractHandler implements HandlerInterface
      *
      * @var bool
      */
-    protected $cacheEnabled = true;
+    protected $enabled = true;
 
     /**
      * Set the enabled/disabled state of this cache handler method
      *
-     * @param  bool $cacheEnabled
+     * @param  bool $enabled
      * @return $this
      */
-    public function setEnabled($cacheEnabled = true)
+    public function setEnabled($enabled = true)
     {
-        $this->cacheEnabled = (bool) $cacheEnabled;
+        $this->enabled = (bool) $enabled;
 
         return $this;
     }
@@ -48,17 +44,7 @@ abstract class AbstractHandler implements HandlerInterface
      */
     public function isEnabled()
     {
-        return (bool) (true === $this->cacheEnabled);
-    }
-
-    /**
-     * Check if this cache handler method is enabled
-     *
-     * @return bool
-     */
-    public function isDisabled()
-    {
-        return (bool) (false === $this->cacheEnabled);
+        return (bool) (true === $this->enabled);
     }
 }
 

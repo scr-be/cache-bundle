@@ -67,6 +67,21 @@ interface KeyGeneratorInterface
     const MODE_VALUES_TRANSLATION_METHOD_CLOSURE = 299;
 
     /**
+     * Set the key prefix string
+     *
+     * @var    string
+     * @return $this
+     */
+    public function setKeyPrefix($prefix = '');
+
+    /**
+     * Set the key prefix string
+     *
+     * @return string
+     */
+    public function getKeyPrefix();
+
+    /**
      * Set the final translated and hashed key string
      *
      * @var string

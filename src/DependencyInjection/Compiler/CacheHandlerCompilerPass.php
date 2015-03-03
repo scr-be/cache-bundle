@@ -22,24 +22,28 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class CacheHandlerCompilerPass implements CompilerPassInterface
 {
+    /**
+     * Process the bundle's container. Perform compiler pass to provide cache chain
+     * handler with all services tagged as handler types.
+     *
+     * @param ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('scribe_cache.handler_chain')) {
-            return;
-        }
-
-        $definition = $container->getDefinition('scribe_cache.handler_chain');
-
-        $unset_priority = 100;
-        foreach ($container->findTaggedServiceIds('scribe_cache.handler_type') as $id => $attributes) {
-            if (false === ($priority = array_search('default_priority', $attributes))) {
-                $priority = $unset_priority++;
-            }
-
-            $definition->addMethodCall(
-                'addHandler',
-                [ new Reference($id), $priority ]
+        if (true === $container->hasDefinition('scribe_cache.handler_chain')) {
+            $chainDefinition = $container->getDefinition(
+                'scribe_cache.handler_chain'
             );
+            $handlerDefinitions = $container->findTaggedServiceIds(
+                'scribe_cache.handler_type'
+            );
+
+            foreach ($handlerDefinitions as $id => $attributes) {
+                $chainDefinition->addMethodCall(
+                    'addHandler',
+                    [ new Reference($id) ]
+                );
+            }
         }
     }
 }

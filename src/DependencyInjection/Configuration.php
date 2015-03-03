@@ -137,7 +137,7 @@ class Configuration implements ConfigurationInterface
             ->root('apcu')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerInnerGenericNode(1))
+                ->append($this->getHandlerInnerGenericNode(3))
             ->end()
         ;
     }
@@ -270,7 +270,7 @@ class Configuration implements ConfigurationInterface
             ->root('filesystem')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerInnerGenericNode(3))
+                ->append($this->getHandlerInnerGenericNode(1))
                 ->scalarNode('cache_dir')
                     ->isRequired()
                     ->defaultValue('/tmp')

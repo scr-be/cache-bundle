@@ -27,6 +27,7 @@ class AppKernel extends Kernel
     {
         return [
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new \Scribe\CacheBundle\ScribeCacheBundle(),
             new \Scribe\MantleBundle\ScribeMantleBundle()
         ];

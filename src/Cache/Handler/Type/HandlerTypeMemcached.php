@@ -21,13 +21,18 @@ use Memcached;
 class HandlerTypeMemcached extends AbstractHandlerType
 {
     /**
+     * @var Memcached
+     */
+    protected $memcached;
+
+    /**
      * Setup the class instance with the required properties
      *
-     * @param KeyGeneratorInterface $keyGenerator
-     * @param int                   $ttl
-     * @param int|null              $priority
-     * @param bool                  $disabled
-     * @param callable              $supportedDecider
+     * @param KeyGeneratorInterface|null $keyGenerator
+     * @param int                        $ttl
+     * @param int|null                   $priority
+     * @param bool                       $disabled
+     * @param callable|null              $supportedDecider
      */
     public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
@@ -128,11 +133,11 @@ class HandlerTypeMemcached extends AbstractHandlerType
      * Get the result of the last operation based on a comparison of the expected
      * return code and the received return code via an optionally custom callable.
      *
-     * @param  int      $expectedCode
-     * @param  callable $decider
+     * @param  int           $expectedCode
+     * @param  callable|null $decider
      * @return bool
      */
-    protected function getDecisionOnLastActionSuccess($expectedCode = Memcached::RES_SUCCESS, callable $decider = null)
+    protected function isLastActionSuccessful($expectedCode = Memcached::RES_SUCCESS, callable $decider = null)
     {
         if (null === $decider) {
             $decider = function($expected, $received) {
@@ -155,7 +160,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
     {
         $data = $this->memcached->get($key);
 
-        if (true === $this->getDecisionOnLastActionSuccess()) {
+        if (true === $this->isLastActionSuccessful()) {
             return $data;
         }
 
@@ -173,7 +178,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
     {
         $this->memcached->set($key, $data, $this->getTtl());
 
-        return $this->getDecisionOnLastActionSuccess();
+        return $this->isLastActionSuccessful();
     }
 
     /**
@@ -184,12 +189,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
      */
     protected function hasUsingHandler($key)
     {
-        if (null === $this->getUsingHandler($key)) {
-
-            return false;
-        }
-
-        return true;
+        return (bool) (null !== $this->getUsingHandler($key));
     }
 
     /**
@@ -202,7 +202,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
     {
         $this->memcached->delete($key, 0);
 
-        return $this->getDecisionOnLastActionSuccess();
+        return $this->isLastActionSuccessful();
     }
 
     /**
@@ -214,7 +214,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
     {
         $this->memcached->flush();
 
-        return $this->getDecisionOnLastActionSuccess();
+        return $this->isLastActionSuccessful();
     }
 }
 

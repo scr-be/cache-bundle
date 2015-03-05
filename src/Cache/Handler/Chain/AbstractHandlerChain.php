@@ -154,12 +154,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      */
     public function getActiveHandlerType($fullyQualified = false)
     {
-        if (false === $fullyQualified) {
-
-            return (string) $this->getActiveHandler()->getType();
-        }
-
-        return (string) $this->getActiveHandler()->__toString();
+        return (string) $this->getActiveHandler()->getType($fullyQualified);
     }
 
     /**

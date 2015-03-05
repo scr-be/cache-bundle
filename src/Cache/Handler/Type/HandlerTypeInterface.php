@@ -19,16 +19,96 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
  */
 interface HandlerTypeInterface
 {
+    /**
+     * Setup the class instance with the required properties
+     *
+     * @param KeyGeneratorInterface $keyGenerator
+     * @param int                   $ttl
+     * @param int|null              $priority
+     * @param bool                  $disabled
+     * @param callable              $supportedDecider
+     */
     public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null);
+
+    /**
+     * Handler-specific implementation to determine if the caching method is
+     * supported by the current platform
+     *
+     * @return bool
+     */
     public function isSupported();
+
+    /**
+     * Set the time to live for the cache values
+     *
+     * @param  int $seconds
+     * @return $this
+     */
     public function setTtl($seconds);
+
+    /**
+     * Get the TTL for the cache values
+     *
+     * @return int
+     */
     public function getTtl();
+
+    /**
+     * Set the cache handler priority
+     *
+     * @param  int|null $priority
+     * @return $this
+     */
     public function setPriority($priority);
+
+    /**
+     * Get the cache handler priority
+     *
+     * @return int|null
+     */
     public function getPriority();
+
+    /**
+     * Check if cache handler has a priority
+     *
+     * @return bool
+     */
     public function hasPriority();
+
+    /**
+     * Set the optional closure that determines if this cache handler is supported
+     *
+     * @param  callable|null $decider
+     * @return $this
+     */
     public function setSupportedDecider(callable $decider = null);
+
+    /**
+     * Un-set the optional closure that determines if this cache handler is supported
+     *
+     * @return $this
+     */
+    public function unsetSupportedDecider();
+
+    /**
+     * Get the optional closure that determines if this cache handler is supported
+     *
+     * @return callable|null
+     */
     public function getSupportedDecider();
+
+    /**
+     * Get the handler type
+     *
+     * @return string
+     */
     public function getType();
+
+    /**
+     * Type casting object will return its fully-qualified class name
+     *
+     * @return string
+     */
     public function __toString();
 }
 

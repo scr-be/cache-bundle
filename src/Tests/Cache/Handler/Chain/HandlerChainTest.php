@@ -277,6 +277,8 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     public function testFilesystemHandlerCanCacheAndDelete()
     {
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
+        $chain->flushAll();
+
         $object = new \stdClass;
         $object->name = 'test field 2';
 
@@ -291,7 +293,8 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
             'a', 'random', 'key', 1, 2, 3, $object
         ));
 
-        $chain->del();
+        $this->assertTrue($chain->del());
+        sleep(1);
         $this->assertNull($chain->get());
     }
 
@@ -338,7 +341,6 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-
         $tempDirBase = sys_get_temp_dir();
         $tempDir     = $tempDirBase . DIRECTORY_SEPARATOR . 'scribe_cache';
 
@@ -347,7 +349,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
             return;
         }
         $kg = new KeyGenerator;
-        $files = glob($tempDir . '/'.$kg->getKeyPrefix().'*');
+        $files = glob($tempDir . '/scribe*');
         foreach ($files as $f) {
             if (substr($f, 0, 1) == '.') {
                 continue;
@@ -357,7 +359,6 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
 
         rmdir($tempDir);
     }
-
 }
 
 /* EOF */

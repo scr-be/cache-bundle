@@ -60,6 +60,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      * @param int                   $ttl
      * @param int|null              $priority
      * @param bool                  $disabled
+     * @param callable              $supportedDecider
      */
     public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
@@ -83,7 +84,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Set the optional closure that determines if this cache handler is supported
      *
-     * @param callable $decider
+     * @param  callable|null $decider
      * @return $this
      */
     public function setSupportedDecider(callable $decider = null)
@@ -124,12 +125,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function hasSupportedDecider()
     {
-        if (true === ($this->supportedDecider instanceof \Closure)) {
-
-            return true;
-        }
-
-        return false;
+        return (bool) ($this->supportedDecider instanceof \Closure);
     }
 
     /**
@@ -224,7 +220,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Get the cache handler priority
      *
-     * @return mixed
+     * @return int|null
      */
     public function getPriority()
     {

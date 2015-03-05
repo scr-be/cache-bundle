@@ -7,7 +7,8 @@ services:
     - memcached
 
 before_script:
-    - pecl install igbinary
+    - sh .travis-build-igbinary.sh
+    - sh .travis-build-memcached.sh
     - phpenv config-add .travis-php.ini
     - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
     - echo "extension = igbinary.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini

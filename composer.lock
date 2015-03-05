@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d93a3fdc6c5eb8c5855d108130601e2c",
+    "hash": "045f004785ca32d566255c126d3eb5d4",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1002,16 +1002,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.12.0",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f"
+                "reference": "c41c218e239b50446fd883acb1ecfd4b770caeae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
-                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c41c218e239b50446fd883acb1ecfd4b770caeae",
+                "reference": "c41c218e239b50446fd883acb1ecfd4b770caeae",
                 "shasum": ""
             },
             "require": {
@@ -1028,6 +1028,7 @@
                 "phpunit/phpunit": "~4.0",
                 "raven/raven": "~0.5",
                 "ruflin/elastica": "0.90.*",
+                "swiftmailer/swiftmailer": "~5.3",
                 "videlalvaro/php-amqplib": "~2.4"
             },
             "suggest": {
@@ -1044,7 +1045,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12.x-dev"
+                    "dev-master": "1.13.x-dev"
                 }
             },
             "autoload": {
@@ -1070,7 +1071,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-12-29 21:29:35"
+            "time": "2015-03-05 01:12:12"
         },
         {
             "name": "phpoption/phpoption",
@@ -1165,12 +1166,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribenet/symfony-mantle-bundle.git",
-                "reference": "e6baa4ed9db51b04e89c56057a8956743f72cea6"
+                "reference": "57c2d16620d48c6e27a521702cf725e098d28801"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/e6baa4ed9db51b04e89c56057a8956743f72cea6",
-                "reference": "e6baa4ed9db51b04e89c56057a8956743f72cea6",
+                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/57c2d16620d48c6e27a521702cf725e098d28801",
+                "reference": "57c2d16620d48c6e27a521702cf725e098d28801",
                 "shasum": ""
             },
             "require": {
@@ -1247,7 +1248,7 @@
                 "mantle",
                 "symfony"
             ],
-            "time": "2015-03-01 14:45:44"
+            "time": "2015-03-05 14:31:42"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -3598,7 +3599,6 @@
         "php": ">=5.6"
     },
     "platform-dev": {
-        "ext-apcu": "~4.0",
         "ext-memcached": "~2.2",
         "ext-tidy": "~2.0"
     }

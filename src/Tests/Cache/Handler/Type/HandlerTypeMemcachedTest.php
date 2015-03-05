@@ -207,11 +207,17 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
         $this->type->__construct();
         $this->type->setOptions([]);
         $this->type->setServers([]);
+
+        $this->type->unsetSupportedDecider();
+
+        $this->assertTrue($this->type->isSupported());
     }
 
     protected function tearDown()
     {
-        $this->chain->flushAll();
+        if ($this->chain instanceof AbstractHandlerChain) {
+            $this->chain->flushAll();
+        }
     }
 }
 

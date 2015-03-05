@@ -130,28 +130,18 @@ class HandlerTypeMemcached extends AbstractHandlerType
      *
      * @param  string          $type
      * @param  bool|int|string $value
-     * @return bool|int
+     * @return mixed
      * @throws RuntimeException
      */
     protected function handleOptionValueResolution($type, $value)
     {
-        if (true === is_bool($value)) {
-
-            return (bool) $value;
-        }
-        else if (true === is_int($value)) {
-
-            return (int) $value;
-        }
-        else if (true === array_key_exists($type, $this->optionValues) &&
-                 true === array_key_exists($value, $this->optionValues[ $type ]))
+        if (true === array_key_exists($type, $this->optionValues) &&
+            true === array_key_exists($value, $this->optionValues[ $type ]))
         {
             return (int) $this->optionValues[ $type ][ $value ];
         }
 
-        throw new RuntimeException(
-            sprintf('Unknown memcache option value %s for type %s specified.', (string) $value, $type)
-        );
+        return $value;
     }
 
     /**

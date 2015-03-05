@@ -20,6 +20,11 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 class HandlerTypeFilesystem extends AbstractHandlerType
 {
     /**
+     * @var string
+     */
+    protected $cacheDirectoryRequirement = 'scribe_cache';
+
+    /**
      * Directory to write cache data files to (generally your system temp dir)
      *
      * @var string|null
@@ -49,16 +54,12 @@ class HandlerTypeFilesystem extends AbstractHandlerType
      */
     public function proposeCacheDirectory($directory)
     {
-        $requiredSubDirectory = 'scribe_cache';
-
-        if ($requiredSubDirectory !== substr($directory, -12) &&
-            $requiredSubDirectory !== substr($directory, -13))
-        {
-            $directory .= DIRECTORY_SEPARATOR . $requiredSubDirectory;
+        if (false === mb_strpos($directory, $this->cacheDirectoryRequirement)) {
+            $directory .= DIRECTORY_SEPARATOR . $this->cacheDirectoryRequirement;
         }
 
         if ((true === is_dir($directory) && true === is_writable($directory)) ||
-            true === mkdir($directory, 0777, true))
+            (true === mkdir($directory, 0777, true)))
         {
             $this->setCacheDirectory($directory);
         }

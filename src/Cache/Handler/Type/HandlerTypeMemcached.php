@@ -21,6 +21,9 @@ use Memcached;
  */
 class HandlerTypeMemcached extends AbstractHandlerType
 {
+    /**
+     * @var array
+     */
     protected $optionTypes = [
         'serializer'           => Memcached::OPT_SERIALIZER,
         'libketama_compatible' => Memcached::OPT_LIBKETAMA_COMPATIBLE,
@@ -30,15 +33,18 @@ class HandlerTypeMemcached extends AbstractHandlerType
         'compression_method'   => Memcached::OPT_COMPRESSION_TYPE,
     ];
 
+    /**
+     * @var array
+     */
     protected $optionValues = [
-        'serializer'   => [
+        'serializer' => [
             'igbinary' => Memcached::SERIALIZER_IGBINARY,
             'json'     => Memcached::SERIALIZER_JSON,
             'php'      => Memcached::SERIALIZER_PHP
         ],
         'compression_method'  => [
-            'zlib'     => Memcached::COMPRESSION_ZLIB,
-            'fastlz'   => Memcached::COMPRESSION_FASTLZ
+            'zlib'   => Memcached::COMPRESSION_ZLIB,
+            'fastlz' => Memcached::COMPRESSION_FASTLZ
         ],
     ];
 
@@ -109,32 +115,38 @@ class HandlerTypeMemcached extends AbstractHandlerType
      */
     protected function handleOptionTypeResolution($type)
     {
-        if (false === array_key_exists($type, $this->optionTypes)) {
-            throw new RuntimeException(
-                sprintf('Unknown memcached option type %s specified.', $type)
-            );
+        if (true === array_key_exists($type, $this->optionTypes)) {
+
+            return (int) $this->optionTypes[ $type ];
         }
 
-        return $this->optionTypes[ $type ];
+        throw new RuntimeException(
+            sprintf('Unknown memcached option type %s specified.', $type)
+        );
     }
 
     /**
      * Determine the Memcached option value constant that should be returned
      *
-     * @param  string   $type
-     * @param  bool|int $value
+     * @param  string          $type
+     * @param  bool|int|string $value
      * @return bool|int
      * @throws RuntimeException
      */
     protected function handleOptionValueResolution($type, $value)
     {
         if (true === is_bool($value)) {
-            return $value;
+
+            return (bool) $value;
+        }
+        else if (true === is_int($value)) {
+
+            return (int) $value;
         }
         else if (true === array_key_exists($type, $this->optionValues) &&
                  true === array_key_exists($value, $this->optionValues[ $type ]))
         {
-            return $this->optionValues[ $type ][ $value ];
+            return (int) $this->optionValues[ $type ][ $value ];
         }
 
         throw new RuntimeException(

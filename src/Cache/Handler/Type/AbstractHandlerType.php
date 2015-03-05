@@ -60,7 +60,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      * @param int                        $ttl
      * @param int|null                   $priority
      * @param bool                       $disabled
-     * @param callable                   $supportedDecider
+     * @param callable|null              $supportedDecider
      */
     public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
@@ -168,7 +168,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function getKey()
     {
-        return (string) $this->getKeyGenerator()->getKey(...[]);
+        return (string) $this->getKeyGenerator()->getKey(...[ ]);
     }
 
     /**
@@ -373,7 +373,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Return cached data in original form (object, int, string, etc)
      *
-     * @param  $data
+     * @param  string $data
      * @return mixed|null
      */
     protected function sanitizeReturnedCacheData($data)

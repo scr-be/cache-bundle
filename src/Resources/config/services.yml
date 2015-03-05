@@ -16,16 +16,6 @@ services:
     scribe_cache.handler_chain:
         class: %scribe_cache.handler_chain.class%
 
-    scribe_cache.handler_type.apcu:
-        class: %scribe_cache.handler_type.apcu.class%
-        arguments:
-            - @scribe_cache.key_generator
-            - %s.cache.handlers.apcu.general.ttl%
-            - %s.cache.handlers.apcu.general.priority%
-            - %s.cache.handlers.apcu.general.disabled%
-        tags:
-            - { name: scribe_cache.handler_type }
-
     scribe_cache.handler_type.memcached:
         class: %scribe_cache.handler_type.memcached.class%
         arguments:
@@ -35,6 +25,9 @@ services:
             - %s.cache.handlers.memcached.general.disabled%
         tags:
             - { name: scribe_cache.handler_type }
+        calls:
+            - [setOptions, [%s.cache.handlers.memcached.internals%]]
+            - [setServers, [%s.cache.handlers.memcached.servers%]]
 
     scribe_cache.handler_type.filesystem:
         class: %scribe_cache.handler_type.filesystem.class%

@@ -54,7 +54,7 @@ trait HandlerChainAwareTrait
      */
     public function hasCacheHandlerChain()
     {
-        return (bool) (true === ($this->cacheHandlerChain instanceof AbstractHandlerChain));
+        return (bool) ($this->cacheHandlerChain instanceof AbstractHandlerChain);
     }
 }
 

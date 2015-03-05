@@ -47,6 +47,13 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     protected $disabled;
 
     /**
+     * Optional closure to determine if cache handler is supported
+     *
+     * @var callable|null
+     */
+    protected $supportedDecider = null;
+
+    /**
      * Setup the class instance with the required properties
      *
      * @param KeyGeneratorInterface $keyGenerator
@@ -54,13 +61,14 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      * @param int|null              $priority
      * @param bool                  $disabled
      */
-    public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
+    public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
         $this
             ->setKeyGenerator($keyGenerator)
             ->setTtl($ttl)
             ->setPriority($priority)
             ->setEnabled($disabled !== true)
+            ->setSupportedDecider($supportedDecider)
         ;
     }
 
@@ -71,6 +79,75 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      * @return bool
      */
     abstract public function isSupported();
+
+    /**
+     * Set the optional closure that determines if this cache handler is supported
+     *
+     * @param callable $decider
+     * @return $this
+     */
+    public function setSupportedDecider(callable $decider = null)
+    {
+        if (true === ($decider instanceof \Closure)) {
+            $this->supportedDecider = $decider;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Un-set the optional closure that determines if this cache handler is supported
+     *
+     * @return $this
+     */
+    public function unsetSupportedDecider()
+    {
+        $this->supportedDecider = null;
+
+        return $this;
+    }
+
+    /**
+     * Get the optional closure that determines if this cache handler is supported
+     *
+     * @return callable|null
+     */
+    public function getSupportedDecider()
+    {
+        return $this->supportedDecider;
+    }
+
+    /**
+     * Check if the optional closure that determines if this cache handler is supported has been set
+     *
+     * @return bool
+     */
+    public function hasSupportedDecider()
+    {
+        if (true === ($this->supportedDecider instanceof \Closure)) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Attempt to call the optional closure that determines if this cache handler is supported
+     *
+     * @return bool|null
+     */
+    protected function callSupportedDecider()
+    {
+        if (false === $this->hasSupportedDecider()) {
+
+            return null;
+        }
+
+        $decider = $this->getSupportedDecider();
+
+        return (bool) ($decider());
+    }
 
     /**
      * Set the value(s) that create the cache key
@@ -336,12 +413,25 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      *
      * @return string
      */
-    public function getType()
+    public function getType($fullyQualified = false)
     {
-        return (string) strtolower(str_replace(
-            'HandlerType', '',
-            join('', array_slice(explode('\\', $this->__toString()), -1))
-        ));
+        $className = get_class($this);
+
+        if ($fullyQualified === true) {
+
+            return (string) $className;
+        }
+
+        return (string) strtolower(
+            str_replace(
+                'HandlerType',
+                '',
+                join(
+                    '',
+                    array_slice(explode('\\', $className), -1)
+                )
+            )
+        );
     }
 
     /**
@@ -351,7 +441,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function __toString()
     {
-        return (string) get_class($this);
+        return (string) $this->getType(true);
     }
 }
 

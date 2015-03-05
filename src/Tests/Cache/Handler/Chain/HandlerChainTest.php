@@ -12,7 +12,6 @@ namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain;
 
 use PHPUnit_Framework_TestCase;
 use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeApcu;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
@@ -51,7 +50,6 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     {
         $chain = $this->setHandlerTypesToChain(
             $this->getNewHandlerChain($disabled),
-            new HandlerTypeApcu(new KeyGenerator, 1800, 10),
             new HandlerTypeMemcached(new KeyGenerator, 1800, 11),
             new HandlerTypeFilesystem(new KeyGenerator, 1800, 20)
         );
@@ -63,19 +61,8 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     {
         $chain = $this->setHandlerTypesToChain(
             $this->getNewHandlerChain($disabled),
-            new HandlerTypeApcu(new KeyGenerator, 1800, 1),
             new HandlerTypeMemcached(new KeyGenerator, 1800, 2),
             new HandlerTypeFilesystem(new KeyGenerator, 1800, 2)
-        );
-
-        return $chain;
-    }
-
-    protected function getNewHandlerChainWithApcuHandlerType($disabled = false)
-    {
-        $chain = $this->setHandlerTypesToChain(
-            $this->getNewHandlerChain($disabled),
-            new HandlerTypeApcu(new KeyGenerator)
         );
 
         return $chain;
@@ -159,13 +146,13 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $chain->setKey('one', 'two', 'three');
     }
 
-    public function testGetActiveHandlerTypeForApcu()
+    public function testGetActiveHandlerTypeForMemcached()
     {
-        $chain = $this->getNewHandlerChainWithApcuHandlerType();
+        $chain = $this->getNewHandlerChainWithMemcachedHandlerType();
 
-        $this->assertEquals('apcu', $chain->getActiveHandlerType());
+        $this->assertEquals('memcached', $chain->getActiveHandlerType());
         $this->assertEquals(
-            'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeApcu',
+            'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached',
             $chain->getActiveHandlerType(true)
         );
     }
@@ -224,7 +211,6 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $chain = $this->getNewHandlerChain($disabled = false);
         $this->assertFalse($chain->hasHandlers());
         $chain->setHandlers([
-            new HandlerTypeApcu(new KeyGenerator),
             new HandlerTypeMemcached(new KeyGenerator),
             new HandlerTypeFilesystem(new KeyGenerator)
         ]);
@@ -332,8 +318,27 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $this->assertNull($chain->get(...$key3));
     }
 
+    public function testFilesystemHandlerCanCacheAndDeleteWhenStale()
+    {
+        $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
+        $chain->getActiveHandler()->setTtl(1);
+
+        $val1 = $key1 = [1, 2, 3];
+
+        $chain->set($val1, ...$key1);
+
+        $this->assertEquals($val1, $chain->get(...$key1));
+
+        sleep(2);
+
+        $this->assertFalse($chain->has(...$key1));
+
+        $this->assertNull($chain->get(...$key1));
+    }
+
     public function tearDown()
     {
+
         $tempDirBase = sys_get_temp_dir();
         $tempDir     = $tempDirBase . DIRECTORY_SEPARATOR . 'scribe_cache';
 

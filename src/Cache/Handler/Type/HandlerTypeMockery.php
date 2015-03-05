@@ -24,6 +24,11 @@ class HandlerTypeMockery extends AbstractHandlerType
      */
     public function isSupported()
     {
+        if (null !== ($decision = $this->callSupportedDecider())) {
+
+            return (bool) $decision;
+        }
+
         return (bool) true;
     }
 

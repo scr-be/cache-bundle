@@ -11,7 +11,6 @@
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
 use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMockery;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
 
 /**
@@ -52,10 +51,10 @@ class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
 
         if (true === array_key_exists($handlerPriority, $this->handlers)) {
             throw new RuntimeException(sprintf(
-                                           'A duplicate priority of %d cannot be set for %s. Please review your config.',
-                                           $handlerPriority,
-                                           $handler->getType()
-                                       ));
+               'A duplicate priority of %d cannot be set for %s. Please review your config.',
+               $handlerPriority,
+               $handler->getType()
+           ));
         }
 
         $this->handlers[ $handlerPriority ] = $handler;

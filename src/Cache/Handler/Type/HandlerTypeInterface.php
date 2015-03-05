@@ -19,13 +19,15 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
  */
 interface HandlerTypeInterface
 {
-    public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false);
+    public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null);
     public function isSupported();
     public function setTtl($seconds);
     public function getTtl();
     public function setPriority($priority);
     public function getPriority();
     public function hasPriority();
+    public function setSupportedDecider(callable $decider = null);
+    public function getSupportedDecider();
     public function getType();
     public function __toString();
 }

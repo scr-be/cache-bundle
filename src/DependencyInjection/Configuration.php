@@ -83,7 +83,6 @@ class Configuration implements ConfigurationInterface
             ->root('handlers')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerApcuNode())
                 ->append($this->getHandlerMemcachedNode())
                 ->append($this->getHandlerFilesystemNode())
             ->end()
@@ -116,28 +115,12 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->integerNode('ttl')
                     ->defaultValue(1800)
-                    ->min(0)
+                    ->min(0)->max(2592000)
                     ->info(
                         'The TTL (time to live) for data cached using this handler ' .
                         'type, defined in seconds.'
                     )
                 ->end()
-            ->end()
-        ;
-    }
-
-    /**
-     * Define the apcu handler configuration options
-     *
-     * @return NodeDefinition
-     */
-    private function getHandlerApcuNode()
-    {
-        return (new TreeBuilder)
-            ->root('apcu')
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->append($this->getHandlerInnerGenericNode(3))
             ->end()
         ;
     }
@@ -154,39 +137,11 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->append($this->getHandlerInnerGenericNode(2))
-                ->arrayNode('compression')
-                    ->children()
-                        ->enumNode('type')
-                            ->values(['fastlz', 'zlib'])
-                            ->defaultValue('fastlz')
-                            ->info('Set the compression type.')
-                        ->end()
-                        ->floatNode('factor')
-                            ->defaultValue(1.3)
-                            ->min(0)->max(5)
-                            ->info(
-                                'Set the compression factor. Used to determine ' .
-                                'weather to store the compressed value or not ' .
-                                'only if the compression factor (saving) exceeds ' .
-                                'the set limit. Store compressed if: plain_len > ' .
-                                'comp_len * factor. The default value is 1.3 ' .
-                                '(23% space saving).'
-                            )
-                        ->end()
-                        ->integerNode('threshold')
-                            ->defaultValue(2000)
-                            ->min(0)
-                            ->info(
-                                'The compression threshold in bytes. Data below ' .
-                                'this value will not be considered for compression.'
-                            )
-                        ->end()
-                    ->end()
-                ->end()
-                ->arrayNode('internals')
+                ->arrayNode('!a::internals')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->enumNode('serializer')
-                            ->values(['igbinary', 'php', 'json_array', 'json'])
+                            ->values(['igbinary', 'php', 'json'])
                             ->defaultValue('igbinary')
                             ->info(
                                 'Set the default serializer for memcache objected. ' .
@@ -221,6 +176,19 @@ class Configuration implements ConfigurationInterface
                                 'connecting sockets (may be faster in some ' .
                                 'environments).'
                             )
+                        ->end()
+                        ->booleanNode('compression')
+                            ->defaultTrue()
+                            ->info(
+                                'Enable or disable payload compression. When enabled, items longer than a ' .
+                                'certain threshold will be compressed. For further configuration, you must ' .
+                                'set proper INI settings for memcached.'
+                            )
+                        ->end()
+                        ->enumNode('compression_method')
+                            ->values(['zlib', 'fastlz'])
+                            ->defaultValue('fastlz')
+                            ->info('Set the compression method used.')
                         ->end()
                     ->end()
                 ->end()

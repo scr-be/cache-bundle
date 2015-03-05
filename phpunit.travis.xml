@@ -5,13 +5,13 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         processIsolation="true"
+         processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
          bootstrap="src/Tests/bootstrap.php">
     <testsuites>
         <testsuite name="Scribe Cache Bundle Test Suite">
-            <directory>./src/Tests</directory>
+            <directory>./*/Tests</directory>
         </testsuite>
     </testsuites>
     <groups>
@@ -23,7 +23,7 @@
         <whitelist>
             <directory suffix=".php">./src</directory>
             <exclude>
-                <directory>./src/Tests</directory>
+                <directory>./*/Tests</directory>
             </exclude>
         </whitelist>
     </filter>

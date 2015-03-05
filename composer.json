@@ -22,7 +22,6 @@
         "scribe/mantle-bundle" : "2.0.*@dev"
     },
     "require-dev" : {
-        "ext-apcu"                         : "~4.0",
         "ext-memcached"                    : "~2.2",
         "ext-tidy"                         : "~2.0",
         "symfony/symfony"                  : "~2.6",
@@ -33,7 +32,6 @@
         "sami/sami"                        : "~3.0"
     },
     "suggest" : {
-        "ext-apcu"      : "Required to use APCu caching service.",
         "ext-memcached" : "Required to use Memcached caching service."
     },
     "autoload" : {

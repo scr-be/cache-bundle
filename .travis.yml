@@ -1,9 +1,5 @@
 language: php
 
-branches:
-    except:
-        - gh-pages
-
 php:
     - 5.6
 
@@ -11,7 +7,6 @@ services:
     - memcached
 
 before_script:
-    - travis_retry echo "no" | pecl install apcu-beta
     - phpenv config-add .travis-php.ini
     - phpenv rehash
     - mkdir -p build/logs

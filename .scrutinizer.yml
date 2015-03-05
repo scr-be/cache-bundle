@@ -10,7 +10,8 @@ filter:
         - src/Tests/*
 
 tools:
-    external_code_coverage: true
+    external_code_coverage:
+        timeout: 1000
     php_code_sniffer:
         config:
             standard: PSR2

@@ -68,6 +68,11 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
         return $this->getNewHandlerTypeEmpty(new KeyGenerator, 1800, 1, false, $supportedDecider);
     }
 
+    public function testUnknownOptionAsInt()
+    {
+        $this->type->setOptions(['compression' => 1]);
+    }
+
     /**
      * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
      * @expectedExceptionMessage Unknown memcached option type unknown_option_type specified.

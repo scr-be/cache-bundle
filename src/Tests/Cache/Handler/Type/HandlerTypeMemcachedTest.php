@@ -69,6 +69,24 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
+     * @expectedExceptionMessage Unknown memcached option type unknown_option_type specified.
+     */
+    public function testUnknownOptionType()
+    {
+        $this->type->setOptions(['unknown_option_type' => true]);
+    }
+
+    /**
+     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
+     * @expectedExceptionMessage Unknown memcache option value unknown_serializer for type serializer specified.
+     */
+    public function testUnknownOptionTypeValue()
+    {
+        $this->type->setOptions(['serializer' => 'unknown_serializer']);
+    }
+
+    /**
      * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Cannot attempt to get a cached value without setting a key to retrieve it.
      */

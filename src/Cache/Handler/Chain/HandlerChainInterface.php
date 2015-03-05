@@ -22,7 +22,7 @@ interface HandlerChainInterface
     /**
      * Setup the object instance properties
      *
-     * @param bool $disabled
+     * @param  bool $disabled
      */
     public function __construct($disabled = false);
 

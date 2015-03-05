@@ -38,7 +38,7 @@ class HandlerTypeMockery extends AbstractHandlerType
      * @param  ...mixed $keyValues
      * @return $this
      */
-    public function setKey(...$values)
+    public function setKey(...$keyValues)
     {
         return $this;
     }

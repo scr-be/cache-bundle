@@ -110,7 +110,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     /**
      * Gets the active handler
      *
-     * @return AbstractHandlerType
+     * @return AbstractHandlerType|null
      * @throws RuntimeException
      */
     public function getActiveHandler()
@@ -163,9 +163,9 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      * @param  ...mixed $keyValues
      * @return $this
      */
-    public function setKey(...$values)
+    public function setKey(...$keyValues)
     {
-        $this->getActiveHandler()->setKey(...$values);
+        $this->getActiveHandler()->setKey(...$keyValues);
 
         return $this;
     }

@@ -22,11 +22,11 @@ interface HandlerTypeInterface
     /**
      * Setup the class instance with the required properties
      *
-     * @param KeyGeneratorInterface $keyGenerator
-     * @param int                   $ttl
-     * @param int|null              $priority
-     * @param bool                  $disabled
-     * @param callable              $supportedDecider
+     * @param KeyGeneratorInterface|null $keyGenerator
+     * @param int                        $ttl
+     * @param int|null                   $priority
+     * @param bool                       $disabled
+     * @param callable|null              $supportedDecider
      */
     public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null);
 

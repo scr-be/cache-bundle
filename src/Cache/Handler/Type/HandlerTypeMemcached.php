@@ -10,6 +10,7 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
+use Scribe\CacheBundle\Exceptions\RuntimeException;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 use Memcached;
 
@@ -20,6 +21,27 @@ use Memcached;
  */
 class HandlerTypeMemcached extends AbstractHandlerType
 {
+    protected $optionTypes = [
+        'serializer'           => Memcached::OPT_SERIALIZER,
+        'libketama_compatible' => Memcached::OPT_LIBKETAMA_COMPATIBLE,
+        'io_no_block'          => Memcached::OPT_NO_BLOCK,
+        'tcp_no_delay'         => Memcached::OPT_TCP_NODELAY,
+        'compression'          => Memcached::OPT_COMPRESSION,
+        'compression_method'   => Memcached::OPT_COMPRESSION_TYPE,
+    ];
+
+    protected $optionValues = [
+        'serializer'   => [
+            'igbinary' => Memcached::SERIALIZER_IGBINARY,
+            'json'     => Memcached::SERIALIZER_JSON,
+            'php'      => Memcached::SERIALIZER_PHP
+        ],
+        'compression_method'  => [
+            'zlib'     => Memcached::COMPRESSION_ZLIB,
+            'fastlz'   => Memcached::COMPRESSION_FASTLZ
+        ],
+    ];
+
     /**
      * @var Memcached
      */
@@ -56,42 +78,68 @@ class HandlerTypeMemcached extends AbstractHandlerType
             return;
         }
 
-        $setOpts = [ ];
-        foreach ($options as $o => $v) {
-            if ($o === 'serializer') {
-                if ($v === 'igbinary') {
-                    $setOpts[ Memcached::OPT_SERIALIZER ] = Memcached::SERIALIZER_IGBINARY;
-                }
-                else if ($v === 'json') {
-                    $setOpts[ Memcached::OPT_SERIALIZER ] = Memcached::SERIALIZER_JSON;
-                }
-                else {
-                    $setOpts[ Memcached::OPT_SERIALIZER ] = Memcached::SERIALIZER_PHP;
-                }
-            }
-            else if ($o === 'libketama_compatible') {
-                $setOpts[ Memcached::OPT_LIBKETAMA_COMPATIBLE ] = (bool) $v;
-            }
-            else if ($o === 'io_no_block') {
-                $setOpts[ Memcached::OPT_NO_BLOCK ] = (bool) $v;
-            }
-            else if ($o === 'tcp_no_delay') {
-                $setOpts[ Memcached::OPT_TCP_NODELAY ] = (bool) $v;
-            }
-            else if ($o === 'compression') {
-                $setOpts[ Memcached::OPT_COMPRESSION ] = (bool) $v;
-            }
-            else if ($o === 'compression_method') {
-                if ($v === 'zlib') {
-                    $setOpts[ Memcached::OPT_COMPRESSION_TYPE ] = Memcached::COMPRESSION_ZLIB;
-                }
-                else {
-                    $setOpts[ Memcached::OPT_COMPRESSION_TYPE ] = Memcached::COMPRESSION_FASTLZ;
-                }
-            }
+        $resolvedOptions = [ ];
+
+        foreach ($options as $type => $value) {
+            $this->handleOptionResolution($resolvedOptions, $type, $value);
         }
 
-        $this->memcached->setOptions($setOpts);
+        $this->memcached->setOptions($resolvedOptions);
+    }
+
+    /**
+     * Resolve the Memcached constants for setOptions based on the provided human-readable config
+     *
+     * @param array    $options
+     * @param string   $type
+     * @param bool|int $value
+     */
+    protected function handleOptionResolution(array &$options, $type, $value)
+    {
+        $options[ $this->handleOptionTypeResolution($type) ] =
+            $this->handleOptionValueResolution($type, $value);
+    }
+
+    /**
+     * Determine the Memcached option type constant that should be returned
+     *
+     * @param  string $type
+     * @return int
+     * @throws RuntimeException
+     */
+    protected function handleOptionTypeResolution($type)
+    {
+        if (false === array_key_exists($type, $this->optionTypes)) {
+            throw new RuntimeException(
+                sprintf('Unknown memcached option type %s specified.', $type)
+            );
+        }
+
+        return $this->optionTypes[ $type ];
+    }
+
+    /**
+     * Determine the Memcached option value constant that should be returned
+     *
+     * @param  string   $type
+     * @param  bool|int $value
+     * @return bool|int
+     * @throws RuntimeException
+     */
+    protected function handleOptionValueResolution($type, $value)
+    {
+        if (true === is_bool($value)) {
+            return $value;
+        }
+        else if (true === array_key_exists($type, $this->optionValues) &&
+                 true === array_key_exists($value, $this->optionValues[ $type ]))
+        {
+            return $this->optionValues[ $type ][ $value ];
+        }
+
+        throw new RuntimeException(
+            sprintf('Unknown memcache option value %s for type %s specified.', (string) $value, $type)
+        );
     }
 
     /**

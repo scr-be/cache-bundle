@@ -56,11 +56,11 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Setup the class instance with the required properties
      *
-     * @param KeyGeneratorInterface $keyGenerator
-     * @param int                   $ttl
-     * @param int|null              $priority
-     * @param bool                  $disabled
-     * @param callable              $supportedDecider
+     * @param KeyGeneratorInterface|null $keyGenerator
+     * @param int                        $ttl
+     * @param int|null                   $priority
+     * @param bool                       $disabled
+     * @param callable                   $supportedDecider
      */
     public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
@@ -151,11 +151,11 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      * @param  ...mixed $keyValues
      * @return $this
      */
-    public function setKey(...$values)
+    public function setKey(...$keyValues)
     {
         $this
             ->getKeyGenerator()
-            ->setKeyValues(...$values)
+            ->setKeyValues(...$keyValues)
         ;
 
         return $this;
@@ -168,7 +168,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function getKey()
     {
-        return (string) $this->getKeyGenerator()->getKey();
+        return (string) $this->getKeyGenerator()->getKey(...[]);
     }
 
     /**
@@ -281,7 +281,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      *
      * @param  string $data
      * @param  string $key
-     * @return $this
+     * @return bool
      */
     abstract protected function setUsingHandler($data, $key);
 

@@ -76,7 +76,16 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
     {
         $this->type->setOptions(['unknown_option_type' => true]);
     }
-    
+
+    /**
+     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
+     * @expectedExceptionMessage Unknown number of server connection parameters. Please provide 3: ip/host, port, and weight.
+     */
+    public function testInvalidServerOption()
+    {
+        $this->type->addServers(['invalid_server_opts' => ['too', 'many', 'args', 'for', 'server', 'config']]);
+    }
+
     /**
      * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Cannot attempt to get a cached value without setting a key to retrieve it.

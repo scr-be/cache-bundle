@@ -26,6 +26,22 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     use KeyGeneratorAwareTrait;
 
     /**
+     * The versions of the relevant software interaction layer
+     *
+     * @var array
+     */
+    protected $versions = [ ];
+
+    /**
+     * If {@see AbstractHandlerType::$versions} is null, this callable can be
+     * optionally defined to determine the versions of the relevant software
+     * interaction layer.
+     *
+     * @var callable|null
+     */
+    protected $versionsDeterminer = null;
+
+    /**
      * The number of seconds before a cache entry becomes stale
      *
      * @var int

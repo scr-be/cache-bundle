@@ -22,6 +22,8 @@ use Memcached;
 class HandlerTypeMemcached extends AbstractHandlerType
 {
     /**
+     * Available memcached option type strings to their object constant
+     *
      * @var array
      */
     protected $optionTypes = [
@@ -34,6 +36,8 @@ class HandlerTypeMemcached extends AbstractHandlerType
     ];
 
     /**
+     * Available memcached option type value strings to their object constant
+     *
      * @var array
      */
     protected $optionValues = [
@@ -49,6 +53,8 @@ class HandlerTypeMemcached extends AbstractHandlerType
     ];
 
     /**
+     * Our memcached object instance
+     *
      * @var Memcached
      */
     protected $memcached;
@@ -96,9 +102,9 @@ class HandlerTypeMemcached extends AbstractHandlerType
     /**
      * Resolve the Memcached constants for setOptions based on the provided human-readable config
      *
-     * @param array    $options
-     * @param string   $type
-     * @param bool|int $value
+     * @param array  $options
+     * @param string $type
+     * @param mixed  $value
      */
     protected function handleOptionResolution(array &$options, $type, $value)
     {
@@ -110,19 +116,18 @@ class HandlerTypeMemcached extends AbstractHandlerType
      * Determine the Memcached option type constant that should be returned
      *
      * @param  string $type
-     * @return int
+     * @return mixed
      * @throws RuntimeException
      */
     protected function handleOptionTypeResolution($type)
     {
-        if (true === array_key_exists($type, $this->optionTypes)) {
-
-            return (int) $this->optionTypes[ $type ];
+        if (false === array_key_exists($type, $this->optionTypes)) {
+            throw new RuntimeException(
+                sprintf('Unknown memcached option type %s specified.', $type)
+            );
         }
 
-        throw new RuntimeException(
-            sprintf('Unknown memcached option type %s specified.', $type)
-        );
+        return $this->optionTypes[ $type ];
     }
 
     /**
@@ -131,37 +136,72 @@ class HandlerTypeMemcached extends AbstractHandlerType
      * @param  string          $type
      * @param  bool|int|string $value
      * @return mixed
-     * @throws RuntimeException
      */
     protected function handleOptionValueResolution($type, $value)
     {
         if (true === array_key_exists($type, $this->optionValues) &&
             true === array_key_exists($value, $this->optionValues[ $type ]))
         {
-            return (int) $this->optionValues[ $type ][ $value ];
+            return $this->optionValues[ $type ][ $value ];
         }
 
         return $value;
     }
 
     /**
-     * Array of server definitions as passed by the DI compiler pass
+     * Array of server definitions to set (generally passed by Symfony's DI).
+     * This will also reset any previously configured servers.
      *
      * @param array $servers
      */
     public function setServers(array $servers = [ ])
     {
+        if (true === $this->isSupported()) {
+            $this->memcached->resetServerList();
+        }
+
+        $this->addServers($servers);
+    }
+
+    /**
+     * Array of server definitions to add. Unlike {@see:setServers} this method
+     * does not reset previously configured servers. Be careful about adding
+     * duplicate entries, as no check is made to disallow such.
+     *
+     * @param  array $servers
+     * @throws RuntimeException
+     */
+    public function addServers(array $servers = [ ])
+    {
         if (true !== $this->isSupported()) {
             return;
         }
 
-        $setOpts = [ ];
-        foreach ($servers as $n => $s) {
-            $setOpts[ ] = array_values($s);
+        $resolvedServers = [ ];
+        foreach ($servers as $name => $parameters) {
+            $this->handleServerResolution($resolvedServers, $name, $parameters);
         }
 
-        $this->memcached->resetServerList();
-        $this->memcached->addServers($setOpts);
+        $this->memcached->addServers($resolvedServers);
+    }
+
+    /**
+     * Resolve single-server configuration array
+     *
+     * @param  array  $resolvedServers
+     * @param  string $name
+     * @param  array  $parameters
+     * @throws RuntimeException
+     */
+    protected function handleServerResolution(array &$resolvedServers, $name, array $parameters)
+    {
+        if (false === (count($parameters) === 3)) {
+            throw new RuntimeException(
+                'Unknown number of server connection parameters. Please provide 3: ip/host, port, and weight.'
+            );
+        }
+
+        $resolvedServers[ $name ] = array_values($parameters);
     }
 
     /**

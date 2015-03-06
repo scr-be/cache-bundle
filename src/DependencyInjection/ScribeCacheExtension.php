@@ -30,25 +30,7 @@ class ScribeCacheExtension extends AbstractExtension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $this->setContainer($container);
-
-        $configuration = new Configuration();
-        $config = $this->processConfiguration(
-            $configuration,
-            $configs
-        );
-
-        $this
-            ->setIndexPrefix('s.cache')
-            ->processConfigToParameter($config)
-        ;
-
-        $loader = new YamlFileLoader(
-            $container,
-            new FileLocator(__DIR__.'/../Resources/config')
-        );
-
-        $loader->load('services.yml');
+        $this->autoLoad($configs, $container, new Configuration, 's.cache');
     }
 }
 

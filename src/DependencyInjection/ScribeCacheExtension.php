@@ -11,8 +11,6 @@
 namespace Scribe\CacheBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
 use Scribe\Component\DependencyInjection\AbstractExtension;
 
 /**

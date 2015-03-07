@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="true"
+         bootstrap="src/Tests/bootstrap.php">
+    <testsuites>
+        <testsuite name="Scribe Cache Bundle Test Suite">
+            <directory>./*/Tests</directory>
+        </testsuite>
+    </testsuites>
+    <groups>
+        <exclude>
+            <group>functional</group>
+        </exclude>
+    </groups>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory>./*/Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-html" target="build/logs/coverage/"/>
+    </logging>
+    <php>
+        <server name="KERNEL_DIR" value="./src/Tests/Fixtures/App/app" />
+    </php>
+    <listeners>
+        <listener class="Yandex\Allure\Adapter\AllureAdapter" file="vendor/allure-framework/allure-phpunit/src/Yandex/Allure/Adapter/AllureAdapter.php">
+            <arguments>
+                <string>build/logs/allure-results</string>
+                <boolean>true</boolean>
+                <array>
+                    <element key="0">
+                        <string>expectedExceptionMessageRegex</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+</phpunit>

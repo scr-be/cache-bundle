@@ -39,21 +39,6 @@ interface HandlerTypeInterface
     public function isSupported();
 
     /**
-     * Set the time to live for the cache values
-     *
-     * @param  int $seconds
-     * @return $this
-     */
-    public function setTtl($seconds);
-
-    /**
-     * Get the TTL for the cache values
-     *
-     * @return int
-     */
-    public function getTtl();
-
-    /**
      * Set the cache handler priority
      *
      * @param  int|null $priority

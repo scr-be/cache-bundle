@@ -46,6 +46,28 @@ abstract class AbstractHandler implements HandlerInterface
     {
         return (bool) (true === $this->enabled);
     }
+
+    /**
+     * Set the time to live for the cache values
+     *
+     * @param  int $seconds
+     * @return $this
+     */
+    abstract public function setTtl($seconds);
+
+    /**
+     * Get the TTL for the cache values
+     *
+     * @return int
+     */
+    abstract public function getTtl();
+
+    /**
+     * Set the TTL back to the system default
+     *
+     * @return $this
+     */
+    abstract public function setTtlToDefault();
 }
 
 /* EOF */

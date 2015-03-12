@@ -84,6 +84,28 @@ interface HandlerInterface
      * @return bool
      */
     public function flushAll();
+
+    /**
+     * Set the time to live for the cache values
+     *
+     * @param  int $seconds
+     * @return $this
+     */
+    public function setTtl($seconds);
+
+    /**
+     * Get the TTL for the cache values
+     *
+     * @return int
+     */
+    public function getTtl();
+
+    /**
+     * Set the TTL back to the system default
+     *
+     * @return $this
+     */
+    public function setTtlToDefault();
 }
 
 /* EOF */

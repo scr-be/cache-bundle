@@ -339,6 +339,45 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $this->assertNull($chain->get(...$key1));
     }
 
+    public function testFilesystemHandlerCanChangeTtl()
+    {
+        $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
+        $chain->setTtl(6);
+
+        $this->assertEquals(6, $chain->getTtl());
+
+        $val1 = $key1 = [1, 2, 3];
+        $val2 = $key2 = [2, 3, 4];
+
+        $chain->set($val1, ...$key1);
+
+        $this->assertEquals($val1, $chain->get(...$key1));
+
+        $chain->setTtl(1);
+
+        $chain->set($val2, ...$key2);
+
+        $this->assertTrue($chain->has(...$key1));
+        $this->assertTrue($chain->has(...$key2));
+        $this->assertEquals($val1, $chain->get(...$key1));
+        $this->assertEquals($val2, $chain->get(...$key2));
+
+        sleep(2);
+
+        $this->assertFalse($chain->has(...$key2));
+        $this->assertNull($chain->get(...$key2));
+
+        $chain->setTtl(6);
+        sleep(5);
+
+        $this->assertFalse($chain->has(...$key1));
+        $this->assertNull($chain->get(...$key1));
+
+        $chain->setTtlToDefault();
+
+        $this->assertEquals(1800, $chain->getTtl());
+    }
+
     public function tearDown()
     {
         $tempDirBase = sys_get_temp_dir();

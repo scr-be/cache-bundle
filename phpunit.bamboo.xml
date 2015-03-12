@@ -35,7 +35,7 @@
         <server name="KERNEL_DIR" value="./src/Tests/Fixtures/App/app" />
     </php>
     <listeners>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter" file="vendor/allure-framework/allure-phpunit/src/Yandex/Allure/Adapter/AllureAdapter.php">
+        <listener class="Yandex\Allure\Adapter\AllureAdapter" file="vendor/allure-framework/allure-php-api/src/Yandex/Allure/Adapter/Allure.php">
             <arguments>
                 <string>build/logs/allure-results</string>
                 <boolean>true</boolean>

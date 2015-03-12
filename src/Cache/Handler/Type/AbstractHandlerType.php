@@ -49,6 +49,13 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     protected $ttl;
 
     /**
+     * The default number of seconds before a cache entry becomes stale
+     *
+     * @var int
+     */
+    protected $ttlDefault;
+
+    /**
      * Priority of this cache handler
      *
      * @var int|null
@@ -80,6 +87,8 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
+        $this->ttlDefault = $ttl;
+
         $this
             ->setKeyGenerator($keyGenerator)
             ->setTtl($ttl)
@@ -218,6 +227,16 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     public function getTtl()
     {
         return (int) $this->ttl;
+    }
+
+    /**
+     * Set the TTL back to the system default
+     *
+     * @return $this
+     */
+    public function setTtlToDefault()
+    {
+        $this->setTtl($this->ttlDefault);
     }
 
     /**

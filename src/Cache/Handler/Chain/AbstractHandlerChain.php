@@ -247,6 +247,41 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
+     * Set the time to live for the cache values
+     *
+     * @param  int $seconds
+     * @return $this
+     */
+    public function setTtl($seconds)
+    {
+        $this->getActiveHandler()->setTtl($seconds);
+
+        return $this;
+    }
+
+    /**
+     * Get the TTL for the cache values
+     *
+     * @return int
+     */
+    public function getTtl()
+    {
+        return $this->getActiveHandler()->getTtl();
+    }
+
+    /**
+     * Set the TTL back to the system default
+     *
+     * @return $this
+     */
+    public function setTtlToDefault()
+    {
+        $this->getActiveHandler()->setTtlToDefault();
+
+        return $this;
+    }
+
+    /**
      * Stack the provided handler in the correct position on the handlers stack,
      * verifying that another handler does not already have the same priority.
      *

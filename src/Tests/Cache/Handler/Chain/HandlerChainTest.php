@@ -342,18 +342,16 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     public function testFilesystemHandlerCanChangeTtl()
     {
         $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
-        $chain->setTtl(6);
+        $chain->setTtl(8);
 
-        $this->assertEquals(6, $chain->getTtl());
+        $this->assertEquals(8, $chain->getTtl());
 
         $val1 = $key1 = [1, 2, 3];
         $val2 = $key2 = [2, 3, 4];
 
         $chain->set($val1, ...$key1);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-
-        $chain->setTtl(1);
+        $chain->setTtl(2);
 
         $chain->set($val2, ...$key2);
 
@@ -362,13 +360,13 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($val1, $chain->get(...$key1));
         $this->assertEquals($val2, $chain->get(...$key2));
 
-        sleep(2);
+        sleep(4);
 
         $this->assertFalse($chain->has(...$key2));
         $this->assertNull($chain->get(...$key2));
 
-        $chain->setTtl(6);
-        sleep(5);
+        $chain->setTtl(8);
+        sleep(6);
 
         $this->assertFalse($chain->has(...$key1));
         $this->assertNull($chain->get(...$key1));

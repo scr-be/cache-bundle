@@ -11,6 +11,9 @@
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
 use PHPUnit_Framework_TestCase;
+use Yandex\Allure\Adapter\Annotation\Title;
+use Yandex\Allure\Adapter\Annotation\Features;
+use Yandex\Allure\Adapter\Annotation\Stories;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
 use Scribe\CacheBundle\Cache\Handler\Chain\AbstractHandlerChain;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;

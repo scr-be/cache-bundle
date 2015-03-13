@@ -18,9 +18,10 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class HandlerTypeMemcachedTest
+ * Class HandlerTypeMemcachedTest.
  *
- * @package Scribe\CacheBundle\Tests\Cache\Handler\Type
+ *
+ * @Title("Memcache Cache Handler Test")
  */
 class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
 {
@@ -41,6 +42,11 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
      */
     protected $container;
 
+    /**
+     * setUp.
+     *
+     * @throws \Scribe\CacheBundle\Exceptions\RuntimeException
+     */
     protected function setUp()
     {
         $kernel = new \AppKernel('test', true);
@@ -51,59 +57,110 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
         $this->type      = $this->chain->getActiveHandler();
     }
 
+    /**
+     * getNewHandlerType.
+     *
+     * @return HandlerTypeMemcached
+     */
     protected function getNewHandlerType()
     {
-        return $this->getNewHandlerTypeEmpty(new KeyGenerator);
+        return $this->getNewHandlerTypeEmpty(new KeyGenerator());
     }
 
+    /**
+     * getNewHandlerTypeEmpty.
+     *
+     * @param KeyGeneratorInterface $keyGenerator
+     * @param int                   $ttl
+     * @param null                  $priority
+     * @param bool                  $disabled
+     * @param callable              $supportedDecider
+     *
+     * @return HandlerTypeMemcached
+     */
     protected function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
         return new HandlerTypeMemcached($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
     }
 
+    /**
+     * getNewHandlerTypeNotSupported.
+     *
+     * @param KeyGeneratorInterface $keyGenerator
+     * @param int                   $ttl
+     * @param null                  $priority
+     * @param bool                  $disabled
+     *
+     * @return HandlerTypeMemcached
+     */
     protected function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
     {
-        $supportedDecider = function() { return false; };
+        $supportedDecider = function () { return false; };
 
-        return $this->getNewHandlerTypeEmpty(new KeyGenerator, 1800, 1, false, $supportedDecider);
+        return $this->getNewHandlerTypeEmpty(new KeyGenerator(), 1800, 1, false, $supportedDecider);
     }
 
     /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage Unknown memcached option type unknown_option_type specified.
+     * @Title("Test Exception is Thrown on Unknown Option Type");
+     * @Features({"Option Handling", "DI", "Exception Handling"})
+     * @Stories({"Handler should be able to handle configuration"})
      */
     public function testUnknownOptionType()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Unknown memcached option type unknown_option_type specified.'
+        );
+
         $this->type->setOptions(['unknown_option_type' => true]);
     }
 
     /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage Unknown number of server connection parameters. Please provide 3: ip/host, port, and weight.
+     * @Title("Test Exception is Thrown on Unknown Server Configuration");
+     * @Features({"Option Handling", "DI", "Exception Handling"})
+     * @Stories({"Handler should be able to handle configuration"})
      */
     public function testInvalidServerOption()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Unknown number of server connection parameters. Please provide 3: ip/host, port, and weight.'
+        );
+
         $this->type->addServers(['invalid_server_opts' => ['too', 'many', 'args', 'for', 'server', 'config']]);
     }
 
     /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Cannot attempt to get a cached value without setting a key to retrieve it.
+     * @Title("Confirm an exception is thrown when `get` is called with no cache key")
+     * @Features({"Exception Handling"})
+     * @Stories({"Handler should be able to set/get/has/del/flush"})
      */
     public function testGetWithoutKeyExceptionHandling()
     {
-        $this
-            ->type
-            ->get()
-        ;
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
+            'Cannot attempt to get a cached value without setting a key to retrieve it.'
+        );
+
+        $this->type->get();
     }
 
-    public function testToString()
+    /**
+     * @Title("Attempt to get the fully qualified class name for handler")
+     * @Features({"To String", "Self-Aware"})
+     * @Stories({"Handler should be able to determine what type it is"})
+     */
+    public function testToStringFQN()
     {
         $this->assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, (string) $this->type);
         $this->assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, $this->type->__toString());
     }
 
+    /**
+     * @Title("Attempt to get the non-fully qualified class name for handler")
+     * @Features({"To String", "Self-Aware"})
+     * @Stories({"Handler should be able to determine what type it is"})
+     */
     public function testGetType()
     {
         $this->assertEquals('memcached', $this->type->getType());
@@ -113,13 +170,40 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @Title("Confirm the Memcached handler can cache")
+     * @Features({"Can Cache"})
+     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     */
     public function testMemcachedHandlerCanCacheAndFlushAll()
     {
         $chain = $this->chain;
 
-        $val1 = $key1 = [1, 2, 3];
-        $val2 = $key2 = [2, 3, 4];
-        $val3 = $key3 = [3, 4, 5];
+        $val1 = $key1 = [ 1, 2, 3 ];
+        $val2 = $key2 = [ 2, 3, 4 ];
+        $val3 = $key3 = [ 3, 4, 5 ];
+
+        $chain->set($val1, ...$key1);
+        $chain->set($val2, ...$key2);
+        $chain->set($val3, ...$key3);
+
+        $this->assertEquals($val1, $chain->get(...$key1));
+        $this->assertEquals($val2, $chain->get(...$key2));
+        $this->assertEquals($val3, $chain->get(...$key3));
+    }
+
+    /**
+     * @Title("Confirm the Memcached handler can determine if it has a cached item")
+     * @Features({"Can Check Cache"})
+     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     */
+    public function testMemcachedHandlerCanCacheAndCheck()
+    {
+        $chain = $this->chain;
+
+        $val1 = $key1 = [ 81, 82, 83 ];
+        $val2 = $key2 = [ 82, 83, 84 ];
+        $val3 = $key3 = [ 83, 84, 85 ];
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);
@@ -129,41 +213,100 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($val2, $chain->get(...$key2));
         $this->assertEquals($val3, $chain->get(...$key3));
 
+        $this->assertTrue($chain->has(...$key1));
+        $this->assertTrue($chain->has(...$key2));
+        $this->assertTrue($chain->has(...$key3));
+    }
+
+    /**
+     * @Title("Confirm the Memcached handler can flush its cache")
+     * @Features({"Can Cache", "Can Flush All"})
+     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     */
+    public function testMemcacheHandlerCanFlushAll()
+    {
+        $chain = $this->chain;
+
+        $val1 = $key1 = [ 11, 22, 33 ];
+        $val2 = $key2 = [ 22, 33, 44 ];
+        $val3 = $key3 = [ 33, 44, 55 ];
+
+        $chain->set($val1, ...$key1);
+        $chain->set($val2, ...$key2);
+        $chain->set($val3, ...$key3);
+
+        $this->assertEquals($val1, $chain->get(...$key1));
+        $this->assertEquals($val2, $chain->get(...$key2));
+        $this->assertEquals($val3, $chain->get(...$key3));
+
+        $this->assertTrue($chain->has(...$key1));
+        $this->assertTrue($chain->has(...$key2));
+        $this->assertTrue($chain->has(...$key3));
+
         $chain->flushAll();
 
         $this->assertNull($chain->get(...$key1));
         $this->assertNull($chain->get(...$key2));
         $this->assertNull($chain->get(...$key3));
+
+        $this->assertFalse($chain->has(...$key1));
+        $this->assertFalse($chain->has(...$key2));
+        $this->assertFalse($chain->has(...$key3));
     }
 
+    /**
+     * @Title("Confirm the Memcached handler honors TTL")
+     * @Features({"Can Cache", "Can Flush All", "Can Respect TTL"})
+     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     */
     public function testMemcachedHandlerCanCacheWithValidateTtl()
     {
         $chain = $this->chain;
-        $chain->getActiveHandler()->setTtl(1);
 
-        $val1 = $key1 = [1, 2, 3];
+        $val1 = $key1 = [102, 203, 304];
+        $val2 = $key2 = [105, 206, 307];
 
+        $chain->setTtlToDefault();
         $chain->set($val1, ...$key1);
+        $chain->setTtl(2);
+        $chain->set($val2, ...$key2);
 
         $this->assertEquals($val1, $chain->get(...$key1));
         $this->assertTrue($chain->has(...$key1));
+        $this->assertEquals($val2, $chain->get(...$key2));
+        $this->assertTrue($chain->has(...$key2));
 
-        sleep(1);
+        sleep(4);
 
-        $this->assertFalse($chain->has(...$key1));
+        $this->assertEquals($val1, $chain->get(...$key1));
+        $this->assertTrue($chain->has(...$key1));
+        $this->assertNotNull($chain->get(...$key1));
+        $this->assertNotEquals($val2, $chain->get(...$key2));
+        $this->assertFalse($chain->has(...$key2));
+        $this->assertNull($chain->get(...$key2));
 
         $chain->flushAll();
 
+        $this->assertNotEquals($val1, $chain->get(...$key1));
+        $this->assertFalse($chain->has(...$key1));
         $this->assertNull($chain->get(...$key1));
+        $this->assertNotEquals($val2, $chain->get(...$key2));
+        $this->assertFalse($chain->has(...$key2));
+        $this->assertNull($chain->get(...$key2));
     }
 
+    /**
+     * @Title("Confirm the Memcached handler can delete cached values")
+     * @Features({"Can Cache", "Can Flush All", "Can Respect TTL", "Can Delete"})
+     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     */
     public function testMemcachedHandlerCanCacheAndDelete()
     {
-        $chain = $this->chain;
-        $chain->getActiveHandler()->setTtl(2);
+        $val1 = $key1 = [1122, 2233, 3344];
+        $val2 = $key2 = [2233, 3455, 4455];
 
-        $val1 = $key1 = [1, 2, 3];
-        $val2 = $key2 = [2, 3, 4];
+        $chain = $this->chain;
+        $chain->setTtl(2);
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);
@@ -189,35 +332,50 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
         $this->assertNull($chain->get(...$key2));
     }
 
+    /**
+     * @Title("Test a collection of possible option values")
+     * @Features({"Option Handling", "DI"})
+     * @Stories({"Handler should be able to handle configuration"})
+     */
     public function testOptions()
     {
         $opts = [
             'serializer' => 'json',
-            'compression_method' => 'zlib'
+            'compression_method' => 'zlib',
         ];
 
         $this->type->setOptions($opts);
 
         $opts = [
-            'serializer' => 'php'
+            'serializer' => 'php',
         ];
 
         $this->type->setOptions($opts);
     }
 
+    /**
+     * @Title("Check isSupported closure handler")
+     * @Features({"Option Handling"})
+     * @Stories({"Handler should be able to determine supported state based on passed closure"})
+     */
     public function testIsNotSupported()
     {
         $this->assertTrue($this->type->isSupported());
 
-        $decider = function() { return (bool) false; };
+        $decider = function () { return (bool) false; };
         $this->type->setSupportedDecider($decider);
 
         $this->assertFalse($this->type->isSupported());
     }
 
+    /**
+     * @Title("Check behaviour on internal calls when handler is not supported")
+     * @Features({"Option Handling"})
+     * @Stories({"Handler should be able to determine supported state based on passed closure"})
+     */
     public function testIsNotSupportedInternalCalls()
     {
-        $decider = function() { return (bool) false; };
+        $decider = function () { return (bool) false; };
         $this->type->setSupportedDecider($decider);
 
         $this->assertFalse($this->type->isSupported());
@@ -231,6 +389,11 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->type->isSupported());
     }
 
+    /**
+     * @Title("Handler can have TTL values changed randomly and continue to operate properly")
+     * @Features({"Can Cache", "Can Respect TTL"})
+     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     */
     public function testMemcachedHandlerCanChangeTtl()
     {
         $chain = $this->chain;

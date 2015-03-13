@@ -11,23 +11,22 @@
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
 /**
- * Trait HandlerChainAwareTrait
- *
- * @package Scribe\CacheBundle\Cache\Handler\Chain
+ * Trait HandlerChainAwareTrait.
  */
 trait HandlerChainAwareTrait
 {
     /**
-     * An instance of a class implementing KeyGeneratorInterface
+     * An instance of a class implementing KeyGeneratorInterface.
      *
      * @var AbstractHandlerChain|null
      */
     private $cacheHandlerChain = null;
 
     /**
-     * Set the cache handler chain
+     * Set the cache handler chain.
      *
-     * @param  AbstractHandlerChain|null $cacheHandlerChain
+     * @param AbstractHandlerChain|null $cacheHandlerChain
+     *
      * @return $this
      */
     public function setCacheHandlerChain(AbstractHandlerChain $cacheHandlerChain = null)
@@ -38,7 +37,7 @@ trait HandlerChainAwareTrait
     }
 
     /**
-     * Get the key generator instance
+     * Get the key generator instance.
      *
      * @return AbstractHandlerChain|null
      */
@@ -48,7 +47,7 @@ trait HandlerChainAwareTrait
     }
 
     /**
-     * Check if the cache handler chain exists
+     * Check if the cache handler chain exists.
      *
      * @return bool
      */

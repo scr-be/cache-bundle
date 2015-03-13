@@ -11,21 +11,18 @@
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
 /**
- * Class HandlerTypeMockery
- *
- * @package Scribe\CacheBundle\Cache\Handler\Type
+ * Class HandlerTypeMockery.
  */
 class HandlerTypeMockery extends AbstractHandlerType
 {
     /**
-     * Check if the handler type is supported by the current environment
+     * Check if the handler type is supported by the current environment.
      *
      * @return bool
      */
     public function isSupported()
     {
         if (null !== ($decision = $this->callSupportedDecider())) {
-
             return (bool) $decision;
         }
 
@@ -33,9 +30,10 @@ class HandlerTypeMockery extends AbstractHandlerType
     }
 
     /**
-     * Overwrite parent implementation of set key for mockery handler type
+     * Overwrite parent implementation of set key for mockery handler type.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return $this
      */
     public function setKey(...$keyValues)
@@ -44,17 +42,17 @@ class HandlerTypeMockery extends AbstractHandlerType
     }
 
     /**
-     * Overwrite parent implementation of get key for mockery handler type
+     * Overwrite parent implementation of get key for mockery handler type.
      *
      * @return string|null
      */
     public function getKey()
     {
-        return null;
+        return;
     }
 
     /**
-     * Overwrite parent implementation of has key for mockery handler type
+     * Overwrite parent implementation of has key for mockery handler type.
      *
      * @return bool
      */
@@ -64,21 +62,23 @@ class HandlerTypeMockery extends AbstractHandlerType
     }
 
     /**
-     * Retrieve the cached data using the provided key
+     * Retrieve the cached data using the provided key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return string|null
      */
     protected function getUsingHandler($key)
     {
-        return null;
+        return;
     }
 
     /**
-     * Set the cached data using the key (overwriting data that may exist already)
+     * Set the cached data using the key (overwriting data that may exist already).
      *
-     * @param  string $data
-     * @param  string $key
+     * @param string $data
+     * @param string $key
+     *
      * @return bool
      */
     protected function setUsingHandler($data, $key)
@@ -87,9 +87,10 @@ class HandlerTypeMockery extends AbstractHandlerType
     }
 
     /**
-     * Check if the cached data exists using the provided key
+     * Check if the cached data exists using the provided key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function hasUsingHandler($key)
@@ -98,9 +99,10 @@ class HandlerTypeMockery extends AbstractHandlerType
     }
 
     /**
-     * Delete the cached data using the provided key
+     * Delete the cached data using the provided key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function delUsingHandler($key)
@@ -109,7 +111,7 @@ class HandlerTypeMockery extends AbstractHandlerType
     }
 
     /**
-     * Flush all cached data within this cache mechanism-type
+     * Flush all cached data within this cache mechanism-type.
      *
      * @return bool
      */

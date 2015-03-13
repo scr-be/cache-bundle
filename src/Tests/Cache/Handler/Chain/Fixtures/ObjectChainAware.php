@@ -14,9 +14,7 @@ use PHPUnit_Framework_TestCase;
 use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChainAwareTrait;
 
 /**
- * Class ObjectChainAware
- *
- * @package Scribe\CacheBundle\Tests\Cache\Handler\Chain\Fixtures
+ * Class ObjectChainAware.
  */
 class ObjectChainAware extends PHPUnit_Framework_TestCase
 {

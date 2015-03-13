@@ -17,9 +17,7 @@ use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 
 /**
- * Class HandlerChainTest
- *
- * @package Scribe\CacheBundle\Tests\Cache\Handler\Chain
+ * Class HandlerChainTest.
  */
 class HandlerChainTest extends PHPUnit_Framework_TestCase
 {
@@ -50,8 +48,8 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     {
         $chain = $this->setHandlerTypesToChain(
             $this->getNewHandlerChain($disabled),
-            new HandlerTypeMemcached(new KeyGenerator, 1800, 11),
-            new HandlerTypeFilesystem(new KeyGenerator, 1800, 20)
+            new HandlerTypeMemcached(new KeyGenerator(), 1800, 11),
+            new HandlerTypeFilesystem(new KeyGenerator(), 1800, 20)
         );
 
         return $chain;
@@ -61,8 +59,8 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     {
         $chain = $this->setHandlerTypesToChain(
             $this->getNewHandlerChain($disabled),
-            new HandlerTypeMemcached(new KeyGenerator, 1800, 2),
-            new HandlerTypeFilesystem(new KeyGenerator, 1800, 2)
+            new HandlerTypeMemcached(new KeyGenerator(), 1800, 2),
+            new HandlerTypeFilesystem(new KeyGenerator(), 1800, 2)
         );
 
         return $chain;
@@ -72,7 +70,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     {
         $chain = $this->setHandlerTypesToChain(
             $this->getNewHandlerChain($disabled),
-            new HandlerTypeMemcached(new KeyGenerator)
+            new HandlerTypeMemcached(new KeyGenerator())
         );
 
         return $chain;
@@ -80,7 +78,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
 
     protected function getNewHandlerChainWithFilesystemHandlerType($disabled = false)
     {
-        $filesystemHandlerType = new HandlerTypeFilesystem(new KeyGenerator);
+        $filesystemHandlerType = new HandlerTypeFilesystem(new KeyGenerator());
         $filesystemHandlerType->proposeCacheDirectory('/tmp');
 
         $chain = $this->setHandlerTypesToChain(
@@ -211,8 +209,8 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $chain = $this->getNewHandlerChain($disabled = false);
         $this->assertFalse($chain->hasHandlers());
         $chain->setHandlers([
-            new HandlerTypeMemcached(new KeyGenerator),
-            new HandlerTypeFilesystem(new KeyGenerator)
+            new HandlerTypeMemcached(new KeyGenerator()),
+            new HandlerTypeFilesystem(new KeyGenerator()),
         ]);
         $this->assertTrue($chain->hasHandlers());
     }
@@ -228,7 +226,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     public function testFilesystemHandlerCanCache2()
     {
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
-        $object = new \stdClass;
+        $object = new \stdClass();
         $object->name = 'test field';
 
         $chain
@@ -245,7 +243,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     public function testFilesystemHandlerCanCache3()
     {
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
-        $object = new \stdClass;
+        $object = new \stdClass();
         $object->name = 'test field';
 
         $chain->set('random-string-2', 'a', 'random', 'key', 1, 2, 3, ['an', 'array', 'of', 'items'], $object);
@@ -259,7 +257,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     public function testFilesystemHandlerCanCache4()
     {
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
-        $object = new \stdClass;
+        $object = new \stdClass();
         $object->name = 'test field 2';
 
         $chain->setKey('a', 'random', 'key', 1, 2, 3, $object);
@@ -279,7 +277,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
         $chain->flushAll();
 
-        $object = new \stdClass;
+        $object = new \stdClass();
         $object->name = 'test field 2';
 
         $chain->setKey('a', 'random', 'key', 1, 2, 3, $object);
@@ -379,14 +377,13 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $tempDirBase = sys_get_temp_dir();
-        $tempDir     = $tempDirBase . DIRECTORY_SEPARATOR . 'scribe_cache';
+        $tempDir     = $tempDirBase.DIRECTORY_SEPARATOR.'scribe_cache';
 
         if (false === is_dir($tempDir)) {
-
             return;
         }
-        $kg = new KeyGenerator;
-        $files = glob($tempDir . '/scribe*');
+        $kg = new KeyGenerator();
+        $files = glob($tempDir.'/scribe*');
         foreach ($files as $f) {
             if (substr($f, 0, 1) == '.') {
                 continue;

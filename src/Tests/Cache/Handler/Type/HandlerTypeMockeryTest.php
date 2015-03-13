@@ -12,14 +12,10 @@ namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
 use PHPUnit_Framework_TestCase;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMockery;
-use Scribe\CacheBundle\Cache\Handler\Chain\AbstractHandlerChain;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class HandlerTypeMockeryTest
- *
- * @package Scribe\CacheBundle\Tests\Cache\Handler\Type
+ * Class HandlerTypeMockeryTest.
  */
 class HandlerTypeMockeryTest extends PHPUnit_Framework_TestCase
 {
@@ -37,7 +33,7 @@ class HandlerTypeMockeryTest extends PHPUnit_Framework_TestCase
 
     protected function getNewHandlerType()
     {
-        return new HandlerTypeMockery(new KeyGenerator);
+        return new HandlerTypeMockery(new KeyGenerator());
     }
 
     public function testSetKey()
@@ -63,7 +59,7 @@ class HandlerTypeMockeryTest extends PHPUnit_Framework_TestCase
 
     public function testSupportedDecider()
     {
-        $this->type->setSupportedDecider(function() { return false; });
+        $this->type->setSupportedDecider(function () { return false; });
 
         $this->assertFalse($this->type->isSupported());
 

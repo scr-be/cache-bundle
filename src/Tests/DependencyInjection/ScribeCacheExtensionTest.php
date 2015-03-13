@@ -15,9 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
- * Class AbstractScribeCacheExtensionTest
- *
- * @package Scribe\CacheBundle\Tests\DependencyInjection
+ * Class AbstractScribeCacheExtensionTest.
  */
 class ScribeCacheExtensionTest extends AbstractScribeCacheExtensionTest
 {

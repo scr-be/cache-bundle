@@ -15,9 +15,7 @@ use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 
 /**
- * Class KeyGeneratorTest
- *
- * @package Scribe\CacheBundle\Tests\KeyGenerator
+ * Class KeyGeneratorTest.
  */
 class KeyGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -32,12 +30,12 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
 
     protected function getNewKeyGenerator()
     {
-        return new KeyGenerator;
+        return new KeyGenerator();
     }
 
     protected function getKeyValuesTranslationClosure()
     {
-        return function(...$values) {
+        return function (...$values) {
             $valuesTranslated = [ ];
             foreach ($values as $v) {
                 $valuesTranslated[ ] = serialize($v);
@@ -49,10 +47,10 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
 
     protected function getKeyHashClosure()
     {
-        return function(...$values) {
+        return function (...$values) {
             $newValues = [ ];
             foreach ($values as $v) {
-                $newValues[ ] = serialize($v . 'Closure');
+                $newValues[ ] = serialize($v.'Closure');
             }
 
             return hash('sha512', implode('', $newValues), false);
@@ -67,7 +65,7 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
 
         return [
             $this->getNewKeyGenerator(),
-            $method
+            $method,
         ];
     }
 
@@ -79,7 +77,7 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
 
         return [
             $this->getNewKeyGenerator(),
-            $property
+            $property,
         ];
     }
 
@@ -94,7 +92,7 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
         return [
             $this->getNewKeyGenerator(),
             $method,
-            $property
+            $property,
         ];
     }
 
@@ -332,12 +330,12 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
         $expectedKeyValues = [
             $stdClass,
             'string-value',
-            123456789
+            123456789,
         ];
         $expectedKeyValuesTranslated = [
             'O:8:"stdClass":1:{s:4:"desc";s:25:"This is a standard class!";}',
             's:12:"string-value";',
-            'i:123456789;'
+            'i:123456789;',
         ];
         $expectedKeyMd5     = 'scribe_cache---f0c6725c36ddad00b38fbcb33091cb42';
         $expectedKeySha1    = 'scribe_cache---3dbd1e522892224feef44c15f133160a3ed9e28e';

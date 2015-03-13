@@ -16,9 +16,7 @@ use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 
 /**
- * Class HandlerTypeFilesystem
- *
- * @package Scribe\CacheBundle\Tests\Cache\Handler\Type
+ * Class HandlerTypeFilesystem.
  */
 class HandlerTypeFilesystemTest extends PHPUnit_Framework_TestCase
 {
@@ -42,7 +40,7 @@ class HandlerTypeFilesystemTest extends PHPUnit_Framework_TestCase
 
     protected function getNewHandlerType()
     {
-        return $this->getNewHandlerTypeEmpty(new KeyGenerator);
+        return $this->getNewHandlerTypeEmpty(new KeyGenerator());
     }
 
     protected function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
@@ -52,9 +50,9 @@ class HandlerTypeFilesystemTest extends PHPUnit_Framework_TestCase
 
     protected function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
     {
-        $supportedDecider = function() { return false; };
+        $supportedDecider = function () { return false; };
 
-        return $this->getNewHandlerTypeEmpty(new KeyGenerator, 1800, 1, false, $supportedDecider);
+        return $this->getNewHandlerTypeEmpty(new KeyGenerator(), 1800, 1, false, $supportedDecider);
     }
 
     /**

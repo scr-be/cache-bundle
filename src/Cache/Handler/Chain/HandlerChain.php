@@ -14,16 +14,15 @@ use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
 
 /**
- * Class HandlerChain
- *
- * @package Scribe\CacheBundle\Cache\Handler\Chain
+ * Class HandlerChain.
  */
 class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
 {
     /**
-     * Sets the active handler
+     * Sets the active handler.
      *
-     * @param  AbstractHandlerType $handler
+     * @param AbstractHandlerType $handler
+     *
      * @return $this
      */
     protected function setActiveHandler(AbstractHandlerType $handler)
@@ -37,8 +36,10 @@ class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
      * Stack the provided handler in the correct position on the handlers stack,
      * verifying that another handler does not already have the same priority.
      *
-     * @param  AbstractHandlerType $handler
+     * @param AbstractHandlerType $handler
+     *
      * @return $this
+     *
      * @throws RuntimeException
      */
     protected function determineStackPosition(AbstractHandlerType $handler)
@@ -73,8 +74,7 @@ class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
     {
         foreach ($this->getHandlers() as $handler) {
             if (true === $handler->isEnabled() &&
-                true === $handler->isSupported())
-            {
+                true === $handler->isSupported()) {
                 $this->setActiveHandler($handler);
                 break;
             }

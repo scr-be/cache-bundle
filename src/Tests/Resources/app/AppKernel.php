@@ -12,14 +12,15 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 /**
- * Class AppKernel
+ * A basic implementation of the core Symfony application kernel intended for
+ * use in the bundle's PHPUnit test cases.
  *
- * @package Scribe\CacheBundle\Tests
+ * @tag     fixture
  */
 class AppKernel extends Kernel
 {
     /**
-     * Return array of bundles requires for tests
+     * registerBundles.
      *
      * @return array
      */
@@ -30,12 +31,12 @@ class AppKernel extends Kernel
             new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new \Symfony\Bundle\TwigBundle\TwigBundle(),
             new \Scribe\CacheBundle\ScribeCacheBundle(),
-            new \Scribe\MantleBundle\ScribeMantleBundle()
+            new \Scribe\MantleBundle\ScribeMantleBundle(),
         ];
     }
 
     /**
-     * Load the required config file based on the environment
+     * registerContainerConfiguration.
      *
      * @param LoaderInterface $loader
      */

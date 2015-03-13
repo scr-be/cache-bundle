@@ -15,11 +15,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class CacheMethodCompilerPass
- *
- * @package Scribe\CacheBundle\DependencyInjection\Compiler
+ * Class CacheMethodCompilerPass.
  */
-
 class CacheHandlerCompilerPass implements CompilerPassInterface
 {
     /**

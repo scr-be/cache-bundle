@@ -15,11 +15,9 @@ use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain;
 use Scribe\CacheBundle\Tests\Cache\Handler\Chain\Fixtures\ObjectChainAware;
 
 /**
- * Class HandlerChainAwareTest
- *
- * @package Scribe\CacheBundle\Tests\Cache\Handler\Chain
+ * Class HandlerChainAwareTest.
  */
-class ObjectChainAwareTest extends PHPUnit_Framework_TestCase
+class HandlerChainAwareTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectChainAware
@@ -28,12 +26,12 @@ class ObjectChainAwareTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->chainAware = new ObjectChainAware;
+        $this->chainAware = new ObjectChainAware();
     }
 
-    public function testMutators()
+    public function testGettersAndSetters()
     {
-        $chainHandler = new HandlerChain;
+        $chainHandler = new HandlerChain();
 
         $this->assertFalse($this->chainAware->hasCacheHandlerChain());
 

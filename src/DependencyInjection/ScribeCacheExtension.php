@@ -14,21 +14,19 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Scribe\Component\DependencyInjection\AbstractExtension;
 
 /**
- * Class ScribeCacheExtension
- *
- * @package Scribe\CacheBundle\DependencyInjection
+ * Class ScribeCacheExtension.
  */
 class ScribeCacheExtension extends AbstractExtension
 {
     /**
-     * Load the configuration directives/files for this bundle
+     * Load the configuration directives/files for this bundle.
      *
      * @param array            $configs
      * @param ContainerBuilder $container
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $this->autoLoad($configs, $container, new Configuration, 's.cache');
+        $this->autoLoad($configs, $container, new Configuration(), 's.cache');
     }
 }
 

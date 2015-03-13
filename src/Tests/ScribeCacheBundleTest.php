@@ -14,13 +14,10 @@ use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 use Scribe\CacheBundle\ScribeCacheBundle;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ScribeCacheBundleTest
- *
- * @package Scribe\CacheBundle\Tests
+ * Class ScribeCacheBundleTest.
  */
 class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
 {
@@ -38,7 +35,7 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
 
     protected function getNewBundle()
     {
-        return new ScribeCacheBundle;
+        return new ScribeCacheBundle();
     }
 
     protected function getReflection()
@@ -82,7 +79,7 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
 
     protected function removeDirectoryRecursive($path)
     {
-        $files = glob($path . '/*');
+        $files = glob($path.'/*');
         foreach ($files as $file) {
             is_dir($file) ? $this->removeDirectoryRecursive($file) : unlink($file);
         }

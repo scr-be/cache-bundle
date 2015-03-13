@@ -15,14 +15,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
- * Class Configuration
- *
- * @package Scribe\CacheBundle\DependencyInjection
+ * Class Configuration.
  */
 class Configuration implements ConfigurationInterface
 {
     /**
-     * Create the config tree builder object
+     * Create the config tree builder object.
      *
      * @return TreeBuilder
      */
@@ -42,13 +40,13 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Define the global state config of the cache bundle
+     * Define the global state config of the cache bundle.
      *
      * @return NodeDefinition
      */
     private function getGlobalNode()
     {
-        return (new TreeBuilder)
+        return (new TreeBuilder())
             ->root('global')
             ->addDefaultsIfNotSet()
             ->children()
@@ -69,13 +67,13 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Define the per-handler configuration options
+     * Define the per-handler configuration options.
      *
      * @return NodeDefinition
      */
     private function getHandlersNode()
     {
-        return (new TreeBuilder)
+        return (new TreeBuilder())
             ->root('handlers')
             ->addDefaultsIfNotSet()
             ->children()
@@ -86,13 +84,13 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * getHandlerTypeGenericInnerNode
+     * getHandlerTypeGenericInnerNode.
      *
      * @return NodeDefinition
      */
     private function getHandlerInnerGenericNode($priority)
     {
-        return (new TreeBuilder)
+        return (new TreeBuilder())
             ->root('general')
             ->addDefaultsIfNotSet()
             ->children()
@@ -119,13 +117,13 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Define the memcached handler configuration options
+     * Define the memcached handler configuration options.
      *
      * @return NodeDefinition
      */
     private function getHandlerMemcachedNode()
     {
-        return (new TreeBuilder)
+        return (new TreeBuilder())
             ->root('memcached')
             ->addDefaultsIfNotSet()
             ->children()
@@ -204,13 +202,13 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Define the filesystem handler configuration options
+     * Define the filesystem handler configuration options.
      *
      * @return NodeDefinition
      */
     private function getHandlerFilesystemNode()
     {
-        return (new TreeBuilder)
+        return (new TreeBuilder())
             ->root('filesystem')
             ->addDefaultsIfNotSet()
             ->children()

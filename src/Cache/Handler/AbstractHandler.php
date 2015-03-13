@@ -11,23 +11,22 @@
 namespace Scribe\CacheBundle\Cache\Handler;
 
 /**
- * Class AbstractHandler
- *
- * @package Scribe\CacheBundle\Cache\Handler
+ * Class AbstractHandler.
  */
 abstract class AbstractHandler implements HandlerInterface
 {
     /**
-     * Allows for enabling/disabling this caching method
+     * Allows for enabling/disabling this caching method.
      *
      * @var bool
      */
     protected $enabled = true;
 
     /**
-     * Set the enabled/disabled state of this cache handler method
+     * Set the enabled/disabled state of this cache handler method.
      *
-     * @param  bool $enabled
+     * @param bool $enabled
+     *
      * @return $this
      */
     public function setEnabled($enabled = true)
@@ -38,7 +37,7 @@ abstract class AbstractHandler implements HandlerInterface
     }
 
     /**
-     * Check if this cache handler method is enabled
+     * Check if this cache handler method is enabled.
      *
      * @return bool
      */
@@ -48,22 +47,23 @@ abstract class AbstractHandler implements HandlerInterface
     }
 
     /**
-     * Set the time to live for the cache values
+     * Set the time to live for the cache values.
      *
-     * @param  int $seconds
+     * @param int $seconds
+     *
      * @return $this
      */
     abstract public function setTtl($seconds);
 
     /**
-     * Get the TTL for the cache values
+     * Get the TTL for the cache values.
      *
      * @return int
      */
     abstract public function getTtl();
 
     /**
-     * Set the TTL back to the system default
+     * Set the TTL back to the system default.
      *
      * @return $this
      */

@@ -13,57 +13,56 @@ namespace Scribe\CacheBundle\Cache\Handler\Chain;
 use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
 
 /**
- * Interface HandlerChainInterface
- *
- * @package Scribe\CacheBundle\Cache\Handlers
+ * Interface HandlerChainInterface.
  */
 interface HandlerChainInterface
 {
     /**
-     * Setup the object instance properties
+     * Setup the object instance properties.
      *
-     * @param  bool $disabled
+     * @param bool $disabled
      */
     public function __construct($disabled = false);
 
     /**
-     * Add a cache handler type to the stack of tagged handlers
+     * Add a cache handler type to the stack of tagged handlers.
      *
      * @param AbstractHandlerType $handler
      */
     public function addHandler(AbstractHandlerType $handler);
 
     /**
-     * Sets an array of handlers (clearing any previous ones)
+     * Sets an array of handlers (clearing any previous ones).
      *
-     * @param  AbstractHandlerType[] $handlers
+     * @param AbstractHandlerType[] $handlers
+     *
      * @return $this
      */
     public function setHandlers(array $handlers = [ ]);
 
     /**
-     * Returns the handler from the stack
+     * Returns the handler from the stack.
      *
      * @return AbstractHandlerType[]
      */
     public function getHandlers();
 
     /**
-     * Check if any handlers have been registered
+     * Check if any handlers have been registered.
      *
      * @return bool
      */
     public function hasHandlers();
 
     /**
-     * Gets the active handler
+     * Gets the active handler.
      *
      * @return AbstractHandlerType
      */
     public function getActiveHandler();
 
     /**
-     * Checks if an active handler has been set
+     * Checks if an active handler has been set.
      *
      * @return bool
      */
@@ -71,9 +70,10 @@ interface HandlerChainInterface
 
     /**
      * Get the active handler type, by default the short name of class such as
-     * simply "apcu" but optionally return the fully-qualified class name
+     * simply "apcu" but optionally return the fully-qualified class name.
      *
-     * @param  bool $fullyQualified
+     * @param bool $fullyQualified
+     *
      * @return string
      */
     public function getActiveHandlerType($fullyQualified = false);

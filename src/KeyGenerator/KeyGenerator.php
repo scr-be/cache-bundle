@@ -11,9 +11,7 @@
 namespace Scribe\CacheBundle\KeyGenerator;
 
 /**
- * Class KeyGenerator
- *
- * @package Scribe\CacheBundle\KeyGenerator
+ * Class KeyGenerator.
  */
 class KeyGenerator implements KeyGeneratorInterface
 {

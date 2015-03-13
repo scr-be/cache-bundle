@@ -16,9 +16,7 @@ use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMockery;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
 
 /**
- * Class AbstractHandlerChain
- *
- * @package Scribe\CacheBundle\Cache\Handler\Chain
+ * Class AbstractHandlerChain.
  */
 abstract class AbstractHandlerChain extends AbstractHandler implements HandlerChainInterface
 {
@@ -32,14 +30,14 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     protected $handlers = [ ];
 
     /**
-     * The handler with the highest priority
+     * The handler with the highest priority.
      *
      * @var AbstractHandlerType|null
      */
     protected $activeHandler = null;
 
     /**
-     * Setup the object instance properties
+     * Setup the object instance properties.
      *
      * @param bool $disabled
      */
@@ -49,7 +47,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Add a cache handler type to the stack of tagged handlers
+     * Add a cache handler type to the stack of tagged handlers.
      *
      * @param AbstractHandlerType $handler
      */
@@ -62,9 +60,10 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Sets an array of handlers (clearing any previous ones)
+     * Sets an array of handlers (clearing any previous ones).
      *
-     * @param  AbstractHandlerType[] $handlers
+     * @param AbstractHandlerType[] $handlers
+     *
      * @return $this
      */
     public function setHandlers(array $handlers = [ ])
@@ -80,7 +79,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Returns the handler from the stack
+     * Returns the handler from the stack.
      *
      * @return AbstractHandlerType[]
      */
@@ -90,7 +89,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Check if any handlers have been registered
+     * Check if any handlers have been registered.
      *
      * @return bool
      */
@@ -100,43 +99,43 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Sets the active handler
+     * Sets the active handler.
      *
-     * @param  AbstractHandlerType $handler
+     * @param AbstractHandlerType $handler
+     *
      * @return $this
      */
     abstract protected function setActiveHandler(AbstractHandlerType $handler);
 
     /**
-     * Gets the active handler
+     * Gets the active handler.
      *
      * @return AbstractHandlerType|null
+     *
      * @throws RuntimeException
      */
     public function getActiveHandler()
     {
         if (true === $this->hasActiveHandler() && true === $this->isEnabled()) {
-
             return $this->activeHandler;
         }
 
         if (false === $this->isEnabled()) {
-
             if (false === ($this->activeHandler instanceof HandlerTypeMockery)) {
-                $this->activeHandler = new HandlerTypeMockery;
+                $this->activeHandler = new HandlerTypeMockery();
             }
 
             return $this->activeHandler;
         }
 
         throw new RuntimeException(
-            'No enabled and supported cache handler types have been configured. ' .
+            'No enabled and supported cache handler types have been configured. '.
             'You must configure at least one type or globally disable this bundle.'
         );
     }
 
     /**
-     * Checks if an active handler has been set
+     * Checks if an active handler has been set.
      *
      * @return bool
      */
@@ -147,9 +146,10 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
 
     /**
      * Get the active handler type, by default the short name of class such as
-     * simply "apcu" but optionally return the fully-qualified class name
+     * simply "apcu" but optionally return the fully-qualified class name.
      *
-     * @param  bool $fullyQualified
+     * @param bool $fullyQualified
+     *
      * @return string
      */
     public function getActiveHandlerType($fullyQualified = false)
@@ -158,9 +158,10 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Set the value(s) that create the cache key
+     * Set the value(s) that create the cache key.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return $this
      */
     public function setKey(...$keyValues)
@@ -171,7 +172,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Get the compiled key string
+     * Get the compiled key string.
      *
      * @return string|null
      */
@@ -181,7 +182,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Check if a key has been setup
+     * Check if a key has been setup.
      *
      * @return bool
      */
@@ -194,7 +195,8 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      * Attempt to get a cached value; returns null if value does not exist or
      * is stale.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return string|int|object|callable|null
      */
     public function get(...$keyValues)
@@ -203,10 +205,11 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Set a cached value; will overwrite a value with the same key silently
+     * Set a cached value; will overwrite a value with the same key silently.
      *
-     * @param  string|int|object|callable $data
-     * @param  ...mixed                   $keyValues
+     * @param string|int|object|callable $data
+     * @param ...mixed                   $keyValues
+     *
      * @return bool
      */
     public function set($data, ...$keyValues)
@@ -215,9 +218,10 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Check for non-stale existence of cached value with same key
+     * Check for non-stale existence of cached value with same key.
      *
      * @param ...$keyValues
+     *
      * @return bool
      */
     public function has(...$keyValues)
@@ -226,9 +230,10 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Delete the cached data using the provided key
+     * Delete the cached data using the provided key.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return bool
      */
     public function del(...$keyValues)
@@ -237,7 +242,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Flush all cached data within this cache mechanism-type
+     * Flush all cached data within this cache mechanism-type.
      *
      * @return bool
      */
@@ -247,9 +252,10 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Set the time to live for the cache values
+     * Set the time to live for the cache values.
      *
-     * @param  int $seconds
+     * @param int $seconds
+     *
      * @return $this
      */
     public function setTtl($seconds)
@@ -260,7 +266,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Get the TTL for the cache values
+     * Get the TTL for the cache values.
      *
      * @return int
      */
@@ -270,7 +276,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
-     * Set the TTL back to the system default
+     * Set the TTL back to the system default.
      *
      * @return $this
      */
@@ -285,8 +291,10 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      * Stack the provided handler in the correct position on the handlers stack,
      * verifying that another handler does not already have the same priority.
      *
-     * @param  AbstractHandlerType $handler
+     * @param AbstractHandlerType $handler
+     *
      * @return $this
+     *
      * @throws RuntimeException
      */
     abstract protected function determineStackPosition(AbstractHandlerType $handler);

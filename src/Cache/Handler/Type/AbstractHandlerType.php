@@ -17,16 +17,14 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorAwareTrait;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 
 /**
- * Class AbstractHandlerType
- *
- * @package Scribe\CacheBundle\Cache\Handler\Type
+ * Class AbstractHandlerType.
  */
 abstract class AbstractHandlerType extends AbstractHandler implements HandlerTypeInterface
 {
     use KeyGeneratorAwareTrait;
 
     /**
-     * The versions of the relevant software interaction layer
+     * The versions of the relevant software interaction layer.
      *
      * @var array
      */
@@ -42,42 +40,42 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     protected $versionsDeterminer = null;
 
     /**
-     * The number of seconds before a cache entry becomes stale
+     * The number of seconds before a cache entry becomes stale.
      *
      * @var int
      */
     protected $ttl;
 
     /**
-     * The default number of seconds before a cache entry becomes stale
+     * The default number of seconds before a cache entry becomes stale.
      *
      * @var int
      */
     protected $ttlDefault;
 
     /**
-     * Priority of this cache handler
+     * Priority of this cache handler.
      *
      * @var int|null
      */
     protected $priority;
 
     /**
-     * Disable flag for this cache handler
+     * Disable flag for this cache handler.
      *
      * @var bool
      */
     protected $disabled;
 
     /**
-     * Optional closure to determine if cache handler is supported
+     * Optional closure to determine if cache handler is supported.
      *
      * @var callable|null
      */
     protected $supportedDecider = null;
 
     /**
-     * Setup the class instance with the required properties
+     * Setup the class instance with the required properties.
      *
      * @param KeyGeneratorInterface|null $keyGenerator
      * @param int                        $ttl
@@ -100,16 +98,17 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
 
     /**
      * Handler-specific implementation to determine if the caching method is
-     * supported by the current platform
+     * supported by the current platform.
      *
      * @return bool
      */
     abstract public function isSupported();
 
     /**
-     * Set the optional closure that determines if this cache handler is supported
+     * Set the optional closure that determines if this cache handler is supported.
      *
-     * @param  callable|null $decider
+     * @param callable|null $decider
+     *
      * @return $this
      */
     public function setSupportedDecider(callable $decider = null)
@@ -122,7 +121,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Un-set the optional closure that determines if this cache handler is supported
+     * Un-set the optional closure that determines if this cache handler is supported.
      *
      * @return $this
      */
@@ -134,7 +133,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Get the optional closure that determines if this cache handler is supported
+     * Get the optional closure that determines if this cache handler is supported.
      *
      * @return callable|null
      */
@@ -144,7 +143,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Check if the optional closure that determines if this cache handler is supported has been set
+     * Check if the optional closure that determines if this cache handler is supported has been set.
      *
      * @return bool
      */
@@ -154,15 +153,14 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Attempt to call the optional closure that determines if this cache handler is supported
+     * Attempt to call the optional closure that determines if this cache handler is supported.
      *
      * @return bool|null
      */
     protected function callSupportedDecider()
     {
         if (false === $this->hasSupportedDecider()) {
-
-            return null;
+            return;
         }
 
         $decider = $this->getSupportedDecider();
@@ -171,9 +169,10 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Set the value(s) that create the cache key
+     * Set the value(s) that create the cache key.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return $this
      */
     public function setKey(...$keyValues)
@@ -187,7 +186,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Get the compiled key string
+     * Get the compiled key string.
      *
      * @return string
      */
@@ -197,7 +196,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Check if a key has been setup
+     * Check if a key has been setup.
      *
      * @return bool
      */
@@ -207,9 +206,10 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Set the time to live for the cache values
+     * Set the time to live for the cache values.
      *
-     * @param  int $seconds
+     * @param int $seconds
+     *
      * @return $this
      */
     public function setTtl($seconds)
@@ -220,7 +220,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Get the TTL for the cache values
+     * Get the TTL for the cache values.
      *
      * @return int
      */
@@ -230,7 +230,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Set the TTL back to the system default
+     * Set the TTL back to the system default.
      *
      * @return $this
      */
@@ -240,9 +240,10 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Set the cache handler priority
+     * Set the cache handler priority.
      *
-     * @param  int|null $priority
+     * @param int|null $priority
+     *
      * @return $this
      */
     public function setPriority($priority = null)
@@ -253,7 +254,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Get the cache handler priority
+     * Get the cache handler priority.
      *
      * @return int|null
      */
@@ -263,7 +264,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Check if cache handler has a priority
+     * Check if cache handler has a priority.
      *
      * @return bool
      */
@@ -276,7 +277,8 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      * Attempt to get a cached value; returns null if value does not exist or
      * is stale.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return string|int|object|callable|null
      */
     public function get(...$keyValues)
@@ -291,16 +293,18 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Get the cached value. Implementation specific to the handler being used.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return string
      */
     abstract protected function getUsingHandler($key);
 
     /**
-     * Set a cached value; will overwrite a value with the same key silently
+     * Set a cached value; will overwrite a value with the same key silently.
      *
-     * @param  string|int|object|callable $data
-     * @param  ...mixed                   $keyValues
+     * @param string|int|object|callable $data
+     * @param ...mixed                   $keyValues
+     *
      * @return bool
      */
     public function set($data, ...$keyValues)
@@ -314,16 +318,18 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Set the cached value. Implementation specific to the handler being used.
      *
-     * @param  string $data
-     * @param  string $key
+     * @param string $data
+     * @param string $key
+     *
      * @return bool
      */
     abstract protected function setUsingHandler($data, $key);
 
     /**
-     * Check for non-stale existence of cached value with same key
+     * Check for non-stale existence of cached value with same key.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return bool
      */
     public function has(...$keyValues)
@@ -336,15 +342,17 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Check for the cached value. Implementation specific to the handler being used.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     abstract protected function hasUsingHandler($key);
 
     /**
-     * Delete a cache value
+     * Delete a cache value.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return bool
      */
     public function del(...$keyValues)
@@ -357,7 +365,8 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Check for the cached value. Implementation specific to the handler being used.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     abstract protected function delUsingHandler($key);
@@ -375,17 +384,19 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Flush all cached values
+     * Flush all cached values.
      *
      * @return bool
      */
     abstract protected function flushAllUsingHandler();
 
     /**
-     * Get the previously set key or set the key based on the passed values
+     * Get the previously set key or set the key based on the passed values.
      *
      * @param ...$keyValues
+     *
      * @return string
+     *
      * @throws InvalidArgumentException
      */
     protected function getCurrentKey(...$keyValues)
@@ -406,26 +417,28 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Return cached data in original form (object, int, string, etc)
+     * Return cached data in original form (object, int, string, etc).
      *
-     * @param  string $data
+     * @param string $data
+     *
      * @return mixed|null
      */
     protected function sanitizeReturnedCacheData($data)
     {
         if (null === $data) {
-
-            return null;
+            return;
         }
 
         return unserialize($data);
     }
 
     /**
-     * Serialize data to be cached (object, int, string, etc)
+     * Serialize data to be cached (object, int, string, etc).
      *
-     * @param  mixed $data
+     * @param mixed $data
+     *
      * @return string
+     *
      * @throws RuntimeException If resource data type is given
      */
     protected function sanitizeSubmittedCacheData($data)
@@ -440,7 +453,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Get the handler type
+     * Get the handler type.
      *
      * @return string
      */
@@ -449,7 +462,6 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
         $className = get_class($this);
 
         if ($fullyQualified === true) {
-
             return (string) $className;
         }
 
@@ -457,7 +469,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
             str_replace(
                 'HandlerType',
                 '',
-                join(
+                implode(
                     '',
                     array_slice(explode('\\', $className), -1)
                 )
@@ -466,7 +478,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
-     * Type casting object will return its fully-qualified class name
+     * Type casting object will return its fully-qualified class name.
      *
      * @return string
      */

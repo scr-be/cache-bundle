@@ -11,23 +11,22 @@
 namespace Scribe\CacheBundle\KeyGenerator;
 
 /**
- * Trait KeyGeneratorAwareTrait
- *
- * @package Scribe\CacheBundle\KeyGenerator
+ * Trait KeyGeneratorAwareTrait.
  */
 trait KeyGeneratorAwareTrait
 {
     /**
-     * An instance of a class implementing KeyGeneratorInterface
+     * An instance of a class implementing KeyGeneratorInterface.
      *
      * @var KeyGeneratorInterface|null
      */
     protected $keyGenerator = null;
 
     /**
-     * Set the key generator instance
+     * Set the key generator instance.
      *
      * @param KeyGeneratorInterface|null $keyGenerator
+     *
      * @return $this
      */
     public function setKeyGenerator(KeyGeneratorInterface $keyGenerator = null)
@@ -38,7 +37,7 @@ trait KeyGeneratorAwareTrait
     }
 
     /**
-     * Get the key generator instance
+     * Get the key generator instance.
      *
      * @return KeyGeneratorInterface|null
      */

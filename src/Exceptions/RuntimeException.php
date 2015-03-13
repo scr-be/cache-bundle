@@ -11,9 +11,7 @@
 namespace Scribe\CacheBundle\Exceptions;
 
 /**
- * Class RuntimeException
- *
- * @package Scribe\CacheBundle\Exceptions
+ * Class RuntimeException.
  */
 class RuntimeException extends CacheBundleException
 {

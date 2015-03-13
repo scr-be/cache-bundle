@@ -10,12 +10,8 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
-use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
-
 /**
- * Class HandlerTypeFilesystem
- *
- * @package Scribe\CacheBundle\Cache\Handler\Type
+ * Class HandlerTypeFilesystem.
  */
 class HandlerTypeFilesystem extends AbstractHandlerType
 {
@@ -25,21 +21,20 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     protected $cacheDirectoryRequirement = 'scribe_cache';
 
     /**
-     * Directory to write cache data files to (generally your system temp dir)
+     * Directory to write cache data files to (generally your system temp dir).
      *
      * @var string|null
      */
     protected $cacheDirectory = null;
 
     /**
-     * Check if the handler type is supported by the current environment
+     * Check if the handler type is supported by the current environment.
      *
      * @return bool
      */
     public function isSupported()
     {
         if (null !== ($decision = $this->callSupportedDecider())) {
-
             return (bool) $decision;
         }
 
@@ -55,18 +50,17 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     public function proposeCacheDirectory($directory)
     {
         if (false === mb_strpos($directory, $this->cacheDirectoryRequirement)) {
-            $directory .= DIRECTORY_SEPARATOR . $this->cacheDirectoryRequirement;
+            $directory .= DIRECTORY_SEPARATOR.$this->cacheDirectoryRequirement;
         }
 
         if ((true === is_dir($directory) && true === is_writable($directory)) ||
-            (true === mkdir($directory, 0777, true)))
-        {
+            (true === mkdir($directory, 0777, true))) {
             $this->setCacheDirectory($directory);
         }
     }
 
     /**
-     * Set the cache directory path
+     * Set the cache directory path.
      *
      * @param string|null $dir
      */
@@ -76,7 +70,7 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     }
 
     /**
-     * Get the cache directory path
+     * Get the cache directory path.
      *
      * @return string|null
      */
@@ -86,7 +80,7 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     }
 
     /**
-     * Determine if a cache directory was validated and set
+     * Determine if a cache directory was validated and set.
      *
      * @return bool
      */
@@ -96,39 +90,40 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     }
 
     /**
-     * Get the fully-qualified file path for a given cache key
+     * Get the fully-qualified file path for a given cache key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return string
      */
     protected function getCacheFilePath($key)
     {
-        return (string) $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $key . '.cache';
+        return (string) $this->getCacheDirectory().DIRECTORY_SEPARATOR.$key.'.cache';
     }
 
-
     /**
-     * Retrieve the cached data using the provided key
+     * Retrieve the cached data using the provided key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return string|null
      */
     protected function getUsingHandler($key)
     {
         if (true === $this->hasUsingHandler($key) &&
-            false !== ($value = file_get_contents($this->getCacheFilePath($key))))
-        {
+            false !== ($value = file_get_contents($this->getCacheFilePath($key)))) {
             return $value;
         }
 
-        return null;
+        return;
     }
 
     /**
-     * Set the cached data using the key (overwriting data that may exist already)
+     * Set the cached data using the key (overwriting data that may exist already).
      *
-     * @param  string $data
-     * @param  string $key
+     * @param string $data
+     * @param string $key
+     *
      * @return bool
      */
     protected function setUsingHandler($data, $key)
@@ -140,7 +135,8 @@ class HandlerTypeFilesystem extends AbstractHandlerType
      * Check if the cached data exists using the provided key (and clean stale
      * file if exists).
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function hasUsingHandler($key)
@@ -149,7 +145,6 @@ class HandlerTypeFilesystem extends AbstractHandlerType
 
         if (true === file_exists($filePath)) {
             if (true === ((time() - filemtime($filePath)) < $this->getTtl())) {
-
                 return true;
             }
 
@@ -160,9 +155,10 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     }
 
     /**
-     * Delete the cached data using the provided key
+     * Delete the cached data using the provided key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function delUsingHandler($key)
@@ -171,13 +167,13 @@ class HandlerTypeFilesystem extends AbstractHandlerType
     }
 
     /**
-     * Flush all cached data within this cache mechanism-type
+     * Flush all cached data within this cache mechanism-type.
      *
      * @return bool
      */
     protected function flushAllUsingHandler()
     {
-        $cacheFiles = glob($this->getCacheDirectory() . '/'.$this->getKeyGenerator()->getKeyPrefix().'*');
+        $cacheFiles = glob($this->getCacheDirectory().'/'.$this->getKeyGenerator()->getKeyPrefix().'*');
 
         foreach ($cacheFiles as $file) {
             unlink($file);

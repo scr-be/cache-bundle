@@ -11,9 +11,7 @@
 namespace Scribe\CacheBundle\Cache\Handler;
 
 /**
- * Interface HandlerInterface
- *
- * @package Scribe\CacheBundle\Cache\Handler
+ * Interface HandlerInterface.
  */
 interface HandlerInterface
 {
@@ -21,22 +19,23 @@ interface HandlerInterface
     public function isEnabled();
 
     /**
-     * Set the value(s) that create the cache key
+     * Set the value(s) that create the cache key.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return $this
      */
     public function setKey(...$keyValues);
 
     /**
-     * Get the compiled key string
+     * Get the compiled key string.
      *
      * @return string
      */
     public function getKey();
 
     /**
-     * Check if a key has been setup
+     * Check if a key has been setup.
      *
      * @return bool
      */
@@ -46,32 +45,36 @@ interface HandlerInterface
      * Attempt to get a cached value; returns null if value does not exist or
      * is stale.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return string|int|object|callable|null
      */
     public function get(...$keyValues);
 
     /**
-     * Set a cached value; will overwrite a value with the same key silently
+     * Set a cached value; will overwrite a value with the same key silently.
      *
-     * @param  string|int|object|callable $data
-     * @param  ...mixed                   $keyValues
+     * @param string|int|object|callable $data
+     * @param ...mixed                   $keyValues
+     *
      * @return bool
      */
     public function set($data, ...$keyValues);
 
     /**
-     * Check for non-stale existence of cached value with same key
+     * Check for non-stale existence of cached value with same key.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return bool
      */
     public function has(...$keyValues);
 
     /**
-     * Delete a cache value
+     * Delete a cache value.
      *
-     * @param  ...mixed $keyValues
+     * @param ...mixed $keyValues
+     *
      * @return bool
      */
     public function del(...$keyValues);
@@ -86,22 +89,23 @@ interface HandlerInterface
     public function flushAll();
 
     /**
-     * Set the time to live for the cache values
+     * Set the time to live for the cache values.
      *
-     * @param  int $seconds
+     * @param int $seconds
+     *
      * @return $this
      */
     public function setTtl($seconds);
 
     /**
-     * Get the TTL for the cache values
+     * Get the TTL for the cache values.
      *
      * @return int
      */
     public function getTtl();
 
     /**
-     * Set the TTL back to the system default
+     * Set the TTL back to the system default.
      *
      * @return $this
      */

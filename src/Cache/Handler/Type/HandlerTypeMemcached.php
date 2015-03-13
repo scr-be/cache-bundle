@@ -15,14 +15,12 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 use Memcached;
 
 /**
- * Class HandlerTypeMemcached
- *
- * @package Scribe\CacheBundle\Cache\Handler\Type
+ * Class HandlerTypeMemcached.
  */
 class HandlerTypeMemcached extends AbstractHandlerType
 {
     /**
-     * Available memcached option type strings to their object constant
+     * Available memcached option type strings to their object constant.
      *
      * @var array
      */
@@ -36,7 +34,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
     ];
 
     /**
-     * Available memcached option type value strings to their object constant
+     * Available memcached option type value strings to their object constant.
      *
      * @var array
      */
@@ -44,23 +42,23 @@ class HandlerTypeMemcached extends AbstractHandlerType
         'serializer' => [
             'igbinary' => Memcached::SERIALIZER_IGBINARY,
             'json'     => Memcached::SERIALIZER_JSON,
-            'php'      => Memcached::SERIALIZER_PHP
+            'php'      => Memcached::SERIALIZER_PHP,
         ],
         'compression_method'  => [
             'zlib'   => Memcached::COMPRESSION_ZLIB,
-            'fastlz' => Memcached::COMPRESSION_FASTLZ
+            'fastlz' => Memcached::COMPRESSION_FASTLZ,
         ],
     ];
 
     /**
-     * Our memcached object instance
+     * Our memcached object instance.
      *
      * @var Memcached
      */
     protected $memcached;
 
     /**
-     * Setup the class instance with the required properties
+     * Setup the class instance with the required properties.
      *
      * @param KeyGeneratorInterface|null $keyGenerator
      * @param int                        $ttl
@@ -76,11 +74,11 @@ class HandlerTypeMemcached extends AbstractHandlerType
             return;
         }
 
-        $this->memcached = new Memcached;
+        $this->memcached = new Memcached();
     }
 
     /**
-     * An array of option definitions as passed by the DI compiler pass
+     * An array of option definitions as passed by the DI compiler pass.
      *
      * @param array $options
      */
@@ -100,7 +98,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Resolve the Memcached constants for setOptions based on the provided human-readable config
+     * Resolve the Memcached constants for setOptions based on the provided human-readable config.
      *
      * @param array  $options
      * @param string $type
@@ -113,10 +111,12 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Determine the Memcached option type constant that should be returned
+     * Determine the Memcached option type constant that should be returned.
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return mixed
+     *
      * @throws RuntimeException
      */
     protected function handleOptionTypeResolution($type)
@@ -131,17 +131,17 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Determine the Memcached option value constant that should be returned
+     * Determine the Memcached option value constant that should be returned.
      *
-     * @param  string          $type
-     * @param  bool|int|string $value
+     * @param string          $type
+     * @param bool|int|string $value
+     *
      * @return mixed
      */
     protected function handleOptionValueResolution($type, $value)
     {
         if (true === array_key_exists($type, $this->optionValues) &&
-            true === array_key_exists($value, $this->optionValues[ $type ]))
-        {
+            true === array_key_exists($value, $this->optionValues[ $type ])) {
             return $this->optionValues[ $type ][ $value ];
         }
 
@@ -168,7 +168,8 @@ class HandlerTypeMemcached extends AbstractHandlerType
      * does not reset previously configured servers. Be careful about adding
      * duplicate entries, as no check is made to disallow such.
      *
-     * @param  array $servers
+     * @param array $servers
+     *
      * @throws RuntimeException
      */
     public function addServers(array $servers = [ ])
@@ -186,11 +187,12 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Resolve single-server configuration array
+     * Resolve single-server configuration array.
      *
-     * @param  array  $resolvedServers
-     * @param  string $name
-     * @param  array  $parameters
+     * @param array  $resolvedServers
+     * @param string $name
+     * @param array  $parameters
+     *
      * @throws RuntimeException
      */
     protected function handleServerResolution(array &$resolvedServers, $name, array $parameters)
@@ -205,14 +207,13 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Check if the handler type is supported by the current environment
+     * Check if the handler type is supported by the current environment.
      *
      * @return bool
      */
     public function isSupported()
     {
         if (null !== ($decision = $this->callSupportedDecider())) {
-
             return (bool) $decision;
         }
 
@@ -223,14 +224,15 @@ class HandlerTypeMemcached extends AbstractHandlerType
      * Get the result of the last operation based on a comparison of the expected
      * return code and the received return code via an optionally custom callable.
      *
-     * @param  int           $expectedCode
-     * @param  callable|null $decider
+     * @param int           $expectedCode
+     * @param callable|null $decider
+     *
      * @return bool
      */
     protected function isLastActionSuccessful($expectedCode = Memcached::RES_SUCCESS, callable $decider = null)
     {
         if (null === $decider) {
-            $decider = function($expected, $received) {
+            $decider = function ($expected, $received) {
                 return (bool) ($received > $expected ? false : true);
             };
         }
@@ -241,9 +243,10 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Retrieve the cached data using the provided key
+     * Retrieve the cached data using the provided key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return string|null
      */
     protected function getUsingHandler($key)
@@ -254,14 +257,15 @@ class HandlerTypeMemcached extends AbstractHandlerType
             return $data;
         }
 
-        return null;
+        return;
     }
 
     /**
-     * Set the cached data using the key (overwriting data that may exist already)
+     * Set the cached data using the key (overwriting data that may exist already).
      *
-     * @param  string $data
-     * @param  string $key
+     * @param string $data
+     * @param string $key
+     *
      * @return bool
      */
     protected function setUsingHandler($data, $key)
@@ -272,9 +276,10 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Check if the cached data exists using the provided key
+     * Check if the cached data exists using the provided key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function hasUsingHandler($key)
@@ -283,9 +288,10 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Delete the cached data using the provided key
+     * Delete the cached data using the provided key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function delUsingHandler($key)
@@ -296,7 +302,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Flush all cached data within this cache mechanism-type
+     * Flush all cached data within this cache mechanism-type.
      *
      * @return bool
      */

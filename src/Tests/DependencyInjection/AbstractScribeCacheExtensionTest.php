@@ -15,9 +15,7 @@ use Scribe\CacheBundle\DependencyInjection\ScribeCacheExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class AbstractScribeCacheExtensionTest
- *
- * @package Scribe\CacheBundle\Tests\DependencyInjection
+ * Class AbstractScribeCacheExtensionTest.
  */
 abstract class AbstractScribeCacheExtensionTest extends PHPUnit_Framework_TestCase
 {

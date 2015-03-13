@@ -11,9 +11,7 @@
 namespace Scribe\CacheBundle\Exceptions;
 
 /**
- * Class InvalidArgumentException
- *
- * @package Scribe\CacheBundle\Exceptions
+ * Class InvalidArgumentException.
  */
 class InvalidArgumentException extends CacheBundleException
 {

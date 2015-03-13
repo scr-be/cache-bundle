@@ -15,14 +15,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Scribe\CacheBundle\DependencyInjection\Compiler\CacheHandlerCompilerPass;
 
 /**
- * Class ScribeCacheBundle
- *
- * @package Scribe\CacheBundle
+ * Class ScribeCacheBundle.
  */
 class ScribeCacheBundle extends Bundle
 {
     /**
-     * Fresh container to build on specific to this bundle (later merge info global container)
+     * Fresh container to build on specific to this bundle (later merge info global container).
      *
      * @param ContainerBuilder $container
      */

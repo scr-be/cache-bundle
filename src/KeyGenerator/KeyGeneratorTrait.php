@@ -14,72 +14,71 @@ use Scribe\CacheBundle\Exceptions\InvalidArgumentException;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
 
 /**
- * Trait KeyGeneratorTrait
- *
- * @package Scribe\CacheBundle\KeyGenerator
+ * Trait KeyGeneratorTrait.
  */
 trait KeyGeneratorTrait
 {
     /**
-     * The key prefix string
+     * The key prefix string.
      *
      * @var string
      */
     protected $keyPrefix = 'scribe_cache';
 
     /**
-     * The final translated and hashed key string
+     * The final translated and hashed key string.
      *
      * @var string|null
      */
     protected $keyString = null;
 
     /**
-     * An array of values to create the cache key from
+     * An array of values to create the cache key from.
      *
      * @var mixed[]
      */
     protected $keyValues = [ ];
 
     /**
-     * An array of values to create the cache key from
+     * An array of values to create the cache key from.
      *
      * @var string[]
      */
     protected $keyValuesTranslated = [ ];
 
     /**
-     * The key values translation method to use prior
+     * The key values translation method to use prior.
      *
      * @var int
      */
     protected $keyValuesTranslationMode = KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_DEFAULT;
 
     /**
-     * The optional callable (closure) for key value translation
+     * The optional callable (closure) for key value translation.
      *
      * @var callable|null
      */
     protected $keyValuesTranslationClosure = null;
 
     /**
-     * The key hash mode used to generate the final cache key
+     * The key hash mode used to generate the final cache key.
      *
      * @var int
      */
     protected $keyHashMode = KeyGeneratorInterface::MODE_KEY_HASH_METHOD_DEFAULT;
 
     /**
-     * The optional callable (closure) for key hash generation
+     * The optional callable (closure) for key hash generation.
      *
      * @var callable|null
      */
     protected $keyHashClosure = null;
 
     /**
-     * Set the key prefix string
+     * Set the key prefix string.
      *
-     * @var    string
+     * @var string
+     *
      * @return $this
      */
     public function setKeyPrefix($prefix = '')
@@ -90,7 +89,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set the key prefix string
+     * Set the key prefix string.
      *
      * @return string
      */
@@ -100,10 +99,12 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set the final translated and hashed cache key based on the values provided
+     * Set the final translated and hashed cache key based on the values provided.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return $this
+     *
      * @throws RuntimeException
      */
     public function setKeyString($string)
@@ -120,7 +121,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Get the final key string
+     * Get the final key string.
      *
      * @return string|null
      */
@@ -130,7 +131,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Check for final key string
+     * Check for final key string.
      *
      * @return bool
      */
@@ -143,17 +144,17 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set the values used to generate the key
+     * Set the values used to generate the key.
      *
-     * @param  ...mixed $values
+     * @param ...mixed $values
+     *
      * @return $this
      */
     public function setKeyValues(...$values)
     {
         if (false === is_array($values) || false === (count($values) > 0)) {
             $this->keyValues = [ ];
-        }
-        else {
+        } else {
             $this->keyValues = $values;
         }
 
@@ -161,9 +162,10 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Add to the values used to generate the key
+     * Add to the values used to generate the key.
      *
-     * @param  ...mixed $values
+     * @param ...mixed $values
+     *
      * @return $this
      */
     public function addKeyValues(...$values)
@@ -176,7 +178,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Get the values used to generate the key
+     * Get the values used to generate the key.
      *
      * @return mixed[]
      */
@@ -186,7 +188,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Check if any values used to generate the key exist
+     * Check if any values used to generate the key exist.
      *
      * @return bool
      */
@@ -199,17 +201,17 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set the translated values used to generate the key
+     * Set the translated values used to generate the key.
      *
-     * @param  ...string $values
+     * @param ...string $values
+     *
      * @return $this
      */
     public function setKeyValuesTranslated(...$values)
     {
         if (false === is_array($values) || false === (count($values) > 0)) {
             $this->keyValuesTranslated = [ ];
-        }
-        else {
+        } else {
             $this->validateKeyValuesTranslated(...$values);
             $this->keyValuesTranslated = $values;
         }
@@ -218,9 +220,10 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Add to the translated values used to generate the key
+     * Add to the translated values used to generate the key.
      *
-     * @param  ...string $values
+     * @param ...string $values
+     *
      * @return $this
      */
     public function addKeyValuesTranslated(...$values)
@@ -234,10 +237,12 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Validate that all supposedly translated key values are in fact strings
+     * Validate that all supposedly translated key values are in fact strings.
      *
-     * @param  ...string $values
+     * @param ...string $values
+     *
      * @return $this
+     *
      * @throws InvalidArgumentException
      */
     protected function validateKeyValuesTranslated(...$values)
@@ -254,7 +259,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Get the translated values used to generate the key
+     * Get the translated values used to generate the key.
      *
      * @return string[]
      */
@@ -264,7 +269,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Check if any translated values used to generate the key exist
+     * Check if any translated values used to generate the key exist.
      *
      * @return bool
      */
@@ -277,10 +282,12 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set the mode used to traverse over and translate the passed key values to strings
+     * Set the mode used to traverse over and translate the passed key values to strings.
      *
-     * @param  int $mode
+     * @param int $mode
+     *
      * @return $this
+     *
      * @throws InvalidArgumentException
      */
     public function setKeyValuesTranslationMode($mode = KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_DEFAULT)
@@ -308,7 +315,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Get the mode used to traverse over and translate the passed key values to strings
+     * Get the mode used to traverse over and translate the passed key values to strings.
      *
      * @return int
      */
@@ -318,9 +325,10 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set the callable (closure) used to traverse over and translate the passed key values to strings
+     * Set the callable (closure) used to traverse over and translate the passed key values to strings.
      *
-     * @param  callable|null $closure
+     * @param callable|null $closure
+     *
      * @return $this
      */
     public function setKeyValuesTranslationClosure(callable $closure = null)
@@ -331,7 +339,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Get the callable (closure) used to traverse over and translate the passed key values to strings
+     * Get the callable (closure) used to traverse over and translate the passed key values to strings.
      *
      * @return callable|null
      */
@@ -341,7 +349,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Check if a callable (closure) used to traverse over and translate the passed key values to string has been defined
+     * Check if a callable (closure) used to traverse over and translate the passed key values to string has been defined.
      *
      * @return bool
      */
@@ -351,10 +359,12 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set the mode used to generate the final cache key
+     * Set the mode used to generate the final cache key.
      *
-     * @param  int $mode
+     * @param int $mode
+     *
      * @return $this
+     *
      * @throws InvalidArgumentException
      */
     public function setKeyHashMode($mode = KeyGeneratorInterface::MODE_KEY_HASH_METHOD_DEFAULT)
@@ -383,7 +393,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set the mode used to generate the final cache key
+     * Set the mode used to generate the final cache key.
      *
      * @return int
      */
@@ -393,9 +403,10 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set callable (closure) used to hash values to generate the final cache key
+     * Set callable (closure) used to hash values to generate the final cache key.
      *
-     * @param  callable|null $closure
+     * @param callable|null $closure
+     *
      * @return $this
      */
     public function setKeyHashClosure(callable $closure = null)
@@ -406,7 +417,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Set callable (closure) used to hash values to generate the final cache key
+     * Set callable (closure) used to hash values to generate the final cache key.
      *
      * @return callable|null
      */
@@ -416,7 +427,7 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Check if callable (closure) used to hash values to generate the final cache key exists
+     * Check if callable (closure) used to hash values to generate the final cache key exists.
      *
      * @return bool
      */
@@ -426,9 +437,10 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Get cache key, overwriting previously set values to generate key if provided
+     * Get cache key, overwriting previously set values to generate key if provided.
      *
-     * @param  ...mixed $values
+     * @param ...mixed $values
+     *
      * @return string
      */
     public function getKey(...$values)
@@ -442,13 +454,14 @@ trait KeyGeneratorTrait
             ->handleKeyValuesTranslatedHashing()
         ;
 
-        return (string) $this->getKeyPrefix() . '---' . $this->getKeyString();
+        return (string) $this->getKeyPrefix().'---'.$this->getKeyString();
     }
 
     /**
-     * Handle translation of the provided key values to a string format
+     * Handle translation of the provided key values to a string format.
      *
      * @return $this
+     *
      * @throws RuntimeException
      */
     protected function handleKeyValuesTranslation()
@@ -464,11 +477,9 @@ trait KeyGeneratorTrait
 
         if ($mode === KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_INTERNAL) {
             $valuesTranslated = $this->handleKeyValuesTranslationInternal(...$values);
-        }
-        else if ($mode === KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_CLOSURE) {
+        } elseif ($mode === KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_CLOSURE) {
             $valuesTranslated = $this->handleKeyValuesTranslationClosure(...$values);
-        }
-        else {
+        } else {
             throw new RuntimeException(
                 "Could not handle key values translation during key generation as invalid mode was set."
             );
@@ -480,10 +491,12 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Handle translation of the provided key values to a string format via PHP's serialize function (default)
+     * Handle translation of the provided key values to a string format via PHP's serialize function (default).
      *
-     * @param  ...mixed $values
+     * @param ...mixed $values
+     *
      * @return string[]
+     *
      * @throws RuntimeException
      */
     protected function handleKeyValuesTranslationInternal(...$values)
@@ -504,10 +517,12 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Handle translation of the provided key values to a string format via a user-defined closure
+     * Handle translation of the provided key values to a string format via a user-defined closure.
      *
-     * @param  ...mixed $values
+     * @param ...mixed $values
+     *
      * @return string[]
+     *
      * @throws RuntimeException
      */
     protected function handleKeyValuesTranslationClosure(...$values)
@@ -525,9 +540,10 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Handle generating final key hash based on translated key values
+     * Handle generating final key hash based on translated key values.
      *
      * @return $this
+     *
      * @throws RuntimeException
      */
     protected function handleKeyValuesTranslatedHashing()
@@ -543,14 +559,11 @@ trait KeyGeneratorTrait
 
         if ($mode === KeyGeneratorInterface::MODE_KEY_HASH_METHOD_MD5) {
             $key = $this->handleKeyValuesTranslatedHashingInternal('md5', ...$values);
-        }
-        else if ($mode === KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1) {
+        } elseif ($mode === KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1) {
             $key = $this->handleKeyValuesTranslatedHashingInternal('sha1', ...$values);
-        }
-        else if ($mode === KeyGeneratorInterface::MODE_KEY_HASH_METHOD_CLOSURE) {
+        } elseif ($mode === KeyGeneratorInterface::MODE_KEY_HASH_METHOD_CLOSURE) {
             $key = $this->handleKeyValuesTranslatedHashingClosure(...$values);
-        }
-        else {
+        } else {
             throw new RuntimeException(
                 "Could not handle key hashing during key generation as invalid mode was set."
             );
@@ -562,10 +575,11 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Handle generating final key hash based on translated key values using a natively supported hash algorithm
+     * Handle generating final key hash based on translated key values using a natively supported hash algorithm.
      *
-     * @param  string    $hashAlgorithm
-     * @param  ...string $values
+     * @param string    $hashAlgorithm
+     * @param ...string $values
+     *
      * @return string
      */
     protected function handleKeyValuesTranslatedHashingInternal($hashAlgorithm, ...$values)
@@ -580,10 +594,12 @@ trait KeyGeneratorTrait
     }
 
     /**
-     * Handle generating final key hash based on translated key values using a passed closure function
+     * Handle generating final key hash based on translated key values using a passed closure function.
      *
-     * @param  ...string $values
+     * @param ...string $values
+     *
      * @return string
+     *
      * @throws RuntimeException
      */
     protected function handleKeyValuesTranslatedHashingClosure(...$values)

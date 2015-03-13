@@ -13,14 +13,12 @@ namespace Scribe\CacheBundle\Cache\Handler\Type;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 
 /**
- * Interface HandlerTypeInterface
- *
- * @package Scribe\CacheBundle\Cache\Handler\Type
+ * Interface HandlerTypeInterface.
  */
 interface HandlerTypeInterface
 {
     /**
-     * Setup the class instance with the required properties
+     * Setup the class instance with the required properties.
      *
      * @param KeyGeneratorInterface|null $keyGenerator
      * @param int                        $ttl
@@ -32,65 +30,67 @@ interface HandlerTypeInterface
 
     /**
      * Handler-specific implementation to determine if the caching method is
-     * supported by the current platform
+     * supported by the current platform.
      *
      * @return bool
      */
     public function isSupported();
 
     /**
-     * Set the cache handler priority
+     * Set the cache handler priority.
      *
-     * @param  int|null $priority
+     * @param int|null $priority
+     *
      * @return $this
      */
     public function setPriority($priority);
 
     /**
-     * Get the cache handler priority
+     * Get the cache handler priority.
      *
      * @return int|null
      */
     public function getPriority();
 
     /**
-     * Check if cache handler has a priority
+     * Check if cache handler has a priority.
      *
      * @return bool
      */
     public function hasPriority();
 
     /**
-     * Set the optional closure that determines if this cache handler is supported
+     * Set the optional closure that determines if this cache handler is supported.
      *
-     * @param  callable|null $decider
+     * @param callable|null $decider
+     *
      * @return $this
      */
     public function setSupportedDecider(callable $decider = null);
 
     /**
-     * Un-set the optional closure that determines if this cache handler is supported
+     * Un-set the optional closure that determines if this cache handler is supported.
      *
      * @return $this
      */
     public function unsetSupportedDecider();
 
     /**
-     * Get the optional closure that determines if this cache handler is supported
+     * Get the optional closure that determines if this cache handler is supported.
      *
      * @return callable|null
      */
     public function getSupportedDecider();
 
     /**
-     * Get the handler type
+     * Get the handler type.
      *
      * @return string
      */
     public function getType();
 
     /**
-     * Type casting object will return its fully-qualified class name
+     * Type casting object will return its fully-qualified class name.
      *
      * @return string
      */

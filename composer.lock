@@ -1166,12 +1166,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribenet/symfony-mantle-bundle.git",
-                "reference": "b2b54b452e038a2640a7190d3b8f50e2498aeb06"
+                "reference": "5da0d43584ce7f11188f72b189df62b53a653c3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/b2b54b452e038a2640a7190d3b8f50e2498aeb06",
-                "reference": "b2b54b452e038a2640a7190d3b8f50e2498aeb06",
+                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/5da0d43584ce7f11188f72b189df62b53a653c3d",
+                "reference": "5da0d43584ce7f11188f72b189df62b53a653c3d",
                 "shasum": ""
             },
             "require": {
@@ -1248,7 +1248,7 @@
                 "mantle",
                 "symfony"
             ],
-            "time": "2015-03-22 12:43:14"
+            "time": "2015-03-22 14:58:39"
         },
         {
             "name": "sensio/distribution-bundle",

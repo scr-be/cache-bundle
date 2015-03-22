@@ -10,6 +10,7 @@
 
 namespace Scribe\CacheBundle\KeyGenerator;
 
+use Scribe\Utility\Serializer\Serializer;
 use Scribe\CacheBundle\Exceptions\InvalidArgumentException;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
 
@@ -510,7 +511,7 @@ trait KeyGeneratorTrait
                 );
             }
 
-            $valuesTranslated[ ] = serialize($v);
+            $valuesTranslated[ ] = Serializer::sleep($v);
         }
 
         return (array) $valuesTranslated;
@@ -586,7 +587,7 @@ trait KeyGeneratorTrait
     {
         $key = hash(
             $hashAlgorithm,
-            serialize($values),
+            Serializer::sleep($values),
             false
         );
 

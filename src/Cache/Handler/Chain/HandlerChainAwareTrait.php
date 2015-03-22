@@ -10,6 +10,8 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
+use Scribe\CacheBundle\Exceptions\RuntimeException;
+
 /**
  * Trait HandlerChainAwareTrait.
  */
@@ -40,9 +42,20 @@ trait HandlerChainAwareTrait
      * Get the key generator instance.
      *
      * @return AbstractHandlerChain|null
+     *
+     * @throws RuntimeException When a cache handler chain has not been set.
      */
     public function getCacheHandlerChain()
     {
+        if (false === $this->hasCacheHandlerChain()) {
+            throw new RuntimeException(sprintf(
+                'You requested a cache chain handler via the method %s declared in trait %s and used in %s, but no handler chain has been set.',
+                __FUNCTION__,
+                'Scribe\CacheBundle\Cache\Handler\Chain\HandlerChainAwareTrait',
+                get_class()
+            ));
+        }
+
         return $this->cacheHandlerChain;
     }
 

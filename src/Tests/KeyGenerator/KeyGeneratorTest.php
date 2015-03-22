@@ -11,6 +11,7 @@
 namespace Scribe\CacheBundle\Tests\KeyGenerator;
 
 use PHPUnit_Framework_TestCase;
+use Scribe\Utility\Serializer\Serializer;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 
@@ -38,7 +39,7 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
         return function (...$values) {
             $valuesTranslated = [ ];
             foreach ($values as $v) {
-                $valuesTranslated[ ] = serialize($v);
+                $valuesTranslated[ ] = Serializer::sleep($v);
             }
 
             return $valuesTranslated;
@@ -50,7 +51,7 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
         return function (...$values) {
             $newValues = [ ];
             foreach ($values as $v) {
-                $newValues[ ] = serialize($v.'Closure');
+                $newValues[ ] = Serializer::sleep($v.'Closure');
             }
 
             return hash('sha512', implode('', $newValues), false);
@@ -332,14 +333,13 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
             'string-value',
             123456789,
         ];
-        $expectedKeyValuesTranslated = [
-            'O:8:"stdClass":1:{s:4:"desc";s:25:"This is a standard class!";}',
-            's:12:"string-value";',
-            'i:123456789;',
-        ];
-        $expectedKeyMd5     = 'scribe_cache---f0c6725c36ddad00b38fbcb33091cb42';
-        $expectedKeySha1    = 'scribe_cache---3dbd1e522892224feef44c15f133160a3ed9e28e';
-        $expectedKeyClosure = 'scribe_cache---4b34db72c9c2ac028722c967f0c3646f5588cf43f3bb59c45254fbfe16295bbd1f5bb54b54a45455d181769a56ab2173fbe0c0605b2996f04655e8443e7f61da';
+        $expectedKeyValuesTranslated = $expectedKeyValues;
+        foreach ($expectedKeyValuesTranslated as &$gotKeyValue) {
+            $gotKeyValue = Serializer::sleep($gotKeyValue);
+        }
+        $expectedKeyMd5     = 'scribe_cache---eafe0156bff82dfe6f89580709815c72';
+        $expectedKeySha1    = 'scribe_cache---12dfdd120c0d9f80a717d721efdcaf38e833b002';
+        $expectedKeyClosure = 'scribe_cache---acd5f359c29d59ca31a3210f5188eb47d4faa76e9d7d38dcae044226be30a6b88c1de35929531f1ecd0ba6dbef3adf0f47252d95777b3bceaae6f78ff7a46b15';
 
         $key = $kg->getKey(
             ...$expectedKeyValues
@@ -375,17 +375,14 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
             $stdClass2,
         ];
         $expectedKeyValues = array_merge($firstKeyValues, $secondKeyValues);
-        $expectedKeyValuesTranslated = [
-            's:12:"string-value";',
-            'i:12345;',
-            'O:8:"stdClass":1:{s:4:"desc";s:36:"This is a standard class! The first!";}',
-            's:14:"string-value-2";',
-            'i:67890;',
-            'O:8:"stdClass":1:{s:4:"desc";s:37:"This is a standard class! The second!";}',
-        ];
-        $expectedKeyMd5     = 'scribe_cache---f3534fbc6095aa262204a1c6d8668cc4';
-        $expectedKeySha1    = 'scribe_cache---06578213c350dcfe8cfb5720916bdbfebbb247c7';
-        $expectedKeyClosure = 'scribe_cache---2b0068d219630c8b21fc47f999c1bf238e5a38944a9ccaba0300a9dd8c012de736eef3bb74b22e2664b44bb1587f451010d8eebfc4d1293d66836b5f021aa70e';
+        $expectedKeyValuesTranslated = $expectedKeyValues;
+        foreach ($expectedKeyValuesTranslated as &$gotKeyValue) {
+            $gotKeyValue = Serializer::sleep($gotKeyValue);
+        }
+
+        $expectedKeyMd5     = 'scribe_cache---1bec05706e94f6002b5d942327e10fbe';
+        $expectedKeySha1    = 'scribe_cache---cd1cfb98b005f2f45743ca6f308c4393779cd8e0';
+        $expectedKeyClosure = 'scribe_cache---aa01f5eb5a96bf0096a5d59eba00b99becb173bbf208c6b7e40d39e0869908fb85c9382a4a46a5f83f16c03686781619347f5ce22cc61404702bcc4f73cac58b';
 
         $kg = $this->getNewKeyGenerator();
         $key = $kg
@@ -397,6 +394,7 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
         ;
 
         $this->assertEquals($expectedKeyValues, $kg->getKeyValues());
+
         $this->assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
         $this->assertEquals($expectedKeyMd5, $key);
         $this->assertEquals($expectedKeyMd5, $kg->getKey());

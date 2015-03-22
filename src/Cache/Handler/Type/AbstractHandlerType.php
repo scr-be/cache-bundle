@@ -10,6 +10,7 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
+use Scribe\Utility\Serializer\Serializer;
 use Scribe\CacheBundle\Cache\Handler\AbstractHandler;
 use Scribe\CacheBundle\Exceptions\InvalidArgumentException;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
@@ -429,7 +430,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
             return;
         }
 
-        return unserialize($data);
+        return Serializer::wake($data);
     }
 
     /**
@@ -449,7 +450,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
             );
         }
 
-        return serialize($data);
+        return Serializer::sleep($data);
     }
 
     /**

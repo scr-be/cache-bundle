@@ -161,7 +161,7 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($chain->hasKey());
 
         $chain->setKey('one', 'two', 'three');
-        $this->assertEquals('scribe_cache---ace501ae86c283fb26d52cddb7dc807c', $chain->getKey());
+        $this->assertEquals('scribe_cache---1a0f618cfb0e759487cb8a0edef79f57', $chain->getKey());
 
         $chain->setEnabled(false);
         $this->assertNull($chain->getKey());

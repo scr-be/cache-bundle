@@ -10,13 +10,13 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain\Fixtures;
 
-use PHPUnit_Framework_TestCase;
 use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChainAwareTrait;
+use Scribe\Tests\Helper\MantleFrameworkHelper;
 
 /**
  * Class ObjectChainAware.
  */
-class ObjectChainAware extends PHPUnit_Framework_TestCase
+class ObjectChainAware extends MantleFrameworkHelper
 {
     use HandlerChainAwareTrait;
 }

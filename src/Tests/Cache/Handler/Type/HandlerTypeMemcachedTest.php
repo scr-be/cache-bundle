@@ -10,10 +10,7 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
-use PHPUnit_Framework_TestCase;
-use Yandex\Allure\Adapter\Annotation\Title;
-use Yandex\Allure\Adapter\Annotation\Features;
-use Yandex\Allure\Adapter\Annotation\Stories;
+use Scribe\Tests\Helper\MantleFrameworkKernelHelper;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
 use Scribe\CacheBundle\Cache\Handler\Chain\AbstractHandlerChain;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
@@ -26,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Title("Memcache Cache Handler Test")
  */
-class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
+class HandlerTypeMemcachedTest extends MantleFrameworkKernelHelper
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached';
 
@@ -52,12 +49,10 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $kernel = new \AppKernel('test', true);
-        $kernel->boot();
+        parent::setUp();
 
-        $this->container = $kernel->getContainer();
-        $this->chain     = $this->container->get('scribe_cache.handler_chain');
-        $this->type      = $this->chain->getActiveHandler();
+        $this->chain = $this->container->get('scribe_cache.handler_chain');
+        $this->type  = $this->chain->getActiveHandler();
     }
 
     /**
@@ -433,11 +428,13 @@ class HandlerTypeMemcachedTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1800, $chain->getTtl());
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         if ($this->chain instanceof AbstractHandlerChain) {
             $this->chain->flushAll();
         }
+
+        parent::tearDown();
     }
 }
 

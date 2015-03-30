@@ -10,14 +10,14 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain;
 
-use PHPUnit_Framework_TestCase;
 use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain;
 use Scribe\CacheBundle\Tests\Cache\Handler\Chain\Fixtures\ObjectChainAware;
+use Scribe\Tests\Helper\MantleFrameworkHelper;
 
 /**
  * Class HandlerChainAwareTest.
  */
-class HandlerChainAwareTest extends PHPUnit_Framework_TestCase
+class HandlerChainAwareTest extends MantleFrameworkHelper
 {
     /**
      * @var ObjectChainAware
@@ -26,6 +26,8 @@ class HandlerChainAwareTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->chainAware = new ObjectChainAware();
     }
 

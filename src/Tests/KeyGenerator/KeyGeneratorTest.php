@@ -10,7 +10,7 @@
 
 namespace Scribe\CacheBundle\Tests\KeyGenerator;
 
-use PHPUnit_Framework_TestCase;
+use Scribe\Tests\Helper\MantleFrameworkHelper;
 use Scribe\Utility\Serializer\Serializer;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
@@ -18,7 +18,7 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 /**
  * Class KeyGeneratorTest.
  */
-class KeyGeneratorTest extends PHPUnit_Framework_TestCase
+class KeyGeneratorTest extends MantleFrameworkHelper
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\KeyGenerator\KeyGenerator';
 
@@ -26,6 +26,8 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->testResource = fopen(__FILE__, 'r');
     }
 
@@ -240,7 +242,7 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException             PHPUnit_Framework_Error
+     * @expectedException             Symfony\Component\Debug\Exception\ContextErrorException
      * @expectedExceptionMessageRegex #Argument 1 passed to .* must be an instance of .*, instance of .* given#
      */
     public function testKeyValuesTranslationClosureSetterTypeHint()
@@ -311,7 +313,7 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException             PHPUnit_Framework_Error
+     * @expectedException             Symfony\Component\Debug\Exception\ContextErrorException
      * @expectedExceptionMessageRegex #Argument 1 passed to .* must be an instance of .*, instance of .* given#
      */
     public function testKeyHashClosureSetterTypeHint()
@@ -565,6 +567,8 @@ class KeyGeneratorTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         fclose($this->testResource);
+
+        parent::tearDown();
     }
 }
 

@@ -10,16 +10,16 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain;
 
-use PHPUnit_Framework_TestCase;
 use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
+use Scribe\Tests\Helper\MantleFrameworkHelper;
 
 /**
  * Class HandlerChainTest.
  */
-class HandlerChainTest extends PHPUnit_Framework_TestCase
+class HandlerChainTest extends MantleFrameworkHelper
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Tests\Cache\Handler\Chain\HandlerChain';
 
@@ -27,6 +27,8 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->handlerChain = $this->getNewHandlerChainWithAllHandlerTypes();
     }
 
@@ -376,22 +378,12 @@ class HandlerChainTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $tempDirBase = sys_get_temp_dir();
-        $tempDir     = $tempDirBase.DIRECTORY_SEPARATOR.'scribe_cache';
-
-        if (false === is_dir($tempDir)) {
-            return;
-        }
-        $kg = new KeyGenerator();
-        $files = glob($tempDir.'/scribe*');
-        foreach ($files as $f) {
-            if (substr($f, 0, 1) == '.') {
-                continue;
-            }
-            unlink($f);
+        $cacheDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'scribe_cache';
+        if (is_dir($cacheDir)) {
+            $this->removeDirectory($cacheDir);
         }
 
-        rmdir($tempDir);
+        parent::tearDown();
     }
 }
 

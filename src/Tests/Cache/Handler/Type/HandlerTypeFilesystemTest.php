@@ -10,15 +10,15 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
-use PHPUnit_Framework_TestCase;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
+use Scribe\Tests\Helper\MantleFrameworkHelper;
 
 /**
  * Class HandlerTypeFilesystem.
  */
-class HandlerTypeFilesystemTest extends PHPUnit_Framework_TestCase
+class HandlerTypeFilesystemTest extends MantleFrameworkHelper
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem';
 
@@ -34,6 +34,8 @@ class HandlerTypeFilesystemTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->type = $this->getNewHandlerType();
         $this->testResource = fopen(__FILE__, 'r');
     }
@@ -105,6 +107,8 @@ class HandlerTypeFilesystemTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         fclose($this->testResource);
+
+        parent::tearDown();
     }
 }
 

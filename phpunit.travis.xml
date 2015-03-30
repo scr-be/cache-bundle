@@ -8,7 +8,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
-         bootstrap="src/Tests/bootstrap.php">
+         bootstrap="src/Tests/Helper/bootstrap/phpunit.php">
     <testsuites>
         <testsuite name="Scribe Cache Bundle Test Suite">
             <directory>./*/Tests</directory>
@@ -31,6 +31,12 @@
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
     <php>
-        <server name="KERNEL_DIR" value="./src/Tests/Fixtures/App/app" />
+        <server name="KERNEL_DIR" value="./src/Tests/Helper/app" />
+        <server name="SYMFONY__DATABASE_DRIVER" value="pdo_mysql" />
+        <server name="SYMFONY__DATABASE_HOST" value="127.0.0.1" />
+        <server name="SYMFONY__DATABASE_PORT" value="3306" />
+        <server name="SYMFONY__DATABASE_NAME" value="Scribe_SymfonyCacheBundle" />
+        <server name="SYMFONY__DATABASE_USER" value="root" />
+        <server name="SYMFONY__DATABASE_PASSWORD" value="" />
     </php>
 </phpunit>

@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+umask(0000);
+
+set_time_limit(0);
+
+require_once realpath(__DIR__.'/../src/Tests/Helper/bootstrap/includes/constants.php');
+require_once TEST_BS_FILE_FUNCTIONS;
+
+testBootstrap__requireFileOnce(
+    TEST_BS_FILE_CONSOLE_APP,
+    testBootstrap__newLogicException(
+        'Could not include the console application at %s.',
+        TEST_BS_FILE_CONSOLE_APP
+    )
+);
+
+/* EOF */

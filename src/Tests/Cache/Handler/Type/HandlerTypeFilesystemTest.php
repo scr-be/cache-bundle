@@ -13,12 +13,12 @@ namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
-use Scribe\Tests\Helper\MantleFrameworkHelper;
+use Scribe\Utility\UnitTest\AbstractMantleTestCase;
 
 /**
  * Class HandlerTypeFilesystem.
  */
-class HandlerTypeFilesystemTest extends MantleFrameworkHelper
+class HandlerTypeFilesystemTest extends AbstractMantleTestCase
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem';
 

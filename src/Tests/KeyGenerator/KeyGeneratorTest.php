@@ -10,7 +10,7 @@
 
 namespace Scribe\CacheBundle\Tests\KeyGenerator;
 
-use Scribe\Tests\Helper\MantleFrameworkHelper;
+use Scribe\Utility\UnitTest\AbstractMantleTestCase;
 use Scribe\Utility\Serializer\Serializer;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
@@ -18,7 +18,7 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 /**
  * Class KeyGeneratorTest.
  */
-class KeyGeneratorTest extends MantleFrameworkHelper
+class KeyGeneratorTest extends AbstractMantleTestCase
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\KeyGenerator\KeyGenerator';
 

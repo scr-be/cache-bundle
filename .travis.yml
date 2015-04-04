@@ -47,5 +47,5 @@ script:
   - bin/phpunit --verbose --configuration phpunit.travis.xml
 
 after_script:
-  - bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml
-  - bin/coveralls -vvv
+    - bin/coveralls -c .coveralls.yml -vvv
+    - bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml

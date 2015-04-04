@@ -21,18 +21,16 @@
         "scribe/mantle-bundle" : "2.0.*@dev"
     },
     "require-dev" : {
-        "ext-memcached"                   : "~2.2",
-        "ext-igbinary"                    : "~1.2",
-        "ext-tidy"                        : "~2.0",
-        "symfony/symfony"                 : "~2.6",
-        "phpunit/phpunit"                 : "~4.5",
-        "allure-framework/allure-phpunit" : "~1.1",
-        "scrutinizer/ocular"              : "~1.1",
-        "satooshi/php-coveralls"          : "~0.6",
-        "codeclimate/php-test-reporter"   : "~0.1.2",
-        "phpdocumentor/phpdocumentor"     : "dev-master",
-        "mayflower/php-codebrowser"       : "~1.1",
-        "leaphub/phpcs-symfony2-standard" : "~2.0"
+        "ext-memcached"                         : "~2.2",
+        "ext-igbinary"                          : "~1.2",
+        "ext-tidy"                              : "~2.0",
+        "symfony/symfony"                       : "~2.6",
+        "sensio/generator-bundle"               : "~2.5",
+        "doctrine/doctrine-fixtures-bundle"     : "2.2.*@dev",
+        "phpunit/phpunit"                       : "~4.5",
+        "scrutinizer/ocular"                    : "~1.1",
+        "satooshi/php-coveralls"                : "dev-multipleroot",
+        "mindscape/raygun4php"                  : "dev-master"
     },
     "suggest" : {
         "ext-memcached" : "Required to use Memcached caching service."
@@ -51,5 +49,11 @@
         "branch-alias": {
             "dev-master": "2.0-dev"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "https://github.com/scribenet/php-coveralls.git"
+        }
+    ]
 }

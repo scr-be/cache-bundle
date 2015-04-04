@@ -10,7 +10,7 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
-use Scribe\Tests\Helper\MantleFrameworkKernelHelper;
+use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
 use Scribe\CacheBundle\Cache\Handler\Chain\AbstractHandlerChain;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Title("Memcache Cache Handler Test")
  */
-class HandlerTypeMemcachedTest extends MantleFrameworkKernelHelper
+class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached';
 

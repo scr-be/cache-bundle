@@ -12,12 +12,12 @@ namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain;
 
 use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain;
 use Scribe\CacheBundle\Tests\Cache\Handler\Chain\Fixtures\ObjectChainAware;
-use Scribe\Tests\Helper\MantleFrameworkHelper;
+use Scribe\Utility\UnitTest\AbstractMantleTestCase;
 
 /**
  * Class HandlerChainAwareTest.
  */
-class HandlerChainAwareTest extends MantleFrameworkHelper
+class HandlerChainAwareTest extends AbstractMantleTestCase
 {
     /**
      * @var ObjectChainAware

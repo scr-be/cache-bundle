@@ -14,12 +14,12 @@ use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
-use Scribe\Tests\Helper\MantleFrameworkHelper;
+use Scribe\Utility\UnitTest\AbstractMantleTestCase;
 
 /**
  * Class HandlerChainTest.
  */
-class HandlerChainTest extends MantleFrameworkHelper
+class HandlerChainTest extends AbstractMantleTestCase
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Tests\Cache\Handler\Chain\HandlerChain';
 

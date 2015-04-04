@@ -2,10 +2,11 @@
 <?php
 
 require_once realpath(__DIR__.'/../src/Tests/Helper/bootstrap/includes/constants.php');
-require_once TEST_BS_FILE_FUNCTIONS;
 
 umask(TEST_BS_FILE_CONSOLE_APP_UMASK);
 set_time_limit(TEST_BS_FILE_CONSOLE_APP_EXEC_LIMIT);
+
+require_once TEST_BS_FILE_FUNCTIONS;
 
 testBootstrap__requireFileOnce(
     TEST_BS_FILE_CONSOLE_APP,

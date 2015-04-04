@@ -11,12 +11,12 @@
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain\Fixtures;
 
 use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChainAwareTrait;
-use Scribe\Tests\Helper\MantleFrameworkHelper;
+use Scribe\Utility\UnitTest\AbstractMantleTestCase;
 
 /**
  * Class ObjectChainAware.
  */
-class ObjectChainAware extends MantleFrameworkHelper
+class ObjectChainAware extends AbstractMantleTestCase
 {
     use HandlerChainAwareTrait;
 }

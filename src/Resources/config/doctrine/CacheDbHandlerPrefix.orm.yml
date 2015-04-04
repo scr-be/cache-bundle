@@ -1,0 +1,23 @@
+Scribe\CacheBundle\Entity\CacheDbHandlerPrefix:
+
+    type:            entity
+    table:           CacheBundle_DatabaseHandler_Prefix
+    repositoryClass: Scribe\CacheBundle\EntityRepository\CacheDbHandlerPrefixRepository
+
+    id:
+        id:
+            type:      integer
+            id:        true
+            generator: { strategy: AUTO }
+
+    fields:
+        slug:
+            type:   string
+            length: '510'
+
+    oneToMany:
+        items:
+            targetEntity: CacheDbHandlerItem
+            mappedBy:     prefix
+
+    lifecycleCallbacks: {  }

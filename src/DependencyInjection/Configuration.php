@@ -78,6 +78,7 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->append($this->getHandlerMemcachedNode())
+                ->append($this->getHandlerDBNode())
                 ->append($this->getHandlerFilesystemNode())
             ->end()
         ;
@@ -127,7 +128,7 @@ class Configuration implements ConfigurationInterface
             ->root('memcached')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerInnerGenericNode(2))
+                ->append($this->getHandlerInnerGenericNode(1))
                 ->arrayNode('!a::internals')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -212,12 +213,28 @@ class Configuration implements ConfigurationInterface
             ->root('filesystem')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerInnerGenericNode(1))
+                ->append($this->getHandlerInnerGenericNode(3))
                 ->scalarNode('cache_dir')
                     ->isRequired()
                     ->defaultValue('/tmp')
                     ->info('The directory to use for filesystem caching.')
                 ->end()
+            ->end()
+        ;
+    }
+
+    /**
+     * Define the filesystem handler configuration options.
+     *
+     * @return NodeDefinition
+     */
+    private function getHandlerDBNode()
+    {
+        return (new TreeBuilder())
+            ->root('db')
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->append($this->getHandlerInnerGenericNode(2))
             ->end()
         ;
     }

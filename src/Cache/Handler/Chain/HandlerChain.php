@@ -19,20 +19,6 @@ use Scribe\CacheBundle\Exceptions\RuntimeException;
 class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
 {
     /**
-     * Sets the active handler.
-     *
-     * @param AbstractHandlerType $handler
-     *
-     * @return $this
-     */
-    protected function setActiveHandler(AbstractHandlerType $handler)
-    {
-        $this->activeHandler = $handler;
-
-        return $this;
-    }
-
-    /**
      * Stack the provided handler in the correct position on the handlers stack,
      * verifying that another handler does not already have the same priority.
      *

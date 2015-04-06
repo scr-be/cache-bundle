@@ -1,0 +1,34 @@
+Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem:
+
+    type:            entity
+    table:           CacheBundle_DatabaseHandler_Item
+    repositoryClass: Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerItemRepository
+
+    id:
+
+        id:
+            type:      integer
+            id:        true
+            generator: { strategy: AUTO }
+
+    fields:
+
+        k:
+            type: string
+            length: '600'
+
+        value:
+            type: blob
+            nullable: true
+
+        ttl:
+            type: integer
+
+    manyToOne:
+
+        prefix:
+            targetEntity: CacheDBHandlerPrefix
+            inversedBy:   items
+            joinColumn:
+                name:            prefixId
+                referenceColumn: id

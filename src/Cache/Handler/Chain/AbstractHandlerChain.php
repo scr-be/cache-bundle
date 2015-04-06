@@ -105,7 +105,12 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      *
      * @return $this
      */
-    abstract protected function setActiveHandler(AbstractHandlerType $handler);
+    public function setActiveHandler(AbstractHandlerType $handler)
+    {
+        $this->activeHandler = $handler;
+
+        return $this;
+    }
 
     /**
      * Gets the active handler.

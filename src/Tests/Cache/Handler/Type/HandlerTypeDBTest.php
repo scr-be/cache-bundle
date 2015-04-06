@@ -10,22 +10,23 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
+use Doctrine\ORM\NoResultException;
 use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB;
 use Scribe\CacheBundle\Cache\Handler\Chain\AbstractHandlerChain;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class HandlerTypeMemcachedTest.
+ * Class HandlerTypeDBTest.
  *
  *
- * @Title("Memcache Cache Handler Test")
+ * @Title("DB Cache Handler Test")
  */
-class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
+class HandlerTypeDBTest extends AbstractMantleKernelTestCase
 {
-    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached';
+    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB';
 
     /**
      * @var AbstractHandlerChain
@@ -33,7 +34,7 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     protected $chain;
 
     /**
-     * @var HandlerTypeMemcached
+     * @var HandlerTypeDB
      */
     protected $type;
 
@@ -55,12 +56,12 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
         $handlers = $this->chain->getHandlers();
         $memcachedHandler = null;
         foreach ($handlers as $h) {
-            if ($h instanceof HandlerTypeMemcached) {
+            if ($h instanceof HandlerTypeDB) {
                 $memcachedHandler = $h;
             }
         }
         if (null === $memcachedHandler) {
-            throw new \PHPUnit_Framework_Exception('Could not find Memcached Handler');
+            throw new \PHPUnit_Framework_Exception('Could not find DB Handler');
         }
         $this->chain->setActiveHandler($memcachedHandler);
         $this->type = $this->chain->getActiveHandler();
@@ -69,7 +70,7 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     /**
      * getNewHandlerType.
      *
-     * @return HandlerTypeMemcached
+     * @return HandlerTypeDB
      */
     protected function getNewHandlerType()
     {
@@ -85,11 +86,11 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
      * @param bool                  $disabled
      * @param callable              $supportedDecider
      *
-     * @return HandlerTypeMemcached
+     * @return HandlerTypeDB
      */
     protected function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
-        return new HandlerTypeMemcached($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
+        return new HandlerTypeDB($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
     }
 
     /**
@@ -100,43 +101,13 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
      * @param null                  $priority
      * @param bool                  $disabled
      *
-     * @return HandlerTypeMemcached
+     * @return HandlerTypeDB
      */
     protected function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
     {
         $supportedDecider = function () { return false; };
 
         return $this->getNewHandlerTypeEmpty(new KeyGenerator(), 1800, 1, false, $supportedDecider);
-    }
-
-    /**
-     * @Title("Test Exception is Thrown on Unknown Option Type");
-     * @Features({"Option Handling", "DI", "Exception Handling"})
-     * @Stories({"Handler should be able to handle configuration"})
-     */
-    public function testUnknownOptionType()
-    {
-        $this->setExpectedException(
-            'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Unknown memcached option type unknown_option_type specified.'
-        );
-
-        $this->type->setOptions(['unknown_option_type' => true]);
-    }
-
-    /**
-     * @Title("Test Exception is Thrown on Unknown Server Configuration");
-     * @Features({"Option Handling", "DI", "Exception Handling"})
-     * @Stories({"Handler should be able to handle configuration"})
-     */
-    public function testInvalidServerOption()
-    {
-        $this->setExpectedException(
-            'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Unknown number of server connection parameters. Please provide 3: ip/host, port, and weight.'
-        );
-
-        $this->type->addServers(['invalid_server_opts' => ['too', 'many', 'args', 'for', 'server', 'config']]);
     }
 
     /**
@@ -172,7 +143,7 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
      */
     public function testGetType()
     {
-        $this->assertEquals('memcached', $this->type->getType());
+        $this->assertEquals('db', $this->type->getType());
         $this->assertEquals(
             self::FULLY_QUALIFIED_CLASS_NAME,
             $this->type->getType(true)
@@ -180,11 +151,11 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the Memcached handler can cache")
+     * @Title("Confirm theDB handler can cache")
      * @Features({"Can Cache"})
      * @Stories({"Handler should be able to set/get/has/del/flush"})
      */
-    public function testMemcachedHandlerCanCacheAndFlushAll()
+    public function testHandlerCanCacheAndFlushAll()
     {
         $chain = $this->chain;
 
@@ -202,11 +173,42 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the Memcached handler can determine if it has a cached item")
+     * @Title("Confirm theDB handler can cache")
+     * @Features({"Can Cache"})
+     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     */
+    public function testHandlerCanCacheAndFlushStale()
+    {
+        $chain = $this->chain;
+        $chain->setTtl(2);
+
+        $val1 = $key1 = [ 1, 2, 3 ];
+        $val2 = $key2 = [ 2, 3, 4 ];
+        $val3 = $key3 = [ 3, 4, 5 ];
+
+        $chain->set($val1, ...$key1);
+        $chain->set($val2, ...$key2);
+        $chain->set($val3, ...$key3);
+
+        $this->assertEquals($val1, $chain->get(...$key1));
+        $this->assertEquals($val2, $chain->get(...$key2));
+        $this->assertEquals($val3, $chain->get(...$key3));
+
+        sleep(2);
+
+        $chain->getActiveHandler()->flushStaleItems();
+
+        $this->assertNotEquals($val1, $chain->get(...$key1));
+        $this->assertNotEquals($val2, $chain->get(...$key2));
+        $this->assertNotEquals($val3, $chain->get(...$key3));
+    }
+
+    /**
+     * @Title("Confirm the DB handler can determine if it has a cached item")
      * @Features({"Can Check Cache"})
      * @Stories({"Handler should be able to set/get/has/del/flush"})
      */
-    public function testMemcachedHandlerCanCacheAndCheck()
+    public function testHandlerCanCacheAndCheck()
     {
         $chain = $this->chain;
 
@@ -228,11 +230,11 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the Memcached handler can flush its cache")
+     * @Title("Confirm the DB handler can flush its cache")
      * @Features({"Can Cache", "Can Flush All"})
      * @Stories({"Handler should be able to set/get/has/del/flush"})
      */
-    public function testMemcacheHandlerCanFlushAll()
+    public function testHandlerCanFlushAll()
     {
         $chain = $this->chain;
 
@@ -264,11 +266,11 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the Memcached handler honors TTL")
+     * @Title("Confirm the DB handler honors TTL")
      * @Features({"Can Cache", "Can Flush All", "Can Respect TTL"})
      * @Stories({"Handler should be able to set/get/has/del/flush"})
      */
-    public function testMemcachedHandlerCanCacheWithValidateTtl()
+    public function testDBHandlerCanCacheWithValidateTtl()
     {
         $chain = $this->chain;
 
@@ -305,11 +307,11 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the Memcached handler can delete cached values")
+     * @Title("Confirm the DB handler can delete cached values")
      * @Features({"Can Cache", "Can Flush All", "Can Respect TTL", "Can Delete"})
      * @Stories({"Handler should be able to set/get/has/del/flush"})
      */
-    public function testMemcachedHandlerCanCacheAndDelete()
+    public function testHandlerCanCacheAndDelete()
     {
         $val1 = $key1 = [1122, 2233, 3344];
         $val2 = $key2 = [2233, 3455, 4455];
@@ -342,27 +344,6 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Test a collection of possible option values")
-     * @Features({"Option Handling", "DI"})
-     * @Stories({"Handler should be able to handle configuration"})
-     */
-    public function testOptions()
-    {
-        $opts = [
-            'serializer' => 'json',
-            'compression_method' => 'zlib',
-        ];
-
-        $this->type->setOptions($opts);
-
-        $opts = [
-            'serializer' => 'php',
-        ];
-
-        $this->type->setOptions($opts);
-    }
-
-    /**
      * @Title("Check isSupported closure handler")
      * @Features({"Option Handling"})
      * @Stories({"Handler should be able to determine supported state based on passed closure"})
@@ -390,8 +371,11 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
         $this->assertFalse($this->type->isSupported());
 
         $this->type->__construct();
-        $this->type->setOptions([]);
-        $this->type->setServers([]);
+        $this->type->setRepositories(
+            $this->container->get('doctrine.orm.entity_manager'),
+            $this->container->get('s.cache.cache_db_handler_item.repo'),
+            $this->container->get('s.cache.cache_db_handler_prefix.repo')
+        );
 
         $this->type->unsetSupportedDecider();
 
@@ -403,7 +387,7 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
      * @Features({"Can Cache", "Can Respect TTL"})
      * @Stories({"Handler should be able to set/get/has/del/flush"})
      */
-    public function testMemcachedHandlerCanChangeTtl()
+    public function testHandlerCanChangeTtl()
     {
         $chain = $this->chain;
         $chain->setTtl(8);
@@ -439,10 +423,34 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
         $this->assertEquals(1800, $chain->getTtl());
     }
 
+    public function testHandlerReturnsNullOnDelOfNonExistantItem()
+    {
+        $chain = $this->chain;
+
+        $this->assertFalse($chain->del(['this', 'doesnt', 'exist']));
+    }
+
     public function tearDown()
     {
         if ($this->chain instanceof AbstractHandlerChain) {
             $this->chain->flushAll();
+        }
+
+        if ($this->chain instanceof AbstractHandlerChain) {
+            $gen = $keyPrefix = $this->chain->getActiveHandler()->getKeyGenerator();
+            if ($gen instanceof KeyGenerator) {
+                $keyPrefix = $gen->getKeyPrefix();
+                try {
+                    $keyPrefixEntity = $this->container->get('s.cache.cache_db_handler_prefix.repo')->findOneBySlug($keyPrefix);
+                    if ($keyPrefixEntity) {
+                        $em = $this->container->get('doctrine.orm.entity_manager');
+                        $em->remove($keyPrefixEntity);
+                        $em->flush();
+                    }
+                } catch (NoResultException $e) {
+                    // do nothing
+                }
+            }
         }
 
         parent::tearDown();

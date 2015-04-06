@@ -1,0 +1,18 @@
+Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix:
+
+    type:            entity
+    table:           CacheBundle_DatabaseHandler_Prefix
+    repositoryClass: Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerPrefixRepository
+
+    id:
+
+        id:
+            type:      integer
+            id:        true
+            generator: { strategy: AUTO }
+
+    oneToMany:
+
+        items:
+            targetEntity: CacheDBHandlerItem
+            mappedBy:     prefix

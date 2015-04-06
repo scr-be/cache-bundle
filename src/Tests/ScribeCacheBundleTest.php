@@ -50,18 +50,18 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
 
     public function testCanAccessContainerServices()
     {
-        $this->assertTrue($this->container->has('scribe_cache.key_generator'));
+        $this->assertTrue($this->container->has('s.cache.key_generator'));
     }
 
     public function testCanApplyCompilerPass()
     {
-        $this->assertTrue($this->container->has('scribe_cache.handler_chain'));
+        $this->assertTrue($this->container->has('s.cache.handler_chain'));
 
-        $methodChain = $this->container->get('scribe_cache.handler_chain');
+        $methodChain = $this->container->get('s.cache.handler_chain');
 
         $this->assertNotEquals([ ], $methodChain->getHandlers());
         $this->assertTrue($methodChain->hasHandlers());
-        $this->assertEquals(2, count($methodChain->getHandlers()));
+        $this->assertEquals(3, count($methodChain->getHandlers()));
     }
 
     protected function tearDown()

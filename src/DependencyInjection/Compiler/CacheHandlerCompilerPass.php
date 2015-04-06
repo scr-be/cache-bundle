@@ -27,12 +27,12 @@ class CacheHandlerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (true === $container->hasDefinition('scribe_cache.handler_chain')) {
+        if (true === $container->hasDefinition('s.cache.handler_chain')) {
             $chainDefinition = $container->getDefinition(
-                'scribe_cache.handler_chain'
+                's.cache.handler_chain'
             );
             $handlerDefinitions = $container->findTaggedServiceIds(
-                'scribe_cache.handler_type'
+                's.cache.handler_type'
             );
 
             foreach ($handlerDefinitions as $id => $attributes) {

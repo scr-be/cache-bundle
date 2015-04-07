@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -53,18 +54,10 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         parent::setUp();
 
         $this->chain = $this->container->get('s.cache.handler_chain');
-        $handlers = $this->chain->getHandlers();
-        $memcachedHandler = null;
-        foreach ($handlers as $h) {
-            if ($h instanceof HandlerTypeDB) {
-                $memcachedHandler = $h;
-            }
-        }
-        if (null === $memcachedHandler) {
-            throw new \PHPUnit_Framework_Exception('Could not find DB Handler');
-        }
-        $this->chain->setActiveHandler($memcachedHandler);
+        $this->chain->reDetermineActiveHandler('db');
         $this->type = $this->chain->getActiveHandler();
+
+        $this->type->initRepositories(true);
     }
 
     /**
@@ -150,6 +143,33 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         );
     }
 
+    public function testRandomInitRepositoryStaleFlush()
+    {
+        $chain = $this->chain;
+        $chain->setTtl(2);
+
+        $val1 = $key1 = [1, 2, 3];
+        $val2 = $key2 = [2, 3, 4];
+        $val3 = $key3 = [3, 4, 5];
+
+        $chain->set($val1, ...$key1);
+        $chain->set($val2, ...$key2);
+        $chain->set($val3, ...$key3);
+
+        sleep(2);
+
+        foreach (range(1, 2000) as $i) {
+            $this->type->initRepositories();
+            usleep(2);
+        }
+
+        $this->assertNotEquals($val1, $chain->get(...$key1));
+        $this->assertNotEquals($val2, $chain->get(...$key2));
+        $this->assertNotEquals($val3, $chain->get(...$key3));
+
+        $chain->setTtlToDefault();
+    }
+
     /**
      * @Title("Confirm theDB handler can cache")
      * @Features({"Can Cache"})
@@ -159,9 +179,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->chain;
 
-        $val1 = $key1 = [ 1, 2, 3 ];
-        $val2 = $key2 = [ 2, 3, 4 ];
-        $val3 = $key3 = [ 3, 4, 5 ];
+        $val1 = $key1 = [1, 2, 3];
+        $val2 = $key2 = [2, 3, 4];
+        $val3 = $key3 = [3, 4, 5];
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);
@@ -182,9 +202,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $chain = $this->chain;
         $chain->setTtl(2);
 
-        $val1 = $key1 = [ 1, 2, 3 ];
-        $val2 = $key2 = [ 2, 3, 4 ];
-        $val3 = $key3 = [ 3, 4, 5 ];
+        $val1 = $key1 = [1, 2, 3];
+        $val2 = $key2 = [2, 3, 4];
+        $val3 = $key3 = [3, 4, 5];
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);
@@ -212,9 +232,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->chain;
 
-        $val1 = $key1 = [ 81, 82, 83 ];
-        $val2 = $key2 = [ 82, 83, 84 ];
-        $val3 = $key3 = [ 83, 84, 85 ];
+        $val1 = $key1 = [81, 82, 83];
+        $val2 = $key2 = [82, 83, 84];
+        $val3 = $key3 = [83, 84, 85];
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);
@@ -238,9 +258,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->chain;
 
-        $val1 = $key1 = [ 11, 22, 33 ];
-        $val2 = $key2 = [ 22, 33, 44 ];
-        $val3 = $key3 = [ 33, 44, 55 ];
+        $val1 = $key1 = [11, 22, 33];
+        $val2 = $key2 = [22, 33, 44];
+        $val3 = $key3 = [33, 44, 55];
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);

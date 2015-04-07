@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -188,9 +189,9 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->chain;
 
-        $val1 = $key1 = [ 1, 2, 3 ];
-        $val2 = $key2 = [ 2, 3, 4 ];
-        $val3 = $key3 = [ 3, 4, 5 ];
+        $val1 = $key1 = [1, 2, 3];
+        $val2 = $key2 = [2, 3, 4];
+        $val3 = $key3 = [3, 4, 5];
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);
@@ -210,9 +211,9 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->chain;
 
-        $val1 = $key1 = [ 81, 82, 83 ];
-        $val2 = $key2 = [ 82, 83, 84 ];
-        $val3 = $key3 = [ 83, 84, 85 ];
+        $val1 = $key1 = [81, 82, 83];
+        $val2 = $key2 = [82, 83, 84];
+        $val3 = $key3 = [83, 84, 85];
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);
@@ -236,9 +237,9 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->chain;
 
-        $val1 = $key1 = [ 11, 22, 33 ];
-        $val2 = $key2 = [ 22, 33, 44 ];
-        $val3 = $key3 = [ 33, 44, 55 ];
+        $val1 = $key1 = [11, 22, 33];
+        $val2 = $key2 = [22, 33, 44];
+        $val3 = $key3 = [33, 44, 55];
 
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);

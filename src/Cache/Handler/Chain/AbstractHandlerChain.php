@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -27,7 +28,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      *
      * @var AbstractHandlerType[]
      */
-    protected $handlers = [ ];
+    protected $handlers = [];
 
     /**
      * The handler with the highest priority.
@@ -66,9 +67,9 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      *
      * @return $this
      */
-    public function setHandlers(array $handlers = [ ])
+    public function setHandlers(array $handlers = [])
     {
-        $this->handlers      = [ ];
+        $this->handlers      = [];
         $this->activeHandler = null;
 
         foreach ($handlers as $h) {
@@ -89,6 +90,29 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
+     * @param $type
+     *
+     * @throws RuntimeException
+     *
+     * @return AbstractHandlerType
+     */
+    public function getHandler($type)
+    {
+        foreach ($this->getHandlers() as $h) {
+            if ($h->getType() === strtolower($type)) {
+                return $h;
+            }
+        }
+
+        throw new RuntimeException(
+            sprintf(
+                'The requested handler type "%s" is not available.',
+                $type
+            )
+        );
+    }
+
+    /**
      * Check if any handlers have been registered.
      *
      * @return bool
@@ -96,6 +120,31 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     public function hasHandlers()
     {
         return (bool) (true === (count($this->handlers)) > 0);
+    }
+
+    /**
+     * Each time a new handler is added to the stack, re-determine the active
+     * handler by processing them by priority (index value) and checking for the
+     * first handler type that is both enabled and supported.
+     *
+     * @throws RuntimeException
+     *
+     * @param null|string|AbstractHandlerType $forceSelection
+     *
+     * @return $this
+     */
+    abstract protected function determineActiveHandler($forceSelection = null);
+
+    /**
+     * Re-determine active handler, possibly based on forced selection.
+     *
+     * @param null $forceSelection
+     *
+     * @return AbstractHandlerChain
+     */
+    public function reDetermineActiveHandler($forceSelection = null)
+    {
+        return $this->determineActiveHandler($forceSelection);
     }
 
     /**
@@ -160,6 +209,16 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     public function getActiveHandlerType($fullyQualified = false)
     {
         return (string) $this->getActiveHandler()->getType($fullyQualified);
+    }
+
+    /**
+     * @return $this
+     */
+    public function unsetActiveHandlerType()
+    {
+        $this->activeHandler = null;
+
+        return $this;
     }
 
     /**
@@ -303,15 +362,6 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      * @throws RuntimeException
      */
     abstract protected function determineStackPosition(AbstractHandlerType $handler);
-
-    /**
-     * Each time a new handler is added to the stack, re-determine the active
-     * handler by processing them by priority (index value) and checking for the
-     * first handler type that is both enabled and supported.
-     *
-     * @return $this
-     */
-    abstract protected function determineActiveHandler();
 }
 
 /* EOF */

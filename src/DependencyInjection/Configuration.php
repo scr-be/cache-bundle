@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -86,6 +87,8 @@ class Configuration implements ConfigurationInterface
 
     /**
      * getHandlerTypeGenericInnerNode.
+     *
+     * @param int $priority
      *
      * @return NodeDefinition
      */

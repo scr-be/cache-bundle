@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -54,17 +55,78 @@ class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
      * handler by processing them by priority (index value) and checking for the
      * first handler type that is both enabled and supported.
      *
+     * @param null|string|AbstractHandlerType $forceSelection
+     *
      * @return $this
      */
-    protected function determineActiveHandler()
+    protected function determineActiveHandler($forceSelection = null)
     {
+        ksort($this->handlers);
+
+        if (null === $forceSelection) {
+            return $this->determineActiveHandlerAutomatic();
+        }
+
+        return $this->determineActiveHandlerForced($forceSelection);
+    }
+
+    /**
+     * @return $this
+     */
+    protected function determineActiveHandlerAutomatic()
+    {
+        $chosenHandler = null;
+
         foreach ($this->getHandlers() as $handler) {
             if (true === $handler->isEnabled() &&
                 true === $handler->isSupported()) {
-                $this->setActiveHandler($handler);
+                $chosenHandler = $handler;
                 break;
             }
         }
+
+        if ($chosenHandler instanceof AbstractHandlerType) {
+            $this->setActiveHandler($chosenHandler);
+        } else {
+            $this->unsetActiveHandlerType();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param null|string|AbstractHandlerType $forceSelection
+     *
+     * @throws RuntimeException
+     *
+     * @return $this
+     */
+    protected function determineActiveHandlerForced($forceSelection)
+    {
+        $chosenHandler = null;
+        $forceSelection = $forceSelection instanceof AbstractHandlerType ?
+            strtolower($forceSelection->getType()) : strtolower($forceSelection);
+
+        foreach ($this->getHandlers() as $handler) {
+            if ($forceSelection === $handler->getType() &&
+                true === $handler->isSupported()) {
+                $chosenHandler = $handler;
+                break;
+            }
+
+            continue;
+        }
+
+        if (false === ($chosenHandler instanceof AbstractHandlerType)) {
+            throw new RuntimeException(
+                sprintf(
+                    'Could not find requested cache handler type "%s".',
+                    $forceSelection
+                )
+            );
+        }
+
+        $this->setActiveHandler($chosenHandler);
 
         return $this;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -82,13 +83,13 @@ class HandlerTypeMemcached extends AbstractHandlerType
      *
      * @param array $options
      */
-    public function setOptions(array $options = [ ])
+    public function setOptions(array $options = [])
     {
         if (true !== $this->isSupported()) {
             return;
         }
 
-        $resolvedOptions = [ ];
+        $resolvedOptions = [];
 
         foreach ($options as $type => $value) {
             $this->handleOptionResolution($resolvedOptions, $type, $value);
@@ -154,7 +155,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
      *
      * @param array $servers
      */
-    public function setServers(array $servers = [ ])
+    public function setServers(array $servers = [])
     {
         if (true === $this->isSupported()) {
             $this->memcached->resetServerList();
@@ -172,13 +173,13 @@ class HandlerTypeMemcached extends AbstractHandlerType
      *
      * @throws RuntimeException
      */
-    public function addServers(array $servers = [ ])
+    public function addServers(array $servers = [])
     {
         if (true !== $this->isSupported()) {
             return;
         }
 
-        $resolvedServers = [ ];
+        $resolvedServers = [];
         foreach ($servers as $name => $parameters) {
             $this->handleServerResolution($resolvedServers, $name, $parameters);
         }

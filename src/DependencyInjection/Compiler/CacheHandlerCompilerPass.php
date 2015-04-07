@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -38,7 +39,7 @@ class CacheHandlerCompilerPass implements CompilerPassInterface
             foreach ($handlerDefinitions as $id => $attributes) {
                 $chainDefinition->addMethodCall(
                     'addHandler',
-                    [ new Reference($id) ]
+                    [new Reference($id)]
                 );
             }
         }

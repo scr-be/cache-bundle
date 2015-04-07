@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -59,7 +60,7 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
 
         $methodChain = $this->container->get('s.cache.handler_chain');
 
-        $this->assertNotEquals([ ], $methodChain->getHandlers());
+        $this->assertNotEquals([], $methodChain->getHandlers());
         $this->assertTrue($methodChain->hasHandlers());
         $this->assertEquals(3, count($methodChain->getHandlers()));
     }

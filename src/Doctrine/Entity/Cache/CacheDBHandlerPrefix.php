@@ -25,20 +25,20 @@ class CacheDBHandlerPrefix extends AbstractEntity
     use SluggableBehaviorTrait;
 
     /**
-     * Collection of cached items associated with prefix
+     * Collection of cached items associated with prefix.
      *
      * @var null|ArrayCollection
      */
     protected $items;
 
     /**
-     * Construct (init) the entity
+     * Construct (init) the entity.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->items = new ArrayCollection;
+        $this->items = new ArrayCollection();
     }
 
     /**
@@ -65,17 +65,17 @@ class CacheDBHandlerPrefix extends AbstractEntity
     }
 
     /**
-     * Support casting to string
+     * Support casting to string.
      *
      * @return string
      */
     public function __toString()
     {
-        return (string) get_class($this) . ':' . ($this->getId() ?: 'not-em-managed');
+        return (string) get_class($this).':'.($this->getId() ?: 'not-em-managed');
     }
 
     /**
-     * Get an array collection of the items associated with this prefix
+     * Get an array collection of the items associated with this prefix.
      *
      * @return ArrayCollection|null
      */
@@ -85,7 +85,7 @@ class CacheDBHandlerPrefix extends AbstractEntity
     }
 
     /**
-     * Search the item associations for the provided item
+     * Search the item associations for the provided item.
      *
      * @param CacheDbHandlerItem $item
      *

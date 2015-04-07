@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a632e4d5fe0f0ed5e43245c17acc709a",
+    "hash": "2091c2166792f825c98dd6e7e6c3be56",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1112,12 +1112,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribenet/symfony-mantle-bundle.git",
-                "reference": "a6c2ea21173341e039bf7915b7c6bb7951cefed7"
+                "reference": "f910122c838a21e744c9e566ebe71584d791c461"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/a6c2ea21173341e039bf7915b7c6bb7951cefed7",
-                "reference": "a6c2ea21173341e039bf7915b7c6bb7951cefed7",
+                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/f910122c838a21e744c9e566ebe71584d791c461",
+                "reference": "f910122c838a21e744c9e566ebe71584d791c461",
                 "shasum": ""
             },
             "require": {
@@ -1147,6 +1147,7 @@
                 "chriskite/phactory": "~0.4.3",
                 "doctrine/doctrine-fixtures-bundle": "2.2.*@dev",
                 "phpunit/phpunit": "~4.5,>=4.5.1",
+                "sami/sami": "*@dev",
                 "satooshi/php-coveralls": "dev-multipleroot",
                 "scrutinizer/ocular": "~1.1",
                 "sensio/generator-bundle": "~2.5"
@@ -1190,8 +1191,8 @@
                     "role": "Developer (UX)"
                 }
             ],
-            "description": "Scribe Mantle Bundle provides the core dependencies and specific functionality need for the \ndevvelopment of our internal (proprietary) application as well as our other external projects, both\nprofessional and personal. Mantle provides a solid foundation for us to develope all our applications\nin tandem, while providing a common version- and feature-set throughout. In addition to the collection\nof external dependencies required, we have also spent a great deal of time abstracting as much as\nas posible with the intend of providing a solid foundation (or \"mantle\") for all our Symfony-based\nwork. If anyone has any qyestions, please feel free to contact the maintainers (try Rob Frawley 2nd\nfirst, as he would be most keen to open a dialoge). Otherwise, as this is MIT Licences, feel free to\n disect, pull-apart, and use whatever functionality you find most-appropriate for your enviornment.\nHappy coding!",
-            "homepage": "https://symfony-mantle-bundle.docs.scribe.tools/git",
+            "description": "Scribe Mantle Bundle provides the core dependencies and specific functionality need for the devvelopment of our internal (proprietary) application as well as our other external projects, both professional and personal. Mantle provides a solid foundation for us to develope all our applications in tandem, while providing a common version- and feature-set throughout. In addition to the collection of external dependencies required, we have also spent a great deal of time abstracting as much as as posible with the intend of providing a solid foundation (or \"mantle\") for all our Symfony-based work. If anyone has any qyestions, please feel free to contact the maintainers (try Rob Frawley 2nd first, as he would be most keen to open a dialoge). Otherwise, as this is MIT Licenced, feel free to disect, pull-apart, and use whatever functionality you find most-appropriate for your enviornment.",
+            "homepage": "https://scr.be/mantle-bundle",
             "keywords": [
                 "Scribe",
                 "Symfony2",
@@ -1211,7 +1212,7 @@
                 "symfony-framework",
                 "symfony-mantle-bundle"
             ],
-            "time": "2015-04-06 22:05:18"
+            "time": "2015-04-07 00:16:11"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -2305,6 +2306,102 @@
             "time": "2014-03-18 08:39:00"
         },
         {
+            "name": "michelf/php-markdown",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michelf/php-markdown.git",
+                "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/e1aabe18173231ebcefc90e615565742fc1c7fd9",
+                "reference": "e1aabe18173231ebcefc90e615565742fc1c7fd9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-lib": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Michelf": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "John Gruber",
+                    "homepage": "http://daringfireball.net/"
+                },
+                {
+                    "name": "Michel Fortin",
+                    "email": "michel.fortin@michelf.ca",
+                    "homepage": "https://michelf.ca/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Markdown",
+            "homepage": "https://michelf.ca/projects/php-markdown/",
+            "keywords": [
+                "markdown"
+            ],
+            "time": "2015-03-01 12:03:08"
+        },
+        {
+            "name": "nikic/php-parser",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "08f97eb4efa029e2fafb6d8c98b71731bf0cf621"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/08f97eb4efa029e2fafb6d8c98b71731bf0cf621",
+                "reference": "08f97eb4efa029e2fafb6d8c98b71731bf0cf621",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "lib/bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "time": "2015-04-03 14:33:59"
+        },
+        {
             "name": "phpcollection/phpcollection",
             "version": "0.4.0",
             "source": {
@@ -2889,6 +2986,110 @@
             "time": "2015-04-02 05:36:41"
         },
         {
+            "name": "pimple/pimple",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silexphp/Pimple.git",
+                "reference": "876bf0899d01feacd2a2e83f04641e51350099ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/876bf0899d01feacd2a2e83f04641e51350099ef",
+                "reference": "876bf0899d01feacd2a2e83f04641e51350099ef",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
+            "homepage": "http://pimple.sensiolabs.org",
+            "keywords": [
+                "container",
+                "dependency injection"
+            ],
+            "time": "2014-07-24 09:48:15"
+        },
+        {
+            "name": "sami/sami",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfPHP/Sami.git",
+                "reference": "e9f1b809171d191274005c09690bb099e841ea0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfPHP/Sami/zipball/e9f1b809171d191274005c09690bb099e841ea0e",
+                "reference": "e9f1b809171d191274005c09690bb099e841ea0e",
+                "shasum": ""
+            },
+            "require": {
+                "michelf/php-markdown": "~1.3",
+                "nikic/php-parser": "~1.0",
+                "php": ">=5.3.3",
+                "phpdocumentor/reflection-docblock": "~2.0",
+                "pimple/pimple": "~3.0",
+                "symfony/console": "~2.1",
+                "symfony/filesystem": "~2.1",
+                "symfony/finder": "~2.1",
+                "symfony/process": "~2.1",
+                "symfony/yaml": "~2.1",
+                "twig/twig": "~1.13"
+            },
+            "bin": [
+                "sami.php"
+            ],
+            "type": "application",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sami\\": "Sami/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Sami, an API documentation generator",
+            "homepage": "http://sami.sensiolabs.org",
+            "keywords": [
+                "phpdoc"
+            ],
+            "time": "2015-03-02 12:22:39"
+        },
+        {
             "name": "satooshi/php-coveralls",
             "version": "dev-multipleroot",
             "source": {
@@ -3420,7 +3621,8 @@
         "scribe/mantle-bundle": 20,
         "doctrine/doctrine-fixtures-bundle": 20,
         "satooshi/php-coveralls": 20,
-        "mindscape/raygun4php": 20
+        "mindscape/raygun4php": 20,
+        "sami/sami": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

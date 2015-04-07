@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -11,15 +12,16 @@
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain;
 
 use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain;
+use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
-use Scribe\Utility\UnitTest\AbstractMantleTestCase;
+use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
 
 /**
  * Class HandlerChainTest.
  */
-class HandlerChainTest extends AbstractMantleTestCase
+class HandlerChainTest extends AbstractMantleKernelTestCase
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Tests\Cache\Handler\Chain\HandlerChain';
 
@@ -100,6 +102,56 @@ class HandlerChainTest extends AbstractMantleTestCase
         return $chain;
     }
 
+    public function testChainFromContainer()
+    {
+        $chain = $this->container->get('s.cache.handler_chain');
+        $chain->reDetermineActiveHandler('memcached');
+        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+        $chain->reDetermineActiveHandler('MemCacheD');
+        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+        $type = new HandlerTypeMemcached();
+        $chain->reDetermineActiveHandler($type);
+        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+
+        $chain->reDetermineActiveHandler('db');
+        $this->assertEquals('db', $chain->getActiveHandler()->getType());
+        $chain->reDetermineActiveHandler('DB');
+        $this->assertEquals('db', $chain->getActiveHandler()->getType());
+        $type = new HandlerTypeDB();
+        $chain->reDetermineActiveHandler($type);
+        $this->assertEquals('db', $chain->getActiveHandler()->getType());
+
+        $chain->reDetermineActiveHandler('filesystem');
+        $this->assertEquals('filesystem', $chain->getActiveHandler()->getType());
+        $chain->reDetermineActiveHandler('FileSystem');
+        $this->assertEquals('filesystem', $chain->getActiveHandler()->getType());
+        $type = new HandlerTypeFilesystem();
+        $chain->reDetermineActiveHandler($type);
+        $this->assertEquals('filesystem', $chain->getActiveHandler()->getType());
+    }
+
+    public function testChainExceptionFromContainerWithInvalidForcedHandler()
+    {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Could not find requested cache handler type "invalid-chain-handler".'
+        );
+
+        $chain = $this->container->get('s.cache.handler_chain');
+        $chain->reDetermineActiveHandler('invalid-chain-handler');
+    }
+
+    public function testChainExceptionFromContainerWithInvalidHandlerGetRequest()
+    {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'The requested handler type "invalid-chain-handler" is not available.'
+        );
+
+        $chain = $this->container->get('s.cache.handler_chain');
+        $chain->getHandler('invalid-chain-handler');
+    }
+
     public function testHasPriority()
     {
         $chain = $this->getNewHandlerChainWithAllHandlerTypes();
@@ -127,6 +179,53 @@ class HandlerChainTest extends AbstractMantleTestCase
         $this->assertFalse($chain->hasHandlers());
         $this->assertFalse($chain->del(1, 2, 3));
         $this->assertFalse($chain->flushAll());
+    }
+
+    public function testChainHandlerDefaultPriorities()
+    {
+        $chain = $this->container->get('s.cache.handler_chain');
+        $handlers = $chain->getHandlers();
+
+        $this->assertEquals(3, count($handlers));
+        $this->assertEquals('memcached', $handlers[1]->getType());
+        $this->assertEquals('db', $handlers[2]->getType());
+        $this->assertEquals('filesystem', $handlers[3]->getType());
+    }
+
+    public function testChainHandlerRePrioritize()
+    {
+        $chain = $this->container->get('s.cache.handler_chain');
+        $handlers = $chain->getHandlers();
+
+        $this->assertEquals(3, count($handlers));
+        $this->assertEquals('memcached', $handlers[1]->getType());
+        $this->assertEquals('db', $handlers[2]->getType());
+        $this->assertEquals('filesystem', $handlers[3]->getType());
+
+        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+
+        $chain->getHandler('memcached')->setSupportedDecider(function () { return false; });
+        $chain->reDetermineActiveHandler();
+        $this->assertEquals('db', $chain->getActiveHandler()->getType());
+
+        $chain->getHandler('db')->setSupportedDecider(function () { return false; });
+        $chain->reDetermineActiveHandler();
+        $this->assertEquals('filesystem', $chain->getActiveHandler()->getType());
+
+        $chain->getHandler('memcached')->unsetSupportedDecider();
+        $chain->reDetermineActiveHandler();
+        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'No enabled and supported cache handler types have been configured. '.
+            'You must configure at least one type or globally disable this bundle.'
+        );
+
+        $chain->getHandler('memcached')->setSupportedDecider(function () { return false; });
+        $chain->getHandler('filesystem')->setSupportedDecider(function () { return false; });
+        $chain->reDetermineActiveHandler();
+        $chain->getActiveHandler();
     }
 
     public function testNoActiveHandlerIsSupported()

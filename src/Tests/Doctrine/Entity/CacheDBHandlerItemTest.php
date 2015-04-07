@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -21,7 +22,7 @@ class CacheDBHandlerItemTest extends AbstractMantleKernelTestCase
 {
     public function testMutators()
     {
-        $entity = new CacheDBHandlerItem;
+        $entity = new CacheDBHandlerItem();
         $prefixEntity = new CacheDBHandlerPrefix();
 
         $entity

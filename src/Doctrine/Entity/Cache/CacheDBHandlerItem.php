@@ -17,7 +17,7 @@ use Scribe\Doctrine\Behavior\Model\Sluggable\SluggableBehaviorTrait;
 use Scribe\Doctrine\Behavior\Model\Timestampable\TimestampableBehaviorTrait;
 
 /**
- * Class CacheDBHandlerItem
+ * Class CacheDBHandlerItem.
  */
 class CacheDBHandlerItem extends AbstractEntity
 {
@@ -41,13 +41,13 @@ class CacheDBHandlerItem extends AbstractEntity
     private $ttl;
 
     /**
-     * Support casting to string
+     * Support casting to string.
      *
      * @return string
      */
     public function __toString()
     {
-        return (string) get_class($this) . ':' . ($this->getId() ?: 'not-em-managed');
+        return (string) get_class($this).':'.($this->getId() ?: 'not-em-managed');
     }
 
     /**
@@ -61,7 +61,7 @@ class CacheDBHandlerItem extends AbstractEntity
     }
 
     /**
-     * Set prefix association
+     * Set prefix association.
      *
      * @param CacheDBHandlerPrefix|null $prefix
      *
@@ -75,7 +75,7 @@ class CacheDBHandlerItem extends AbstractEntity
     }
 
     /**
-     * Get prefix association
+     * Get prefix association.
      *
      * @return CacheDBHandlerPrefix|null
      */
@@ -85,7 +85,7 @@ class CacheDBHandlerItem extends AbstractEntity
     }
 
     /**
-     * Set cacheKey
+     * Set cacheKey.
      *
      * @param string $cacheKey
      *
@@ -99,9 +99,9 @@ class CacheDBHandlerItem extends AbstractEntity
     }
 
     /**
-     * Get cacheKey
+     * Get cacheKey.
      *
-     * @return string 
+     * @return string
      */
     public function getK()
     {
@@ -109,7 +109,7 @@ class CacheDBHandlerItem extends AbstractEntity
     }
 
     /**
-     * Clear cacheKey
+     * Clear cacheKey.
      *
      * @return $this
      */
@@ -121,7 +121,7 @@ class CacheDBHandlerItem extends AbstractEntity
     }
 
     /**
-     * Set ttl
+     * Set ttl.
      *
      * @param string $ttl
      *
@@ -135,9 +135,9 @@ class CacheDBHandlerItem extends AbstractEntity
     }
 
     /**
-     * Get ttl
+     * Get ttl.
      *
-     * @return string 
+     * @return string
      */
     public function getTtl()
     {
@@ -145,7 +145,7 @@ class CacheDBHandlerItem extends AbstractEntity
     }
 
     /**
-     * Clear ttl
+     * Clear ttl.
      *
      * @return $this
      */

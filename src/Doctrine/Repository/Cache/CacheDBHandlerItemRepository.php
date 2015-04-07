@@ -12,7 +12,6 @@
 namespace Scribe\CacheBundle\Doctrine\Repository\Cache;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix;
 use Scribe\Doctrine\Exception\ORMException;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -29,7 +30,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      *
      * @var array
      */
-    protected $versions = [ ];
+    protected $versions = [];
 
     /**
      * If {@see AbstractHandlerType::$versions} is null, this callable can be
@@ -193,7 +194,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function getKey()
     {
-        return (string) $this->getKeyGenerator()->getKey(...[ ]);
+        return (string) $this->getKeyGenerator()->getKey(...[]);
     }
 
     /**

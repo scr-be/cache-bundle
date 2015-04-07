@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -39,7 +40,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
     protected function getKeyValuesTranslationClosure()
     {
         return function (...$values) {
-            $valuesTranslated = [ ];
+            $valuesTranslated = [];
             foreach ($values as $v) {
                 $valuesTranslated[ ] = Serializer::sleep($v);
             }
@@ -51,7 +52,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
     protected function getKeyHashClosure()
     {
         return function (...$values) {
-            $newValues = [ ];
+            $newValues = [];
             foreach ($values as $v) {
                 $newValues[ ] = Serializer::sleep($v.'Closure');
             }
@@ -134,7 +135,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
     {
         $kg = $this->getNewKeyGenerator();
         $this->assertNotTrue($kg->hasKeyValues());
-        $this->assertEquals([ ], $kg->getKeyValues());
+        $this->assertEquals([], $kg->getKeyValues());
 
         $kg->setKeyValues('val1', 'val2');
         $this->assertEquals(['val1', 'val2'], $kg->getKeyValues());
@@ -151,7 +152,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
     {
         $kg = $this->getNewKeyGenerator();
         $this->assertNotTrue($kg->hasKeyValuesTranslated());
-        $this->assertEquals([ ], $kg->getKeyValuesTranslated());
+        $this->assertEquals([], $kg->getKeyValuesTranslated());
 
         $kg->setKeyValuesTranslated('val1', 'val2');
         $this->assertEquals(['val1', 'val2'], $kg->getKeyValuesTranslated());

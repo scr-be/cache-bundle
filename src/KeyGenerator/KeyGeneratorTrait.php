@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -38,14 +39,14 @@ trait KeyGeneratorTrait
      *
      * @var mixed[]
      */
-    protected $keyValues = [ ];
+    protected $keyValues = [];
 
     /**
      * An array of values to create the cache key from.
      *
      * @var string[]
      */
-    protected $keyValuesTranslated = [ ];
+    protected $keyValuesTranslated = [];
 
     /**
      * The key values translation method to use prior.
@@ -112,7 +113,7 @@ trait KeyGeneratorTrait
     {
         if (true !== is_string($string)) {
             throw new RuntimeException(
-                "The final translated and hashed key must be a string."
+                'The final translated and hashed key must be a string.'
             );
         }
 
@@ -154,7 +155,7 @@ trait KeyGeneratorTrait
     public function setKeyValues(...$values)
     {
         if (false === is_array($values) || false === (count($values) > 0)) {
-            $this->keyValues = [ ];
+            $this->keyValues = [];
         } else {
             $this->keyValues = $values;
         }
@@ -211,7 +212,7 @@ trait KeyGeneratorTrait
     public function setKeyValuesTranslated(...$values)
     {
         if (false === is_array($values) || false === (count($values) > 0)) {
-            $this->keyValuesTranslated = [ ];
+            $this->keyValuesTranslated = [];
         } else {
             $this->validateKeyValuesTranslated(...$values);
             $this->keyValuesTranslated = $values;
@@ -251,7 +252,7 @@ trait KeyGeneratorTrait
         foreach ($values as $v) {
             if (false === is_string($v)) {
                 throw new InvalidArgumentException(
-                    "A passed translated value was not properly converted to a string."
+                    'A passed translated value was not properly converted to a string.'
                 );
             }
         }
@@ -295,7 +296,7 @@ trait KeyGeneratorTrait
     {
         if (false === is_int($mode)) {
             throw new InvalidArgumentException(
-                "An invalid key for values translation mode was detected."
+                'An invalid key for values translation mode was detected.'
             );
         }
 
@@ -304,7 +305,7 @@ trait KeyGeneratorTrait
         ) {
             throw new InvalidArgumentException(
                 sprintf(
-                    "An invalid key for values translation mode of %d was detected and cannot be used.",
+                    'An invalid key for values translation mode of %d was detected and cannot be used.',
                     $mode
                 )
             );
@@ -372,7 +373,7 @@ trait KeyGeneratorTrait
     {
         if (false === is_int($mode)) {
             throw new InvalidArgumentException(
-                "An invalid key for hash mode was detected."
+                'An invalid key for hash mode was detected.'
             );
         }
 
@@ -382,7 +383,7 @@ trait KeyGeneratorTrait
         ) {
             throw new InvalidArgumentException(
                 sprintf(
-                    "An invalid key for hash mode of %d was detected and cannot be used.",
+                    'An invalid key for hash mode of %d was detected and cannot be used.',
                     $mode
                 )
             );
@@ -469,7 +470,7 @@ trait KeyGeneratorTrait
     {
         if (false === $this->hasKeyValues()) {
             throw new RuntimeException(
-                "Could not generate key without any values provided to base the key on."
+                'Could not generate key without any values provided to base the key on.'
             );
         }
 
@@ -482,7 +483,7 @@ trait KeyGeneratorTrait
             $valuesTranslated = $this->handleKeyValuesTranslationClosure(...$values);
         } else {
             throw new RuntimeException(
-                "Could not handle key values translation during key generation as invalid mode was set."
+                'Could not handle key values translation during key generation as invalid mode was set.'
             );
         }
 
@@ -502,12 +503,12 @@ trait KeyGeneratorTrait
      */
     protected function handleKeyValuesTranslationInternal(...$values)
     {
-        $valuesTranslated = [ ];
+        $valuesTranslated = [];
 
         foreach ($values as $v) {
             if (true === is_resource($v)) {
                 throw new RuntimeException(
-                    "PHP resources (such as DB connections, file handles, etc) cannot be used as key values using the internal translation method."
+                    'PHP resources (such as DB connections, file handles, etc) cannot be used as key values using the internal translation method.'
                 );
             }
 
@@ -530,7 +531,7 @@ trait KeyGeneratorTrait
     {
         if (false === $this->hasKeyValuesTranslationClosure()) {
             throw new RuntimeException(
-                "Could not handle key value translation as closure mode was set but no closure was defined."
+                'Could not handle key value translation as closure mode was set but no closure was defined.'
             );
         }
 
@@ -551,7 +552,7 @@ trait KeyGeneratorTrait
     {
         if (false === $this->hasKeyValuesTranslated()) {
             throw new RuntimeException(
-                "Could not generate key without any translated values provided to base the key on."
+                'Could not generate key without any translated values provided to base the key on.'
             );
         }
 
@@ -566,7 +567,7 @@ trait KeyGeneratorTrait
             $key = $this->handleKeyValuesTranslatedHashingClosure(...$values);
         } else {
             throw new RuntimeException(
-                "Could not handle key hashing during key generation as invalid mode was set."
+                'Could not handle key hashing during key generation as invalid mode was set.'
             );
         }
 
@@ -607,7 +608,7 @@ trait KeyGeneratorTrait
     {
         if (false === $this->hasKeyHashClosure()) {
             throw new RuntimeException(
-                "Could not handle key hashing as closure mode was set but no closure was defined."
+                'Could not handle key hashing as closure mode was set but no closure was defined.'
             );
         }
 

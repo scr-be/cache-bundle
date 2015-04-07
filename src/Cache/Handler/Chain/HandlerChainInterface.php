@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -38,7 +39,7 @@ interface HandlerChainInterface
      *
      * @return $this
      */
-    public function setHandlers(array $handlers = [ ]);
+    public function setHandlers(array $handlers = []);
 
     /**
      * Returns the handler from the stack.

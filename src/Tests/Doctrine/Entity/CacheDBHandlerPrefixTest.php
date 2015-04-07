@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -25,8 +26,8 @@ class CacheDBHandlerPrefixTest extends AbstractMantleKernelTestCase
 
     public function testMutators()
     {
-        $itemEntity = new CacheDBHandlerItem;
-        $entity = new CacheDBHandlerPrefix;
+        $itemEntity = new CacheDBHandlerItem();
+        $entity = new CacheDBHandlerPrefix();
 
         $this->assertEquals('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix:not-em-managed', (string) $entity);
     }
@@ -38,7 +39,7 @@ class CacheDBHandlerPrefixTest extends AbstractMantleKernelTestCase
         $prop = $refFormat->getProperty('items');
         $prop->setAccessible(true);
 
-        $items = new ArrayCollection([new CacheDBHandlerItem]);
+        $items = new ArrayCollection([new CacheDBHandlerItem()]);
 
         $this->assertFalse($entity->hasItem($items->first()));
 
@@ -57,7 +58,7 @@ class CacheDBHandlerPrefixTest extends AbstractMantleKernelTestCase
             ORMExceptionInterface::CODE_GENERIC
         );
 
-        $entity = new CacheDBHandlerPrefix;
+        $entity = new CacheDBHandlerPrefix();
         $entity->getAutoSlugFields();
     }
 }

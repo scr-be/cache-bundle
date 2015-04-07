@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Scribe Cache Bundle.
  *
@@ -41,7 +42,7 @@ class HandlerTypeDB extends AbstractHandlerType
     protected $prefix;
 
     /**
-     * Set the required repositories for cache handler
+     * Set the required repositories for cache handler.
      *
      * @param $em         EntityManager
      * @param $itemRepo   CacheDBHandlerItemRepository
@@ -60,32 +61,35 @@ class HandlerTypeDB extends AbstractHandlerType
     }
 
     /**
-     * Perform any pre-init repository initialization
+     * Perform any pre-init repository initialization.
+     *
+     * @param bool $forceStaleFlush
      *
      * @throws ORMException
      *
      * @return $this
      */
-    public function initRepositories()
+    public function initRepositories($forceStaleFlush = false)
     {
         $prefixSlug = $this->getKeyGenerator()->getKeyPrefix();
 
         try {
             $prefix = $this->prefixRepo->findOneBySlug($prefixSlug);
-        }
-        catch (ORMException $e) {
+        } catch (ORMException $e) {
             $prefix = $this->initNewPrefix($prefixSlug);
         }
 
         $this->prefix = $prefix;
 
-        $this->flushStaleItems();
+        if (true === $forceStaleFlush || mt_rand(1, 100) === 50) {
+            $this->flushStaleItems();
+        }
 
         return $this;
     }
 
     /**
-     * Flush all stale items from DB
+     * Flush all stale items from DB.
      *
      * @return bool
      */
@@ -110,7 +114,7 @@ class HandlerTypeDB extends AbstractHandlerType
     }
 
     /**
-     * Initialize a new prefix in the DB
+     * Initialize a new prefix in the DB.
      *
      * @param $prefixSlug
      *
@@ -120,7 +124,7 @@ class HandlerTypeDB extends AbstractHandlerType
     {
         $em = $this->getEntityManager();
 
-        $prefix = new CacheDBHandlerPrefix;
+        $prefix = new CacheDBHandlerPrefix();
         $prefix->setSlug($prefixSlug);
 
         $em->persist($prefix);
@@ -171,7 +175,7 @@ class HandlerTypeDB extends AbstractHandlerType
         $item = $this->hasDBCacheItem($key);
 
         if (null === $item) {
-            $item = new CacheDBHandlerItem;
+            $item = new CacheDBHandlerItem();
         }
 
         $item
@@ -212,14 +216,14 @@ class HandlerTypeDB extends AbstractHandlerType
         try {
             $item = $this->itemRepo->findOneByPrefixAndKey($this->prefix, $key);
         } catch (ORMException $e) {
-            return null;
+            return;
         }
 
         if ($item->getUpdatedOn() <= (new \DateTime(sprintf('-%d seconds', $item->getTtl())))) {
             $em->remove($item);
             $em->flush();
 
-            return null;
+            return;
         }
 
         return $item;

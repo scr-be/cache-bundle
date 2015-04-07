@@ -59,4 +59,4 @@ script:
 
 after_script:
     - bin/coveralls -c .coveralls.yml -vvv
-    - bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml
+    - if [ "${SYMFONY_VERSION}" == "2.6.*" ]; then bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml; fi

@@ -27,7 +27,7 @@ tools:
     php_analyzer: true
     sensiolabs_security_checker: true
 
-code_style:
+coding_style:
     php:
         upper_lower_casing:
             keywords:

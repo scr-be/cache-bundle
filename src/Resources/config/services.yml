@@ -1,11 +1,11 @@
 parameters:
 
-    s.cache.key_generator.class:               Scribe\CacheBundle\KeyGenerator\KeyGenerator
-    s.cache.handler_chain.class:               Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain
-    s.cache.handler_type.apcu.class:           Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeApcu
-    s.cache.handler_type.memcached.class:      Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached
-    s.cache.handler_type.filesystem.class:     Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem
-    s.cache.handler_type.db.class:             Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB
+    s.cache.key_generator.class:                    Scribe\CacheBundle\KeyGenerator\KeyGenerator
+    s.cache.handler_chain.class:                    Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain
+    s.cache.handler_type.apcu.class:                Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeApcu
+    s.cache.handler_type.memcached.class:           Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached
+    s.cache.handler_type.filesystem.class:          Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem
+    s.cache.handler_type.db.class:                  Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB
 
     s.cache.cache_db_handler_item.entity.class:     Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem
     s.cache.cache_db_handler_item.repo.class:       Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerItemRepository

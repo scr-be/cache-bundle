@@ -8,7 +8,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
-         bootstrap="src/Tests/bootstrap.php">
+         bootstrap="src/Tests/Helper/bootstrap/phpunit.php">
     <testsuites>
         <testsuite name="Scribe Cache Bundle Test Suite">
             <directory>./*/Tests</directory>
@@ -24,6 +24,7 @@
             <directory suffix=".php">./src</directory>
             <exclude>
                 <directory>./*/Tests</directory>
+                <directory>./*/Resources/</directory>
             </exclude>
         </whitelist>
     </filter>
@@ -32,7 +33,17 @@
         <log type="coverage-html" target="build/logs/coverage/"/>
     </logging>
     <php>
-        <server name="KERNEL_DIR" value="./src/Tests/Fixtures/App/app" />
+        <server name="KERNEL_DIR" value="./src/Tests/Helper/app" />
+        <server name="SYMFONY__DATABASE_DRIVER" value="pdo_mysql" />
+        <server name="SYMFONY__DATABASE_HOST" value="127.0.0.1" />
+        <server name="SYMFONY__DATABASE_PORT" value="3306" />
+        <server name="SYMFONY__DATABASE_NAME" value="Scribe_SymfonyCacheBundle" />
+        <server name="SYMFONY__DATABASE_USER" value="root" />
+        <server name="SYMFONY__DATABASE_PASSWORD" value="" />
+        <ini name="error_reporting" value="-1" />
+        <ini name="intl.default_locale" value="en" />
+        <ini name="intl.error_level" value="0" />
+        <ini name="memory_limit" value="-1" />
     </php>
     <listeners>
         <listener class="Yandex\Allure\Adapter\AllureAdapter" file="vendor/allure-framework/allure-php-api/src/Yandex/Allure/Adapter/Allure.php">

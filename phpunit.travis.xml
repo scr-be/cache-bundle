@@ -24,6 +24,7 @@
             <directory suffix=".php">./src</directory>
             <exclude>
                 <directory>./*/Tests</directory>
+                <directory>./*/Resources/</directory>
             </exclude>
         </whitelist>
     </filter>
@@ -38,5 +39,9 @@
         <server name="SYMFONY__DATABASE_NAME" value="Scribe_SymfonyCacheBundle" />
         <server name="SYMFONY__DATABASE_USER" value="root" />
         <server name="SYMFONY__DATABASE_PASSWORD" value="" />
+        <ini name="error_reporting" value="-1" />
+        <ini name="intl.default_locale" value="en" />
+        <ini name="intl.error_level" value="0" />
+        <ini name="memory_limit" value="-1" />
     </php>
 </phpunit>

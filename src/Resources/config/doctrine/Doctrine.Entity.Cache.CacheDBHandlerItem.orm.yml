@@ -14,11 +14,11 @@ Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem:
     fields:
 
         k:
-            type: string
-            length: '600'
+            type:   string
+            length: 600
 
         value:
-            type: blob
+            type:     blob
             nullable: true
 
         ttl:

@@ -15,7 +15,6 @@ use Doctrine\ORM\EntityRepository;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix;
 use Scribe\Doctrine\Exception\ORMException;
-use Scribe\Doctrine\Exception\ORMExceptionInterface;
 
 /**
  * Class CacheDBHandlerItemRepository.
@@ -51,7 +50,7 @@ class CacheDBHandlerItemRepository extends EntityRepository
                     $key,
                     $prefix->getSlug()
                 ),
-                ORMExceptionInterface::CODE_GENERIC,
+                ORMException::CODE_ORM_GENERIC,
                 $e
             );
         }

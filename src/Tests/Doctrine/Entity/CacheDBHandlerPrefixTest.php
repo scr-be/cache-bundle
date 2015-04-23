@@ -14,7 +14,7 @@ namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 use Doctrine\Common\Collections\ArrayCollection;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix;
-use Scribe\Doctrine\Exception\ORMExceptionInterface;
+use Scribe\Doctrine\Exception\ORMException;
 use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
 
 /**
@@ -55,7 +55,7 @@ class CacheDBHandlerPrefixTest extends AbstractMantleKernelTestCase
         $this->setExpectedException(
             'Scribe\Doctrine\Exception\SubscriberEventORMException',
             'This entity does not support automatically generating slugs!',
-            ORMExceptionInterface::CODE_GENERIC
+            ORMException::CODE_ORM_GENERIC
         );
 
         $entity = new CacheDBHandlerPrefix();

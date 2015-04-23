@@ -119,12 +119,13 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $this->assertTrue($kg->hasKeyString());
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage The final translated and hashed key must be a string.
-     */
     public function testKeyStringSetterExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'The final translated and hashed key must be a string.'
+        );
+
         $this
             ->getNewKeyGenerator()
             ->setKeyString(0123)
@@ -165,24 +166,26 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $this->assertNotTrue($kg->hasKeyValuesTranslated());
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage A passed translated value was not properly converted to a string.
-     */
     public function testKeyValuesTranslatedSetterExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
+            'A passed translated value was not properly converted to a string.'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->setKeyValuesTranslated((new \stdClass()))
         ;
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage A passed translated value was not properly converted to a string.
-     */
     public function testKeyValuesTranslatedAdderExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
+            'A passed translated value was not properly converted to a string.'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->addKeyValuesTranslated((new \stdClass()))
@@ -201,24 +204,26 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $this->assertEquals(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_CLOSURE, $kg->getKeyValuesTranslationMode());
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage An invalid key for values translation mode was detected.
-     */
     public function testKeyValuesTranslationModeSetterExceptionHandlingNonInt()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
+            'An invalid key for values translation mode was detected.'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->setKeyValuesTranslationMode('string')
         ;
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage An invalid key for values translation mode of 123456789 was detected and cannot be used.
-     */
     public function testKeyValuesTranslationModeSetterExceptionHandlingInvalidInt()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
+            'An invalid key for values translation mode of 123456789 was detected and cannot be used.'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->setKeyValuesTranslationMode(123456789)
@@ -242,12 +247,13 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $this->assertNotTrue($kg->hasKeyValuesTranslationClosure());
     }
 
-    /**
-     * @expectedException             Symfony\Component\Debug\Exception\ContextErrorException
-     * @expectedExceptionMessageRegex #Argument 1 passed to .* must be an instance of .*, instance of .* given#
-     */
     public function testKeyValuesTranslationClosureSetterTypeHint()
     {
+        $this->setExpectedExceptionRegExp(
+            'Symfony\Component\Debug\Exception\ContextErrorException',
+            '#.*Argument 1 passed to .*KeyGenerator::setKeyValuesTranslationClosure\(\) must be callable, string given, called in .*KeyGeneratorTest.php.*#'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->setKeyValuesTranslationClosure('not-a-closure')
@@ -272,24 +278,26 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $this->assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_CLOSURE, $kg->getKeyHashMode());
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage An invalid key for hash mode was detected.
-     */
     public function testKeyHashModeSetterExceptionHandlingNonInt()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
+            'An invalid key for hash mode was detected.'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->setKeyHashMode('string')
         ;
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage An invalid key for hash mode of 123456789 was detected and cannot be used.
-     */
     public function testKeyHashModeSetterExceptionHandlingInvalidInt()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
+            'An invalid key for hash mode of 123456789 was detected and cannot be used.'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->setKeyHashMode(123456789)
@@ -313,12 +321,13 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $this->assertNotTrue($kg->hasKeyHashClosure());
     }
 
-    /**
-     * @expectedException             Symfony\Component\Debug\Exception\ContextErrorException
-     * @expectedExceptionMessageRegex #Argument 1 passed to .* must be an instance of .*, instance of .* given#
-     */
     public function testKeyHashClosureSetterTypeHint()
     {
+        $this->setExpectedExceptionRegExp(
+            'Symfony\Component\Debug\Exception\ContextErrorException',
+            '#.*Argument 1 passed to .*KeyGenerator::setKeyHashClosure\(\) must be callable, string given, called in .*KeyGeneratorTest.php.*#'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->setKeyHashClosure('not-a-closure')
@@ -475,24 +484,26 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $this->assertEquals($expectedKeyClosure, $kg->getKey());
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage Could not generate key without any values provided to base the key on.
-     */
     public function testHandleKeyValuesTranslationNoKeyValuesExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Could not generate key without any values provided to base the key on.'
+        );
+
         list($kg, $method) = $this->getReflectionForMethod('handleKeyValuesTranslation');
 
         $kg->setKeyValues();
         $method->invokeArgs($kg, []);
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage Could not handle key values translation during key generation as invalid mode was set.
-     */
     public function testHandleKeyValuesTranslationInvalidModeExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Could not handle key values translation during key generation as invalid mode was set.'
+        );
+
         list($kg, $method, $prop) = $this->getReflectionForMethodAndProperty('handleKeyValuesTranslation', 'keyValuesTranslationMode');
 
         $kg->setKeyValues('val1', 'val2');
@@ -500,24 +511,26 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $method->invokeArgs($kg, []);
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage PHP resources (such as DB connections, file handles, etc) cannot be used as key values using the internal translation method.
-     */
     public function testHandleKeyValuesTranslationInternalExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'PHP resources (such as DB connections, file handles, etc) cannot be used as key values using the internal translation method.'
+        );
+
         $kg = $this
             ->getNewKeyGenerator()
             ->getKey($this->testResource)
         ;
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage Could not handle key value translation as closure mode was set but no closure was defined.
-     */
     public function testHandleKeyValuesTranslationClosureExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Could not handle key value translation as closure mode was set but no closure was defined.'
+        );
+
         $key = $this
             ->getNewKeyGenerator()
             ->setKeyValues('val1', 'val2')
@@ -526,24 +539,26 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage Could not generate key without any translated values provided to base the key on.
-     */
     public function testHandleKeyValuesTranslatedHashingNoKeyExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Could not generate key without any translated values provided to base the key on.'
+        );
+
         list($kg, $method) = $this->getReflectionForMethod('handleKeyValuesTranslatedHashing');
 
         $kg->setKeyValues();
         $method->invokeArgs($kg, []);
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage Could not handle key hashing during key generation as invalid mode was set.
-     */
     public function testHandleKeyValuesTranslatedHashingInvalidModeExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Could not handle key hashing during key generation as invalid mode was set.'
+        );
+
         list($kg, $method, $prop) = $this->getReflectionForMethodAndProperty('handleKeyValuesTranslatedHashing', 'keyHashMode');
 
         $kg->setKeyValuesTranslated('val1', 'val2');
@@ -551,12 +566,13 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $method->invokeArgs($kg, []);
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage Could not handle key hashing as closure mode was set but no closure was defined.
-     */
     public function testHandleKeyValuesTranslatedHashingClosureExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'Could not handle key hashing as closure mode was set but no closure was defined.'
+        );
+
         $key = $this
             ->getNewKeyGenerator()
             ->setKeyValues('val1', 'val2')

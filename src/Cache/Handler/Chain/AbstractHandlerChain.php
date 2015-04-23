@@ -15,6 +15,8 @@ use Scribe\CacheBundle\Cache\Handler\AbstractHandler;
 use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMockery;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
+use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
+use Scribe\Exception\InvalidArgumentException;
 
 /**
  * Class AbstractHandlerChain.
@@ -22,13 +24,9 @@ use Scribe\CacheBundle\Exceptions\RuntimeException;
 abstract class AbstractHandlerChain extends AbstractHandler implements HandlerChainInterface
 {
     /**
-     * An array of cache handlers ordered by priority provided via a dependency
-     * injection compiler pass. They have not been filtered for their internal
-     * enabled or supported states.
-     *
-     * @var AbstractHandlerType[]
+     * @var HandlerChainInterface[]
      */
-    protected $handlers = [];
+    protected $handlerCollection;
 
     /**
      * The handler with the highest priority.
@@ -45,14 +43,16 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     public function __construct($disabled = false)
     {
         $this->setEnabled($disabled !== true);
+        $this->handlerCollection = [];
     }
 
     /**
-     * Add a cache handler type to the stack of tagged handlers.
+     * Basic implementation of the compiler pass add handler.
      *
-     * @param AbstractHandlerType $handler
+     * @param CompilerPassHandlerInterface $handler
+     * @param int|null                     $priority
      */
-    public function addHandler(AbstractHandlerType $handler)
+    public function addHandler(CompilerPassHandlerInterface $handler, $priority = null)
     {
         $this
             ->determineStackPosition($handler)
@@ -69,7 +69,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      */
     public function setHandlers(array $handlers = [])
     {
-        $this->handlers      = [];
+        $this->handlerCollection      = [];
         $this->activeHandler = null;
 
         foreach ($handlers as $h) {
@@ -86,7 +86,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      */
     public function getHandlers()
     {
-        return $this->handlers;
+        return $this->handlerCollection;
     }
 
     /**
@@ -96,8 +96,20 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      *
      * @return AbstractHandlerType
      */
-    public function getHandler($type)
+    public function getHandler(...$by)
     {
+        if (count($by) !== 1) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Invalid number of arguments provided to "%s" in "%s".',
+                    __FUNCTION__,
+                    __CLASS__
+                )
+            );
+        }
+
+        list($type) = $by;
+
         foreach ($this->getHandlers() as $h) {
             if ($h->getType() === strtolower($type)) {
                 return $h;
@@ -119,7 +131,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      */
     public function hasHandlers()
     {
-        return (bool) (true === (count($this->handlers)) > 0);
+        return (bool) (true === (count($this->handlerCollection)) > 0);
     }
 
     /**

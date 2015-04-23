@@ -12,11 +12,12 @@
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
+use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
 
 /**
  * Interface HandlerTypeInterface.
  */
-interface HandlerTypeInterface
+interface HandlerTypeInterface extends CompilerPassHandlerInterface
 {
     /**
      * Setup the class instance with the required properties.
@@ -35,7 +36,7 @@ interface HandlerTypeInterface
      *
      * @return bool
      */
-    public function isSupported();
+    public function isSupported(...$by);
 
     /**
      * Set the cache handler priority.

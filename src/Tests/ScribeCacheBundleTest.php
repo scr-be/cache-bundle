@@ -30,7 +30,6 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
     {
         $kernel = new \AppKernel('test', true);
         $kernel->boot();
-
         $this->container = $kernel->getContainer();
     }
 
@@ -57,9 +56,7 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
     public function testCanApplyCompilerPass()
     {
         $this->assertTrue($this->container->has('s.cache.handler_chain'));
-
         $methodChain = $this->container->get('s.cache.handler_chain');
-
         $this->assertNotEquals([], $methodChain->getHandlers());
         $this->assertTrue($methodChain->hasHandlers());
         $this->assertEquals(3, count($methodChain->getHandlers()));
@@ -70,21 +67,20 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
         if (!$this->container instanceof ContainerInterface) {
             return;
         }
-
         $cacheDir = $this->container->getParameter('kernel.cache_dir');
-
         if (true === is_dir($cacheDir)) {
             $this->removeDirectoryRecursive($cacheDir);
         }
+
+
     }
 
     protected function removeDirectoryRecursive($path)
     {
-        $files = glob($path.'/*');
+        $files = glob($path . '/*');
         foreach ($files as $file) {
             is_dir($file) ? $this->removeDirectoryRecursive($file) : unlink($file);
         }
-
         rmdir($path);
     }
 }

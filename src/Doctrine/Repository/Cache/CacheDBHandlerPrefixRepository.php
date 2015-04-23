@@ -13,7 +13,6 @@ namespace Scribe\CacheBundle\Doctrine\Repository\Cache;
 
 use Doctrine\ORM\EntityRepository;
 use Scribe\Doctrine\Exception\ORMException;
-use Scribe\Doctrine\Exception\ORMExceptionInterface;
 
 /**
  * Class CacheDBHandlerPrefixRepository.
@@ -45,7 +44,7 @@ class CacheDBHandlerPrefixRepository extends EntityRepository
                     'Could not fetch the requested prefix "%s".',
                     $slug
                 ),
-                ORMExceptionInterface::CODE_GENERIC,
+                ORMException::CODE_ORM_GENERIC,
                 $e
             );
         }

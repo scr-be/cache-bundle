@@ -212,7 +212,7 @@ class HandlerTypeMemcached extends AbstractHandlerType
      *
      * @return bool
      */
-    public function isSupported()
+    public function isSupported(...$by)
     {
         if (null !== ($decision = $this->callSupportedDecider())) {
             return (bool) $decision;

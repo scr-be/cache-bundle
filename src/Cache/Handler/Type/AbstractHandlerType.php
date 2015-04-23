@@ -104,7 +104,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      *
      * @return bool
      */
-    abstract public function isSupported();
+    abstract public function isSupported(...$by);
 
     /**
      * Set the optional closure that determines if this cache handler is supported.

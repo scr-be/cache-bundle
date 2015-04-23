@@ -16,7 +16,14 @@ namespace Scribe\CacheBundle\Cache\Handler;
  */
 interface HandlerInterface
 {
+    /**
+     * @param bool $cacheEnabled
+     */
     public function setEnabled($cacheEnabled = true);
+
+    /**
+     * @return bool
+     */
     public function isEnabled();
 
     /**

@@ -235,12 +235,13 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
         $this->assertTrue($chain->getActiveHandler()->isSupported());
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage No enabled and supported cache handler types have been configured. You must configure at least one type or globally disable this bundle.
-     */
     public function testNoActiveHandlerExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'No enabled and supported cache handler types have been configured. You must configure at least one type or globally disable this bundle.'
+        );
+
         $chain = $this->getNewHandlerChainWithNoHandlerTypes();
         $chain->setKey('one', 'two', 'three');
     }
@@ -286,28 +287,41 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
         $this->assertFalse($chain->has(rand()));
     }
 
-    /**
-     * @expectedException             Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessageRegex There are no valid cache handler configured..*
-     */
     public function testHandlerChainCanExcludeHandlerViaConfig()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'No enabled and supported cache handler types have been configured. You must configure at least one type or globally disable this bundle.'
+        );
+
         $chain = $this->getNewHandlerChainWithNoHandlerTypes(false);
         $chain->set('some-value', 'the', 'string', 'for', 'key');
     }
 
-    /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage A duplicate priority of 2 cannot be set for filesystem. Please review your config.
-     */
     public function testHandlerChainWithConflictingHandlerPrioritiesExceptionHandling()
     {
+        $this->setExpectedException(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            'A duplicate priority of 2 cannot be set for filesystem. Please review your config.'
+        );
+
         $this->getNewHandlerChainWithConflictingHandlerPriorities();
+    }
+
+    public function testHandlerChainGetExceptionIncorrectParamCount()
+    {
+        $this->setExpectedException(
+            'Scribe\Exception\InvalidArgumentException',
+            'Invalid number of arguments provided to "getHandler" in "Scribe\CacheBundle\Cache\Handler\Chain\AbstractHandlerChain".'
+        );
+
+        $chain = $this->getNewHandlerChain(false);
+        $chain->getHandler(1, 2, 3);
     }
 
     public function testSetHandlers()
     {
-        $chain = $this->getNewHandlerChain($disabled = false);
+        $chain = $this->getNewHandlerChain(false);
         $this->assertFalse($chain->hasHandlers());
         $chain->setHandlers([
             new HandlerTypeMemcached(new KeyGenerator()),

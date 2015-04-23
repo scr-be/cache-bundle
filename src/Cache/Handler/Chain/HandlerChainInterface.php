@@ -12,49 +12,13 @@
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
 use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
+use Scribe\Component\DependencyInjection\Compiler\CompilerPassChainInterface;
 
 /**
- * Interface HandlerChainInterface.
+ * Interface CacheCompilerPassChainInterface.
  */
-interface HandlerChainInterface
+interface HandlerChainInterface extends CompilerPassChainInterface
 {
-    /**
-     * Setup the object instance properties.
-     *
-     * @param bool $disabled
-     */
-    public function __construct($disabled = false);
-
-    /**
-     * Add a cache handler type to the stack of tagged handlers.
-     *
-     * @param AbstractHandlerType $handler
-     */
-    public function addHandler(AbstractHandlerType $handler);
-
-    /**
-     * Sets an array of handlers (clearing any previous ones).
-     *
-     * @param AbstractHandlerType[] $handlers
-     *
-     * @return $this
-     */
-    public function setHandlers(array $handlers = []);
-
-    /**
-     * Returns the handler from the stack.
-     *
-     * @return AbstractHandlerType[]
-     */
-    public function getHandlers();
-
-    /**
-     * Check if any handlers have been registered.
-     *
-     * @return bool
-     */
-    public function hasHandlers();
-
     /**
      * Gets the active handler.
      *

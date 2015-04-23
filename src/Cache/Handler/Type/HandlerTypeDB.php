@@ -16,7 +16,7 @@ use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix;
 use Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerItemRepository;
 use Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerPrefixRepository;
-use Scribe\Component\DependencyInjection\EntityManagerAwareTrait;
+use Scribe\Component\DependencyInjection\Aware\EntityManagerAwareTrait;
 use Scribe\Doctrine\Exception\ORMException;
 
 /**
@@ -138,7 +138,7 @@ class HandlerTypeDB extends AbstractHandlerType
      *
      * @return bool
      */
-    public function isSupported()
+    public function isSupported(...$by)
     {
         if (null !== ($decision = $this->callSupportedDecider())) {
             return (bool) $decision;

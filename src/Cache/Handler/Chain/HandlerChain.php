@@ -17,7 +17,7 @@ use Scribe\CacheBundle\Exceptions\RuntimeException;
 /**
  * Class HandlerChain.
  */
-class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
+class HandlerChain extends AbstractHandlerChain
 {
     /**
      * Stack the provided handler in the correct position on the handlers stack,
@@ -37,7 +37,7 @@ class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
             $handlerPriority = $internalHandlerPriority++;
         }
 
-        if (true === array_key_exists($handlerPriority, $this->handlers)) {
+        if (true === array_key_exists($handlerPriority, $this->handlerCollection)) {
             throw new RuntimeException(sprintf(
                'A duplicate priority of %d cannot be set for %s. Please review your config.',
                $handlerPriority,
@@ -45,7 +45,7 @@ class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
            ));
         }
 
-        $this->handlers[ $handlerPriority ] = $handler;
+        $this->handlerCollection[ $handlerPriority ] = $handler;
 
         return $this;
     }
@@ -61,7 +61,7 @@ class HandlerChain extends AbstractHandlerChain implements HandlerChainInterface
      */
     protected function determineActiveHandler($forceSelection = null)
     {
-        ksort($this->handlers);
+        ksort($this->handlerCollection);
 
         if (null === $forceSelection) {
             return $this->determineActiveHandlerAutomatic();

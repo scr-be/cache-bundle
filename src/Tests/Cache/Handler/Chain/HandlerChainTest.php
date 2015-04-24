@@ -184,7 +184,7 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
     public function testChainHandlerDefaultPriorities()
     {
         $chain = $this->container->get('s.cache.handler_chain');
-        $handlers = $chain->getHandlers();
+        $handlers = $chain->getHandlerCollection();
 
         $this->assertEquals(3, count($handlers));
         $this->assertEquals('memcached', $handlers[1]->getType());
@@ -195,7 +195,7 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
     public function testChainHandlerRePrioritize()
     {
         $chain = $this->container->get('s.cache.handler_chain');
-        $handlers = $chain->getHandlers();
+        $handlers = $chain->getHandlerCollection();
 
         $this->assertEquals(3, count($handlers));
         $this->assertEquals('memcached', $handlers[1]->getType());
@@ -323,7 +323,7 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->getNewHandlerChain(false);
         $this->assertFalse($chain->hasHandlers());
-        $chain->setHandlers([
+        $chain->setHandlerCollection([
             new HandlerTypeMemcached(new KeyGenerator()),
             new HandlerTypeFilesystem(new KeyGenerator()),
         ]);

@@ -53,7 +53,7 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
         parent::setUp();
 
         $this->chain = $this->container->get('s.cache.handler_chain');
-        $handlers = $this->chain->getHandlers();
+        $handlers = $this->chain->getHandlerCollection();
         $memcachedHandler = null;
         foreach ($handlers as $h) {
             if ($h instanceof HandlerTypeMemcached) {

@@ -11,6 +11,7 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
+use Scribe\Utility\ClassInfo;
 use Scribe\Utility\Serializer\Serializer;
 use Scribe\CacheBundle\Cache\Handler\AbstractHandler;
 use Scribe\CacheBundle\Exceptions\InvalidArgumentException;
@@ -459,23 +460,14 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      *
      * @return string
      */
-    public function getType($fullyQualified = false)
+    public function getType($fqcn = false)
     {
-        $className = get_class($this);
-
-        if ($fullyQualified === true) {
-            return (string) $className;
+        if ($fqcn === true) {
+            return (string) ClassInfo::getNamespaceByInstance($this).ClassInfo::getClassNameByInstance($this);
         }
 
         return (string) strtolower(
-            str_replace(
-                'HandlerType',
-                '',
-                implode(
-                    '',
-                    array_slice(explode('\\', $className), -1)
-                )
-            )
+            str_replace('HandlerType', '', ClassInfo::getClassNameByInstance($this))
         );
     }
 

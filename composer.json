@@ -39,13 +39,15 @@
     ],
     "require" : {
         "php"                  : ">=5.6",
-        "scribe/mantle-bundle" : "2.0.*@dev"
+        "scribe/mantle-bundle" : "2.0.*@dev",
+        "mindscape/raygun4php" : "dev-master"
     },
     "require-dev" : {
         "ext-memcached"                        : "~2.2",
         "ext-igbinary"                         : "~1.2",
         "ext-tidy"                             : "~2.0",
         "symfony/symfony"                      : "2.7.*@dev",
+        "symfony/proxy-manager-bridge"         : "2.7.*@dev",
         "sensio/generator-bundle"              : "3.0.*@dev",
         "doctrine/doctrine-fixtures-bundle"    : "2.2.*@dev",
         "sensiolabs/security-checker"          : "2.0.*@dev",

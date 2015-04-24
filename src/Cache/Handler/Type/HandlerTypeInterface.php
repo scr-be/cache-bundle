@@ -20,19 +20,17 @@ use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
 interface HandlerTypeInterface extends CompilerPassHandlerInterface
 {
     /**
-     * Setup the class instance with the required properties.
+     * The default restriction to check against when adding handler.
      *
-     * @param KeyGeneratorInterface|null $keyGenerator
-     * @param int                        $ttl
-     * @param int|null                   $priority
-     * @param bool                       $disabled
-     * @param callable|null              $supportedDecider
+     * @var string
      */
-    public function __construct(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null);
+    const INTERFACE_NAME_CACHE = __CLASS__;
 
     /**
      * Handler-specific implementation to determine if the caching method is
      * supported by the current platform.
+     *
+     * @param mixed ...$by
      *
      * @return bool
      */
@@ -83,13 +81,6 @@ interface HandlerTypeInterface extends CompilerPassHandlerInterface
      * @return callable|null
      */
     public function getSupportedDecider();
-
-    /**
-     * Get the handler type.
-     *
-     * @return string
-     */
-    public function getType();
 
     /**
      * Type casting object will return its fully-qualified class name.

@@ -40,6 +40,7 @@ services:
 
     s.cache.handler_type.memcached:
         class: %s.cache.handler_type.memcached.class%
+        lazy:  true
         arguments:
             - @s.cache.key_generator
             - %s.cache.handlers.memcached.general.ttl%
@@ -53,6 +54,7 @@ services:
 
     s.cache.handler_type.filesystem:
         class: %s.cache.handler_type.filesystem.class%
+        lazy:  true
         arguments:
             - @s.cache.key_generator
             - %s.cache.handlers.filesystem.general.ttl%
@@ -65,6 +67,7 @@ services:
 
     s.cache.handler_type.db:
         class: %s.cache.handler_type.db.class%
+        lazy:  true
         arguments:
             - @s.cache.key_generator
             - %s.cache.handlers.db.general.ttl%
@@ -80,6 +83,7 @@ services:
 
     s.cache.cache_db_handler_item.repo:
         class: %s.cache.cache_db_handler_item.repo.class%
+        lazy:  true
         factory:
             - @doctrine
             - getRepository

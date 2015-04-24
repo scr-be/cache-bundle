@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2091c2166792f825c98dd6e7e6c3be56",
+    "hash": "2d2b1ac488549de7d5adc4f6508265c8",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -949,12 +949,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/MindscapeHQ/raygun4php.git",
-                "reference": "75151ab9e1d88755af76b716fbae32839f522c60"
+                "reference": "c3a04ca69158b99fdd54095250c739a2f47d3294"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MindscapeHQ/raygun4php/zipball/75151ab9e1d88755af76b716fbae32839f522c60",
-                "reference": "75151ab9e1d88755af76b716fbae32839f522c60",
+                "url": "https://api.github.com/repos/MindscapeHQ/raygun4php/zipball/c3a04ca69158b99fdd54095250c739a2f47d3294",
+                "reference": "c3a04ca69158b99fdd54095250c739a2f47d3294",
                 "shasum": ""
             },
             "require": {
@@ -991,7 +991,7 @@
                 "logging",
                 "raygun"
             ],
-            "time": "2014-12-01 03:44:06"
+            "time": "2015-04-23 23:34:05"
         },
         {
             "name": "monolog/monolog",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribenet/symfony-mantle-bundle.git",
-                "reference": "4c73bdbb7e6a3f78ad96bb1ce03661a52aee1ea4"
+                "reference": "5a32b6debf484a7f6a2700f86e9065bd48c47cd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/4c73bdbb7e6a3f78ad96bb1ce03661a52aee1ea4",
-                "reference": "4c73bdbb7e6a3f78ad96bb1ce03661a52aee1ea4",
+                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/5a32b6debf484a7f6a2700f86e9065bd48c47cd5",
+                "reference": "5a32b6debf484a7f6a2700f86e9065bd48c47cd5",
                 "shasum": ""
             },
             "require": {
@@ -1210,7 +1210,7 @@
                 "symfony-framework",
                 "symfony-mantle-bundle"
             ],
-            "time": "2015-04-14 12:34:00"
+            "time": "2015-04-16 20:19:47"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -1329,16 +1329,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v2.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "134cecf1c61256bd8e973e11376891a724543820"
+                "reference": "cecb1397087dc9c733796eda6e9d121336039cdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/134cecf1c61256bd8e973e11376891a724543820",
-                "reference": "134cecf1c61256bd8e973e11376891a724543820",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/cecb1397087dc9c733796eda6e9d121336039cdc",
+                "reference": "cecb1397087dc9c733796eda6e9d121336039cdc",
                 "shasum": ""
             },
             "require": {
@@ -1370,7 +1370,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2015-01-26 16:25:19"
+            "time": "2015-04-21 07:52:05"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1607,25 +1607,26 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.6.6",
+            "version": "2.7.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "48c9e835a877adfb023b8b6d033d9dd14f342b4b"
+                "reference": "4cc4f079c5616f21873014e669b35d419c15d3ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/48c9e835a877adfb023b8b6d033d9dd14f342b4b",
-                "reference": "48c9e835a877adfb023b8b6d033d9dd14f342b4b",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/4cc4f079c5616f21873014e669b35d419c15d3ff",
+                "reference": "4cc4f079c5616f21873014e669b35d419c15d3ff",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": "~2.3",
-                "php": ">=5.3.3",
+                "php": ">=5.3.9",
                 "psr/log": "~1.0",
-                "twig/twig": "~1.12,>=1.12.3"
+                "twig/twig": "~1.18"
             },
             "replace": {
+                "symfony/asset": "self.version",
                 "symfony/browser-kit": "self.version",
                 "symfony/class-loader": "self.version",
                 "symfony/config": "self.version",
@@ -1649,7 +1650,6 @@
                 "symfony/monolog-bridge": "self.version",
                 "symfony/options-resolver": "self.version",
                 "symfony/process": "self.version",
-                "symfony/propel1-bridge": "self.version",
                 "symfony/property-access": "self.version",
                 "symfony/proxy-manager-bridge": "self.version",
                 "symfony/routing": "self.version",
@@ -1680,18 +1680,23 @@
                 "ircmaxell/password-compat": "~1.0",
                 "monolog/monolog": "~1.11",
                 "ocramius/proxy-manager": "~0.4|~1.0",
-                "propel/propel1": "~1.6",
-                "symfony/phpunit-bridge": "~2.7"
+                "symfony/phpunit-bridge": "self.version"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Symfony\\": "src/"
+                "psr-4": {
+                    "Symfony\\Bridge\\Doctrine\\": "src/Symfony/Bridge/Doctrine/",
+                    "Symfony\\Bridge\\Monolog\\": "src/Symfony/Bridge/Monolog/",
+                    "Symfony\\Bridge\\ProxyManager\\": "src/Symfony/Bridge/ProxyManager/",
+                    "Symfony\\Bridge\\Swiftmailer\\": "src/Symfony/Bridge/Swiftmailer/",
+                    "Symfony\\Bridge\\Twig\\": "src/Symfony/Bridge/Twig/",
+                    "Symfony\\Bundle\\": "src/Symfony/Bundle/",
+                    "Symfony\\Component\\": "src/Symfony/Component/"
                 },
                 "classmap": [
                     "src/Symfony/Component/HttpFoundation/Resources/stubs",
@@ -1720,7 +1725,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-04-01 16:55:26"
+            "time": "2015-04-24 19:21:36"
         },
         {
             "name": "twig/extensions",
@@ -1776,20 +1781,20 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.18.0",
+            "version": "v1.18.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "4cf7464348e7f9893a93f7096a90b73722be99cf"
+                "reference": "9f70492f44398e276d1b81c1b43adfe6751c7b7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/4cf7464348e7f9893a93f7096a90b73722be99cf",
-                "reference": "4cf7464348e7f9893a93f7096a90b73722be99cf",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9f70492f44398e276d1b81c1b43adfe6751c7b7f",
+                "reference": "9f70492f44398e276d1b81c1b43adfe6751c7b7f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.4"
+                "php": ">=5.2.7"
             },
             "type": "library",
             "extra": {
@@ -1829,7 +1834,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-01-25 17:32:08"
+            "time": "2015-04-19 08:30:27"
         },
         {
             "name": "zendframework/zend-json",
@@ -1936,6 +1941,52 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "chriskite/phactory",
+            "version": "v0.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chriskite/phactory.git",
+                "reference": "fa0140e27992dbcc5d70c523f738c373d5a75061"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chriskite/phactory/zipball/fa0140e27992dbcc5d70c523f738c373d5a75061",
+                "reference": "fa0140e27992dbcc5d70c523f738c373d5a75061",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "ext-mongo": "*",
+                "ext-pdo": "*",
+                "ext-pdo_sqlite": "*"
+            },
+            "suggest": {
+                "ext-mongo": "Allows use of Phactory for testing against MongoDB databases",
+                "ext-pdo": "Allows use of Phactory for testing against SQL databases",
+                "ext-pdo_mysql": "Allows use of Phactory for testing against MySQL databases",
+                "ext-pdo_sqlite": "Allows use of Phactory for testing against SQLite databases"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Phactory": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "A Database Factory for PHP Unit Tests",
+            "homepage": "http://phactory.org",
+            "keywords": [
+                "database",
+                "mongodb",
+                "mysql",
+                "sqlite",
+                "testing"
+            ],
+            "time": "2013-07-11 01:48:16"
+        },
         {
             "name": "doctrine/data-fixtures",
             "version": "v1.1.1",
@@ -2398,6 +2449,45 @@
                 "php"
             ],
             "time": "2015-04-03 14:33:59"
+        },
+        {
+            "name": "pdepend/pdepend",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pdepend/pdepend.git",
+                "reference": "a15ffcbfbcc4570d4a733ca7b76e9cac0a56c3f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/a15ffcbfbcc4570d4a733ca7b76e9cac0a56c3f4",
+                "reference": "a15ffcbfbcc4570d4a733ca7b76e9cac0a56c3f4",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/config": ">=2.4",
+                "symfony/dependency-injection": ">=2.4",
+                "symfony/filesystem": ">=2.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*@stable",
+                "squizlabs/php_codesniffer": "@stable"
+            },
+            "bin": [
+                "src/bin/pdepend"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PDepend\\": "src/main/php/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Official version of pdepend to be handled with Composer",
+            "time": "2015-03-02 08:06:43"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -3156,7 +3246,7 @@
         },
         {
             "name": "scrutinizer/ocular",
-            "version": "1.1.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/scrutinizer-ci/ocular.git",
@@ -3563,32 +3653,32 @@
         },
         {
             "name": "sensio/generator-bundle",
-            "version": "v2.5.3",
+            "version": "dev-master",
             "target-dir": "Sensio/Bundle/GeneratorBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
-                "reference": "e50108c2133ee5c9c484555faed50c17a61221d3"
+                "reference": "8c24b21dd1f9d1d420f096da704a45f2165b665e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/e50108c2133ee5c9c484555faed50c17a61221d3",
-                "reference": "e50108c2133ee5c9c484555faed50c17a61221d3",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/8c24b21dd1f9d1d420f096da704a45f2165b665e",
+                "reference": "8c24b21dd1f9d1d420f096da704a45f2165b665e",
                 "shasum": ""
             },
             "require": {
-                "symfony/console": "~2.5",
-                "symfony/framework-bundle": "~2.2"
+                "symfony/console": "~2.6",
+                "symfony/framework-bundle": "~2.6"
             },
             "require-dev": {
                 "doctrine/orm": "~2.2,>=2.2.3",
                 "symfony/doctrine-bridge": "~2.2",
-                "twig/twig": "~1.11"
+                "twig/twig": "~1.18"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5.x-dev"
+                    "dev-master": "3.0.x-dev"
                 }
             },
             "autoload": {
@@ -3607,16 +3697,21 @@
                 }
             ],
             "description": "This bundle generates code for you",
-            "time": "2015-03-17 06:36:52"
+            "time": "2015-03-23 07:24:16"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "scribe/mantle-bundle": 20,
-        "doctrine/doctrine-fixtures-bundle": 20,
-        "satooshi/php-coveralls": 20,
         "mindscape/raygun4php": 20,
+        "symfony/symfony": 20,
+        "symfony/proxy-manager-bridge": 20,
+        "sensio/generator-bundle": 20,
+        "doctrine/doctrine-fixtures-bundle": 20,
+        "sensiolabs/security-checker": 20,
+        "scrutinizer/ocular": 20,
+        "satooshi/php-coveralls": 20,
         "sami/sami": 20
     },
     "prefer-stable": false,

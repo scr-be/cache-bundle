@@ -12,7 +12,9 @@
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
 use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
+use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeInterface;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
+use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
 
 /**
  * Class HandlerChain.
@@ -23,13 +25,13 @@ class HandlerChain extends AbstractHandlerChain
      * Stack the provided handler in the correct position on the handlers stack,
      * verifying that another handler does not already have the same priority.
      *
-     * @param AbstractHandlerType $handler
+     * @param HandlerTypeInterface $handler
      *
      * @return $this
      *
      * @throws RuntimeException
      */
-    protected function determineStackPosition(AbstractHandlerType $handler)
+    protected function determineStackPosition(HandlerTypeInterface $handler)
     {
         static $internalHandlerPriority = 100;
 
@@ -37,7 +39,7 @@ class HandlerChain extends AbstractHandlerChain
             $handlerPriority = $internalHandlerPriority++;
         }
 
-        if (true === array_key_exists($handlerPriority, $this->handlerCollection)) {
+        if (true === array_key_exists($handlerPriority, $this->handlers)) {
             throw new RuntimeException(sprintf(
                'A duplicate priority of %d cannot be set for %s. Please review your config.',
                $handlerPriority,
@@ -45,7 +47,7 @@ class HandlerChain extends AbstractHandlerChain
            ));
         }
 
-        $this->handlerCollection[ $handlerPriority ] = $handler;
+        $this->handlers[$handlerPriority] = $handler;
 
         return $this;
     }
@@ -61,7 +63,7 @@ class HandlerChain extends AbstractHandlerChain
      */
     protected function determineActiveHandler($forceSelection = null)
     {
-        ksort($this->handlerCollection);
+        ksort($this->handlers);
 
         if (null === $forceSelection) {
             return $this->determineActiveHandlerAutomatic();
@@ -77,7 +79,7 @@ class HandlerChain extends AbstractHandlerChain
     {
         $chosenHandler = null;
 
-        foreach ($this->getHandlers() as $handler) {
+        foreach ($this->getHandlerCollection() as $handler) {
             if (true === $handler->isEnabled() &&
                 true === $handler->isSupported()) {
                 $chosenHandler = $handler;
@@ -107,7 +109,7 @@ class HandlerChain extends AbstractHandlerChain
         $forceSelection = $forceSelection instanceof AbstractHandlerType ?
             strtolower($forceSelection->getType()) : strtolower($forceSelection);
 
-        foreach ($this->getHandlers() as $handler) {
+        foreach ($this->handlers as $handler) {
             if ($forceSelection === $handler->getType() &&
                 true === $handler->isSupported()) {
                 $chosenHandler = $handler;
@@ -126,7 +128,9 @@ class HandlerChain extends AbstractHandlerChain
             );
         }
 
-        $this->setActiveHandler($chosenHandler);
+        if (null !== $chosenHandler) {
+            $this->setActiveHandler($chosenHandler);
+        }
 
         return $this;
     }

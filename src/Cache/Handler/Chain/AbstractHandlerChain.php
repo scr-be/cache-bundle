@@ -13,8 +13,11 @@ namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
 use Scribe\CacheBundle\Cache\Handler\AbstractHandler;
 use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
+use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeInterface;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMockery;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
+use Scribe\Component\DependencyInjection\Compiler\CompilerPassChainInterface;
+use Scribe\Component\DependencyInjection\Compiler\CompilerPassChainTrait;
 use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
 use Scribe\Exception\InvalidArgumentException;
 
@@ -23,15 +26,12 @@ use Scribe\Exception\InvalidArgumentException;
  */
 abstract class AbstractHandlerChain extends AbstractHandler implements HandlerChainInterface
 {
-    /**
-     * @var HandlerChainInterface[]
-     */
-    protected $handlerCollection;
+    use CompilerPassChainTrait;
 
     /**
      * The handler with the highest priority.
      *
-     * @var AbstractHandlerType|null
+     * @var HandlerTypeInterface|null
      */
     protected $activeHandler = null;
 
@@ -42,8 +42,14 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      */
     public function __construct($disabled = false)
     {
-        $this->setEnabled($disabled !== true);
-        $this->handlerCollection = [];
+        $this->handlers     = [];
+        $this->filterMode   = CompilerPassChainInterface::FILTER_MODE_FIRST;
+        $this->restrictions = [
+            CompilerPassChainInterface::RESTRICTION_INTERFACE_DEFAULT,
+            HandlerTypeInterface::INTERFACE_NAME_CACHE,
+        ];
+
+        $this->setEnabled(true !== $disabled);
     }
 
     /**
@@ -51,6 +57,8 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      *
      * @param CompilerPassHandlerInterface $handler
      * @param int|null                     $priority
+     *
+     * @return $this
      */
     public function addHandler(CompilerPassHandlerInterface $handler, $priority = null)
     {
@@ -58,47 +66,21 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
             ->determineStackPosition($handler)
             ->determineActiveHandler()
         ;
-    }
-
-    /**
-     * Sets an array of handlers (clearing any previous ones).
-     *
-     * @param AbstractHandlerType[] $handlers
-     *
-     * @return $this
-     */
-    public function setHandlers(array $handlers = [])
-    {
-        $this->handlerCollection      = [];
-        $this->activeHandler = null;
-
-        foreach ($handlers as $h) {
-            $this->addHandler($h);
-        }
 
         return $this;
     }
 
     /**
-     * Returns the handler from the stack.
-     *
-     * @return AbstractHandlerType[]
-     */
-    public function getHandlers()
-    {
-        return $this->handlerCollection;
-    }
-
-    /**
-     * @param $type
+     * @param mixed $by
      *
      * @throws RuntimeException
+     * @throws InvalidArgumentException
      *
      * @return AbstractHandlerType
      */
     public function getHandler(...$by)
     {
-        if (count($by) !== 1) {
+        if (1 !== count($by)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Invalid number of arguments provided to "%s" in "%s".',
@@ -109,9 +91,10 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
         }
 
         list($type) = $by;
+        $type = strtolower($type);
 
-        foreach ($this->getHandlers() as $h) {
-            if ($h->getType() === strtolower($type)) {
+        foreach ($this->handlers as $h) {
+            if ($h->getType() === $type) {
                 return $h;
             }
         }
@@ -127,25 +110,14 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     /**
      * Check if any handlers have been registered.
      *
+     * @deprecated
+     *
      * @return bool
      */
     public function hasHandlers()
     {
-        return (bool) (true === (count($this->handlerCollection)) > 0);
+        return (bool) $this->hasHandlerCollection();
     }
-
-    /**
-     * Each time a new handler is added to the stack, re-determine the active
-     * handler by processing them by priority (index value) and checking for the
-     * first handler type that is both enabled and supported.
-     *
-     * @throws RuntimeException
-     *
-     * @param null|string|AbstractHandlerType $forceSelection
-     *
-     * @return $this
-     */
-    abstract protected function determineActiveHandler($forceSelection = null);
 
     /**
      * Re-determine active handler, possibly based on forced selection.
@@ -364,16 +336,27 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
+     * Each time a new handler is added to the stack, re-determine the active
+     * handler by processing them by priority (index value) and checking for the
+     * first handler type that is both enabled and supported.
+     *
+     * @throws RuntimeException
+     *
+     * @param null|string|AbstractHandlerType $forceSelection
+     *
+     * @return $this
+     */
+    abstract protected function determineActiveHandler($forceSelection = null);
+
+    /**
      * Stack the provided handler in the correct position on the handlers stack,
      * verifying that another handler does not already have the same priority.
      *
-     * @param AbstractHandlerType $handler
+     * @param HandlerTypeInterface $handler
      *
      * @return $this
-     *
-     * @throws RuntimeException
      */
-    abstract protected function determineStackPosition(AbstractHandlerType $handler);
+    abstract protected function determineStackPosition(HandlerTypeInterface $handler);
 }
 
 /* EOF */

@@ -57,9 +57,9 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->container->has('s.cache.handler_chain'));
         $methodChain = $this->container->get('s.cache.handler_chain');
-        $this->assertNotEquals([], $methodChain->getHandlers());
+        $this->assertNotEquals([], $methodChain->getHandlerCollection());
         $this->assertTrue($methodChain->hasHandlers());
-        $this->assertEquals(3, count($methodChain->getHandlers()));
+        $this->assertEquals(3, count($methodChain->getHandlerCollection()));
     }
 
     protected function tearDown()

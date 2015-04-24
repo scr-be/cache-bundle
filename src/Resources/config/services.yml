@@ -1,27 +1,42 @@
 parameters:
 
+    # Key Generator
+
     s.cache.key_generator.class:                    Scribe\CacheBundle\KeyGenerator\KeyGenerator
+
+    # Cache Chain
+
     s.cache.handler_chain.class:                    Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain
+
+    # Cache Mechanisms (Types)
+
     s.cache.handler_type.apcu.class:                Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeApcu
     s.cache.handler_type.memcached.class:           Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached
     s.cache.handler_type.filesystem.class:          Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem
     s.cache.handler_type.db.class:                  Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB
 
+    # Entity/Repos
+
     s.cache.cache_db_handler_item.entity.class:     Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem
     s.cache.cache_db_handler_item.repo.class:       Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerItemRepository
-
     s.cache.cache_db_handler_prefix.entity.class:   Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix
     s.cache.cache_db_handler_prefix.repo.class:     Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerPrefixRepository
 
 services:
+
+    # Key Generator
 
     s.cache.key_generator:
         class: %s.cache.key_generator.class%
         calls:
             - [setKeyPrefix, [%s.cache.global.prefix%]]
 
+    # Cache Chain
+
     s.cache.handler_chain:
         class: %s.cache.handler_chain.class%
+
+    # Cache Mechanisms (Types)
 
     s.cache.handler_type.memcached:
         class: %s.cache.handler_type.memcached.class%
@@ -61,16 +76,20 @@ services:
         tags:
             - { name: s.cache.handler_type }
 
+    # Repos
+
     s.cache.cache_db_handler_item.repo:
-        class:           %s.cache.cache_db_handler_item.repo.class%
-        factory_service: doctrine
-        factory_method:  getRepository
+        class: %s.cache.cache_db_handler_item.repo.class%
+        factory:
+            - @doctrine
+            - getRepository
         arguments:
             - %s.cache.cache_db_handler_item.entity.class%
 
     s.cache.cache_db_handler_prefix.repo:
-        class:           %s.cache.cache_db_handler_prefix.repo.class%
-        factory_service: doctrine
-        factory_method:  getRepository
+        class: %s.cache.cache_db_handler_prefix.repo.class%
+        factory:
+            - @doctrine
+            - getRepository
         arguments:
             - %s.cache.cache_db_handler_prefix.entity.class%

@@ -349,6 +349,8 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
      */
     public function testOptions()
     {
+        $this->assertEquals(\Memcached::SERIALIZER_IGBINARY, $this->type->getOption(\Memcached::OPT_SERIALIZER));
+
         $opts = [
             'serializer' => 'json',
             'compression_method' => 'zlib',
@@ -356,11 +358,15 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
 
         $this->type->setOptions($opts);
 
+        $this->assertEquals(\Memcached::SERIALIZER_JSON, $this->type->getOption(\Memcached::OPT_SERIALIZER));
+
         $opts = [
             'serializer' => 'php',
         ];
 
         $this->type->setOptions($opts);
+
+        $this->assertEquals(\Memcached::SERIALIZER_PHP, $this->type->getOption(\Memcached::OPT_SERIALIZER));
     }
 
     /**

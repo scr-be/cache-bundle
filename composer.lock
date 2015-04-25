@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fc517abfdf92255ff4bcc9315736012e",
+    "hash": "3bc87ca3d6079446129d403d5ec1d6f5",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribenet/symfony-mantle-bundle.git",
-                "reference": "1dc091351c9a7c46978ed6afc5bdb69b3eb2109a"
+                "reference": "ecc3adbe51476992183ab3a85a5da9aa11b8fcb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/1dc091351c9a7c46978ed6afc5bdb69b3eb2109a",
-                "reference": "1dc091351c9a7c46978ed6afc5bdb69b3eb2109a",
+                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/ecc3adbe51476992183ab3a85a5da9aa11b8fcb2",
+                "reference": "ecc3adbe51476992183ab3a85a5da9aa11b8fcb2",
                 "shasum": ""
             },
             "require": {
@@ -1214,7 +1214,7 @@
                 "symfony-framework",
                 "symfony-mantle-bundle"
             ],
-            "time": "2015-04-24 23:37:30"
+            "time": "2015-04-25 03:03:11"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -3702,6 +3702,58 @@
             ],
             "description": "This bundle generates code for you",
             "time": "2015-03-23 07:24:16"
+        },
+        {
+            "name": "symfony/phpunit-bridge",
+            "version": "2.7.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/phpunit-bridge.git",
+                "reference": "ef5cbfcf4668409a3b997a2ddf4d7727cd388443"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/ef5cbfcf4668409a3b997a2ddf4d7727cd388443",
+                "reference": "ef5cbfcf4668409a3b997a2ddf4d7727cd388443",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "symfony/debug": "For tracking deprecated interfaces usages at runtime with DebugClassLoader"
+            },
+            "type": "symfony-bridge",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Bridge\\PhpUnit\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                }
+            ],
+            "description": "Symfony PHPUnit Bridge",
+            "homepage": "http://symfony.com",
+            "time": "2015-04-11 21:43:46"
         }
     ],
     "aliases": [],
@@ -3710,6 +3762,7 @@
         "scribe/mantle-bundle": 20,
         "mindscape/raygun4php": 20,
         "kriswallsmith/assetic": 20,
+        "symfony/phpunit-bridge": 20,
         "symfony/symfony": 20,
         "symfony/proxy-manager-bridge": 20,
         "sensio/generator-bundle": 20,

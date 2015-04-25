@@ -79,6 +79,18 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
+     * Gets the value of a memcached configured option.
+     *
+     * @param $memcachedOptionConstant
+     *
+     * @return mixed|false
+     */
+    public function getOption($memcachedOptionConstant)
+    {
+        return $this->memcached->getOption($memcachedOptionConstant);
+    }
+
+    /**
      * An array of option definitions as passed by the DI compiler pass.
      *
      * @param array $options

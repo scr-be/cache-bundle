@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2d2b1ac488549de7d5adc4f6508265c8",
+    "hash": "fc517abfdf92255ff4bcc9315736012e",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -871,16 +871,16 @@
         },
         {
             "name": "kriswallsmith/assetic",
-            "version": "v1.2.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "b20efe38845d20458702f97f3ff625d80805897b"
+                "reference": "6c3bd95d329bfe79f3cfa137ac7a8a482e247644"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/b20efe38845d20458702f97f3ff625d80805897b",
-                "reference": "b20efe38845d20458702f97f3ff625d80805897b",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/6c3bd95d329bfe79f3cfa137ac7a8a482e247644",
+                "reference": "6c3bd95d329bfe79f3cfa137ac7a8a482e247644",
                 "shasum": ""
             },
             "require": {
@@ -912,7 +912,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
@@ -941,7 +941,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2014-12-12 05:04:05"
+            "time": "2015-03-02 19:47:30"
         },
         {
             "name": "mindscape/raygun4php",
@@ -1110,33 +1110,34 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribenet/symfony-mantle-bundle.git",
-                "reference": "5a32b6debf484a7f6a2700f86e9065bd48c47cd5"
+                "reference": "1dc091351c9a7c46978ed6afc5bdb69b3eb2109a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/5a32b6debf484a7f6a2700f86e9065bd48c47cd5",
-                "reference": "5a32b6debf484a7f6a2700f86e9065bd48c47cd5",
+                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/1dc091351c9a7c46978ed6afc5bdb69b3eb2109a",
+                "reference": "1dc091351c9a7c46978ed6afc5bdb69b3eb2109a",
                 "shasum": ""
             },
             "require": {
-                "doctrine/common": "~2.5.0",
-                "doctrine/dbal": "~2.5.1",
-                "doctrine/doctrine-bundle": "~1.4.0",
-                "doctrine/orm": "~2.5.0",
+                "doctrine/common": "~2.5",
+                "doctrine/dbal": "~2.5",
+                "doctrine/doctrine-bundle": "~1.4",
+                "doctrine/orm": "~2.5",
                 "incenteev/composer-parameter-handler": "~2.1",
-                "kriswallsmith/assetic": "~1.2",
+                "kriswallsmith/assetic": "1.3.*@dev",
                 "mindscape/raygun4php": "dev-master",
-                "php": ">=5.6",
+                "php": ">=5.6.4",
                 "scribe/cache-bundle": "2.0.*@dev",
-                "sensio/distribution-bundle": "~3.0,>=3.0.12",
-                "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
-                "symfony/assetic-bundle": "~2.6",
-                "symfony/filesystem": "~2.6",
-                "symfony/finder": "~2.6",
-                "symfony/monolog-bundle": "~2.7",
-                "symfony/swiftmailer-bundle": "~2.3",
-                "symfony/symfony": "~2.6",
-                "symfony/yaml": "~2.6",
+                "sensio/distribution-bundle": "3.0.*@dev",
+                "sensio/framework-extra-bundle": "3.0.*@dev",
+                "symfony/assetic-bundle": "2.6.*@dev",
+                "symfony/filesystem": "2.7.*@dev",
+                "symfony/finder": "2.7.*@dev",
+                "symfony/monolog-bundle": "2.7.*@dev",
+                "symfony/proxy-manager-bridge": "2.7.*@dev",
+                "symfony/swiftmailer-bundle": "2.3.*@dev",
+                "symfony/symfony": "2.7.*@dev",
+                "symfony/yaml": "2.7.*@dev",
                 "twig/extensions": "~1.2",
                 "twig/twig": "~1.18,<2.0",
                 "zendframework/zend-json": "~2.3"
@@ -1144,11 +1145,14 @@
             "require-dev": {
                 "chriskite/phactory": "~0.4.3",
                 "doctrine/doctrine-fixtures-bundle": "2.2.*@dev",
-                "phpunit/phpunit": "~4.5,>=4.5.1",
+                "pdepend/pdepend": "2.0.6",
+                "phpunit/phpunit": "~4.6.4",
                 "sami/sami": "*@dev",
-                "satooshi/php-coveralls": "~0.6,>=0.6.2",
-                "scrutinizer/ocular": "~1.1",
-                "sensio/generator-bundle": "~2.5"
+                "satooshi/php-coveralls": "dev-multipleroot",
+                "scrutinizer/ocular": "dev-master",
+                "sensio/generator-bundle": "3.0.*@dev",
+                "sensiolabs/security-checker": "2.0.*@dev",
+                "symfony/phpunit-bridge": "2.7.*@dev"
             },
             "type": "project",
             "extra": {
@@ -1210,7 +1214,7 @@
                 "symfony-framework",
                 "symfony-mantle-bundle"
             ],
-            "time": "2015-04-16 20:19:47"
+            "time": "2015-04-24 23:37:30"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -3240,7 +3244,7 @@
                 "test"
             ],
             "support": {
-                "source": "https://github.com/scribenet/php-coveralls/tree/multipleroot"
+                "source": "https://github.com/scribenet/php-coveralls/tree/v0.6.2"
             },
             "time": "2015-04-04 18:19:58"
         },
@@ -3705,6 +3709,7 @@
     "stability-flags": {
         "scribe/mantle-bundle": 20,
         "mindscape/raygun4php": 20,
+        "kriswallsmith/assetic": 20,
         "symfony/symfony": 20,
         "symfony/proxy-manager-bridge": 20,
         "sensio/generator-bundle": 20,

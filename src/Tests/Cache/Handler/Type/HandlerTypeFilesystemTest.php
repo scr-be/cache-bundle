@@ -26,14 +26,14 @@ class HandlerTypeFilesystemTest extends AbstractMantleTestCase
     /**
      * @var HandlerTypeFilesystem
      */
-    protected $type;
+    public $type;
 
     /**
      * @var resource
      */
-    protected $testResource;
+    public $testResource;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -41,17 +41,17 @@ class HandlerTypeFilesystemTest extends AbstractMantleTestCase
         $this->testResource = fopen(__FILE__, 'r');
     }
 
-    protected function getNewHandlerType()
+    public function getNewHandlerType()
     {
         return $this->getNewHandlerTypeEmpty(new KeyGenerator());
     }
 
-    protected function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
+    public function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
         return new HandlerTypeFilesystem($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
     }
 
-    protected function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
+    public function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
     {
         $supportedDecider = function () { return false; };
 
@@ -105,7 +105,7 @@ class HandlerTypeFilesystemTest extends AbstractMantleTestCase
         $this->assertFalse($type->isSupported());
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         fclose($this->testResource);
 

@@ -13,10 +13,7 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 /**
- * A basic implementation of the core Symfony application kernel intended for
- * use in the bundle's PHPUnit test cases.
- *
- * @tag     fixture
+ * Class AppKernel
  */
 class AppKernel extends Kernel
 {
@@ -42,6 +39,7 @@ class AppKernel extends Kernel
         if (in_array($this->getEnvironment(), ['dev', 'test'])) {
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
         }
 
         return $bundles;

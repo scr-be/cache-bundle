@@ -25,14 +25,14 @@ class HandlerTypeMockeryTest extends PHPUnit_Framework_TestCase
     /**
      * @var HandlerTypeMockery
      */
-    protected $type;
+    public $type;
 
-    protected function setUp()
+    public function setUp()
     {
         $this->type = $this->getNewHandlerType();
     }
 
-    protected function getNewHandlerType()
+    public function getNewHandlerType()
     {
         return new HandlerTypeMockery(new KeyGenerator());
     }

@@ -27,7 +27,7 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
 
     protected $handlerChain;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 

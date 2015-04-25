@@ -23,21 +23,21 @@ class KeyGeneratorTest extends AbstractMantleTestCase
 {
     const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\KeyGenerator\KeyGenerator';
 
-    protected $testResource;
+    public $testResource;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 
         $this->testResource = fopen(__FILE__, 'r');
     }
 
-    protected function getNewKeyGenerator()
+    public function getNewKeyGenerator()
     {
         return new KeyGenerator();
     }
 
-    protected function getKeyValuesTranslationClosure()
+    public function getKeyValuesTranslationClosure()
     {
         return function (...$values) {
             $valuesTranslated = [];
@@ -49,7 +49,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         };
     }
 
-    protected function getKeyHashClosure()
+    public function getKeyHashClosure()
     {
         return function (...$values) {
             $newValues = [];
@@ -61,7 +61,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         };
     }
 
-    protected function getReflectionForMethod($method)
+    public function getReflectionForMethod($method)
     {
         $refFormat = new \ReflectionClass(self::FULLY_QUALIFIED_CLASS_NAME);
         $method = $refFormat->getMethod($method);
@@ -73,7 +73,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ];
     }
 
-    protected function getReflectionForProperty($property)
+    public function getReflectionForProperty($property)
     {
         $refFormat = new \ReflectionClass(self::FULLY_QUALIFIED_CLASS_NAME);
         $property = $refFormat->getProperty($property);
@@ -85,7 +85,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ];
     }
 
-    protected function getReflectionForMethodAndProperty($method, $property)
+    public function getReflectionForMethodAndProperty($method, $property)
     {
         $refFormat = new \ReflectionClass(self::FULLY_QUALIFIED_CLASS_NAME);
         $method = $refFormat->getMethod($method);
@@ -250,7 +250,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
     public function testKeyValuesTranslationClosureSetterTypeHint()
     {
         $this->setExpectedExceptionRegExp(
-            'Symfony\Component\Debug\Exception\ContextErrorException',
+            'PHPUnit_Framework_Error',
             '#.*Argument 1 passed to .*KeyGenerator::setKeyValuesTranslationClosure\(\) must be callable, string given, called in .*KeyGeneratorTest.php.*#'
         );
 
@@ -324,7 +324,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
     public function testKeyHashClosureSetterTypeHint()
     {
         $this->setExpectedExceptionRegExp(
-            'Symfony\Component\Debug\Exception\ContextErrorException',
+            'PHPUnit_Framework_Error',
             '#.*Argument 1 passed to .*KeyGenerator::setKeyHashClosure\(\) must be callable, string given, called in .*KeyGeneratorTest.php.*#'
         );
 
@@ -581,7 +581,7 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         fclose($this->testResource);
 

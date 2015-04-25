@@ -23,9 +23,9 @@ class HandlerChainAwareTest extends AbstractMantleTestCase
     /**
      * @var ObjectChainAware
      */
-    protected $chainAware;
+    public $chainAware;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 

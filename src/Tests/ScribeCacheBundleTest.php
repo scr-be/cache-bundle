@@ -26,19 +26,19 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
 
     private $container;
 
-    protected function setUp()
+    public function setUp()
     {
         $kernel = new \AppKernel('test', true);
         $kernel->boot();
         $this->container = $kernel->getContainer();
     }
 
-    protected function getNewBundle()
+    public function getNewBundle()
     {
         return new ScribeCacheBundle();
     }
 
-    protected function getReflection()
+    public function getReflection()
     {
         return new ReflectionClass(self::FULLY_QUALIFIED_CLASS_NAME);
     }
@@ -62,7 +62,7 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($methodChain->getHandlerCollection()));
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         if (!$this->container instanceof ContainerInterface) {
             return;
@@ -75,7 +75,7 @@ class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
 
     }
 
-    protected function removeDirectoryRecursive($path)
+    public function removeDirectoryRecursive($path)
     {
         $files = glob($path . '/*');
         foreach ($files as $file) {

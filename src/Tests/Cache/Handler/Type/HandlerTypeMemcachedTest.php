@@ -31,24 +31,24 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
     /**
      * @var AbstractHandlerChain
      */
-    protected $chain;
+    public $chain;
 
     /**
      * @var HandlerTypeMemcached
      */
-    protected $type;
+    public $type;
 
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    public $container;
 
     /**
      * setUp.
      *
      * @throws \Scribe\CacheBundle\Exceptions\RuntimeException
      */
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -72,7 +72,7 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
      *
      * @return HandlerTypeMemcached
      */
-    protected function getNewHandlerType()
+    public function getNewHandlerType()
     {
         return $this->getNewHandlerTypeEmpty(new KeyGenerator());
     }
@@ -88,7 +88,7 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
      *
      * @return HandlerTypeMemcached
      */
-    protected function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
+    public function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
         return new HandlerTypeMemcached($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
     }
@@ -103,7 +103,7 @@ class HandlerTypeMemcachedTest extends AbstractMantleKernelTestCase
      *
      * @return HandlerTypeMemcached
      */
-    protected function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
+    public function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
     {
         $supportedDecider = function () { return false; };
 

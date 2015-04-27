@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3bc87ca3d6079446129d403d5ec1d6f5",
+    "hash": "9dea20a4b1f1212705a157f0f37bf293",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1615,12 +1615,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "4cc4f079c5616f21873014e669b35d419c15d3ff"
+                "reference": "17ee6a633a7c5e1bf07d2c2bf1a8d4928f170624"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/4cc4f079c5616f21873014e669b35d419c15d3ff",
-                "reference": "4cc4f079c5616f21873014e669b35d419c15d3ff",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/17ee6a633a7c5e1bf07d2c2bf1a8d4928f170624",
+                "reference": "17ee6a633a7c5e1bf07d2c2bf1a8d4928f170624",
                 "shasum": ""
             },
             "require": {
@@ -1729,7 +1729,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-04-24 19:21:36"
+            "time": "2015-04-27 16:40:03"
         },
         {
             "name": "twig/extensions",
@@ -3760,11 +3760,10 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "scribe/mantle-bundle": 20,
-        "mindscape/raygun4php": 20,
         "kriswallsmith/assetic": 20,
+        "mindscape/raygun4php": 20,
         "symfony/phpunit-bridge": 20,
         "symfony/symfony": 20,
-        "symfony/proxy-manager-bridge": 20,
         "sensio/generator-bundle": 20,
         "doctrine/doctrine-fixtures-bundle": 20,
         "sensiolabs/security-checker": 20,
@@ -3775,7 +3774,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6"
+        "php": ">=5.6.4"
     },
     "platform-dev": {
         "ext-memcached": "~2.2",

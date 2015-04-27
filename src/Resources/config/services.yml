@@ -28,6 +28,7 @@ services:
 
     s.cache.key_generator:
         class: %s.cache.key_generator.class%
+        lazy:  true
         calls:
             - [setKeyPrefix, [%s.cache.global.prefix%]]
 
@@ -83,7 +84,6 @@ services:
 
     s.cache.cache_db_handler_item.repo:
         class: %s.cache.cache_db_handler_item.repo.class%
-        lazy:  true
         factory:
             - @doctrine
             - getRepository

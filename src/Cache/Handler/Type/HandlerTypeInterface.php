@@ -11,7 +11,6 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Type;
 
-use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
 
 /**

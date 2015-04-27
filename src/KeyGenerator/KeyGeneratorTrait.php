@@ -184,7 +184,7 @@ trait KeyGeneratorTrait
      *
      * @return mixed[]
      */
-    public function getKeyValues()
+    public function getKeyValues()  
     {
         return (array) $this->keyValues;
     }

@@ -220,7 +220,9 @@ class HandlerTypeMemcached extends AbstractHandlerType
     }
 
     /**
-     * Check if the handler type is supported by the current environment.
+     * Allows the chain to determine if the handler is supported.
+     *
+     * @param string ...$by
      *
      * @return bool
      */

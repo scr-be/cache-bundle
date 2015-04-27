@@ -38,10 +38,10 @@
         }
     ],
     "require" : {
-        "php"                                  : ">=5.6",
+        "php"                                  : ">=5.6.4",
         "scribe/mantle-bundle"                 : "2.0.*@dev",
-        "mindscape/raygun4php"                 : "dev-master",
-        "kriswallsmith/assetic"                : "1.3.*@dev"
+        "kriswallsmith/assetic"                : "1.3.*@dev",
+        "mindscape/raygun4php"                 : "dev-master"
     },
     "require-dev" : {
         "ext-memcached"                        : "~2.2",
@@ -49,7 +49,6 @@
         "ext-tidy"                             : "~2.0",
         "symfony/phpunit-bridge"               : "2.7.*@dev",
         "symfony/symfony"                      : "2.7.*@dev",
-        "symfony/proxy-manager-bridge"         : "2.7.*@dev",
         "phpunit/phpunit"                      : "~4.6.4",
         "sensio/generator-bundle"              : "3.0.*@dev",
         "doctrine/doctrine-fixtures-bundle"    : "2.2.*@dev",

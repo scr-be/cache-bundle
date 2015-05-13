@@ -8,10 +8,10 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="true"
-         bootstrap="src/Tests/Helper/bootstrap/phpunit.php">
+         bootstrap="app/config/shared_public/tests/bootstrap/phpunit.php">
     <testsuites>
         <testsuite name="Scribe Cache Bundle Test Suite">
-            <directory>./*/Tests</directory>
+            <directory>./src/Tests</directory>
         </testsuite>
     </testsuites>
     <groups>
@@ -21,18 +21,19 @@
     </groups>
     <filter>
         <whitelist>
-            <directory suffix=".php">./src</directory>
+            <directory>./src</directory>
             <exclude>
-                <directory>./*/Tests</directory>
-                <directory>./*/Resources/</directory>
+                <directory>./src/Tests</directory>
+                <directory>./src/Resources/</directory>
             </exclude>
         </whitelist>
     </filter>
     <logging>
+        <log type="coverage-html" target="build/logs/coverage/"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
     <php>
-        <server name="KERNEL_DIR" value="./src/Tests/Helper/app" />
+        <server name="KERNEL_DIR" value="./src/Tests/app" />
         <server name="SYMFONY__DATABASE_DRIVER" value="pdo_mysql" />
         <server name="SYMFONY__DATABASE_HOST" value="127.0.0.1" />
         <server name="SYMFONY__DATABASE_PORT" value="3306" />

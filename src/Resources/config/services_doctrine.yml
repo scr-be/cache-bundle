@@ -1,0 +1,30 @@
+---
+
+parameters:
+
+    # Entity/Repos
+
+    s.cache.cache_db_handler_item.entity.class:     Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem
+    s.cache.cache_db_handler_item.repo.class:       Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerItemRepository
+    s.cache.cache_db_handler_prefix.entity.class:   Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix
+    s.cache.cache_db_handler_prefix.repo.class:     Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerPrefixRepository
+
+services:
+
+    # Repos
+
+    s.cache.cache_db_handler_item.repo:
+        class: %s.cache.cache_db_handler_item.repo.class%
+        factory:
+            - @doctrine
+            - getRepository
+        arguments:
+            - %s.cache.cache_db_handler_item.entity.class%
+
+    s.cache.cache_db_handler_prefix.repo:
+        class: %s.cache.cache_db_handler_prefix.repo.class%
+        factory:
+            - @doctrine
+            - getRepository
+        arguments:
+            - %s.cache.cache_db_handler_prefix.entity.class%

@@ -11,38 +11,31 @@
 
 namespace Scribe\CacheBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Reference;
+use Scribe\MantleBundle\DependencyInjection\Compiler\AbstractCompilerPass;
 
 /**
  * Class CacheMethodCompilerPass.
  */
-class CacheHandlerCompilerPass implements CompilerPassInterface
+class CacheHandlerCompilerPass extends AbstractCompilerPass
 {
     /**
-     * Process the bundle's container. Perform compiler pass to provide cache chain
-     * handler with all services tagged as handler types.
+     * Return the name of the service that handles registering the handlers (the chain manager)
      *
-     * @param ContainerBuilder $container
+     * @return string
      */
-    public function process(ContainerBuilder $container)
+    protected function getChainServiceName()
     {
-        if (true === $container->hasDefinition('s.cache.handler_chain')) {
-            $chainDefinition = $container->getDefinition(
-                's.cache.handler_chain'
-            );
-            $handlerDefinitions = $container->findTaggedServiceIds(
-                's.cache.handler_type'
-            );
+        return 's.cache.handler_chain';
+    }
 
-            foreach ($handlerDefinitions as $id => $attributes) {
-                $chainDefinition->addMethodCall(
-                    'addHandler',
-                    [new Reference($id)]
-                );
-            }
-        }
+    /**
+     * Return the name of the service tag to attach to the chain manager (the handlers)
+     *
+     * @return string
+     */
+    protected function getHandlerTagName()
+    {
+        return 's.cache.handler_type';
     }
 }
 

@@ -1,8 +1,7 @@
-/src/Tests/Helper/app/cache/
 /vendor/
-/bin/
-/build/
 /docs/_build/
 /.idea/
-/atlassian-ide-plugin.xml
+atlassian-ide-plugin.xml
 *.DS_Store*
+*.rb
+tags

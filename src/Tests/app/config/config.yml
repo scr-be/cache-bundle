@@ -35,9 +35,11 @@ doctrine:
                     ScribeCacheBundle:
                         type: yml
                         prefix: Scribe\CacheBundle
+                        alias: ScribeCacheBundle
                     ScribeMantleBundle:
                         type: yml
                         prefix: Scribe\MantleBundle
+                        alias: ScribeMantleBundle
                 metadata_cache_driver: array
                 query_cache_driver:    array
                 result_cache_driver:   array

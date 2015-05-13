@@ -39,14 +39,14 @@
     ],
     "require" : {
         "php"                                  : ">=5.6.4",
-        "scribe/mantle-bundle"                 : "1.9.6.*@dev",
-        "symfony/symfony"                      : "~2.6",
-        "symfony/framework-bundle"             : "~2.6"
+        "scribe/mantle-bundle"                 : "1.9.6.*@dev"
     },
     "require-dev" : {
         "ext-memcached"                        : "~2.2",
         "ext-igbinary"                         : "~1.2",
         "ext-tidy"                             : "~2.0",
+        "symfony/symfony"                      : "~2.6",
+        "symfony/framework-bundle"             : "~2.6",
         "symfony/phpunit-bridge"               : "2.7.*@beta",
         "phpunit/phpunit"                      : "~4.6",
         "sensio/generator-bundle"              : "~2.5",

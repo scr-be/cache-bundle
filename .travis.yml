@@ -3,6 +3,7 @@ language: php
 branches:
     only:
         - master
+        - dev-release/v1.9.6
 
 env:
     global:

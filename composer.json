@@ -39,7 +39,7 @@
     ],
     "require" : {
         "php"                                  : ">=5.6.4",
-        "scribe/mantle-bundle"                 : "dev-release/v1.9.6"
+        "scribe/mantle-bundle"                 : "2.0.*@dev"
     },
     "require-dev" : {
         "ext-memcached"                        : "~2.2",
@@ -71,11 +71,11 @@
     "config" : {
         "bin-dir"           : "bin",
         "preferred-install" : "auto",
-        "minimum-stability" : "stable"
+        "minimum-stability" : "dev"
     },
     "extra": {
         "branch-alias": {
-            "dev-release/v1.9.6": "1.9.6-dev"
+            "dev-master": "2.0-dev"
         }
     },
     "repositories": [

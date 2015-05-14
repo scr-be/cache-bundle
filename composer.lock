@@ -1060,12 +1060,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribenet/symfony-mantle-bundle.git",
-                "reference": "62263b42be5c01ba1cb4653a8b5b100ea2ba5d33"
+                "reference": "90500ca136c6ed3405f7db901940807e9122c186"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/62263b42be5c01ba1cb4653a8b5b100ea2ba5d33",
-                "reference": "62263b42be5c01ba1cb4653a8b5b100ea2ba5d33",
+                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/90500ca136c6ed3405f7db901940807e9122c186",
+                "reference": "90500ca136c6ed3405f7db901940807e9122c186",
                 "shasum": ""
             },
             "require": {
@@ -1081,14 +1081,15 @@
                 "scribe/cache-bundle": "1.9.6.*@dev",
                 "sensio/distribution-bundle": "~3.0",
                 "sensio/framework-extra-bundle": "~3.0",
-                "symfony/assetic-bundle": "~2.6",
-                "symfony/filesystem": "~2.6",
-                "symfony/finder": "~2.6",
-                "symfony/framework-bundle": "~2.6",
-                "symfony/monolog-bundle": "~2.6",
+                "symfony/assetic-bundle": "2.6.*@dev",
+                "symfony/dependency-injection": "2.7.0-BETA2",
+                "symfony/filesystem": "2.7.0-BETA2",
+                "symfony/finder": "2.7.0-BETA2",
+                "symfony/framework-bundle": "2.7.0-BETA2",
+                "symfony/monolog-bundle": "2.7.*@dev",
                 "symfony/swiftmailer-bundle": "~2.3",
-                "symfony/symfony": "~2.6",
-                "symfony/yaml": "~2.6",
+                "symfony/symfony": "2.7.0-BETA2",
+                "symfony/yaml": "2.7.0-BETA2",
                 "twig/extensions": "~1.2",
                 "twig/twig": "~1.18,<2.0",
                 "zendframework/zend-json": "~2.3"
@@ -1110,7 +1111,7 @@
                 "scrutinizer/ocular": "dev-master",
                 "sensio/generator-bundle": "~2.5",
                 "sensiolabs/security-checker": "2.0.*@dev",
-                "symfony/phpunit-bridge": "2.7.*@beta"
+                "symfony/phpunit-bridge": "2.7.0-BETA2"
             },
             "type": "project",
             "extra": {
@@ -1172,7 +1173,7 @@
                 "symfony-framework",
                 "symfony-mantle-bundle"
             ],
-            "time": "2015-05-14 06:56:21"
+            "time": "2015-05-14 16:36:04"
         },
         {
             "name": "sensio/distribution-bundle",

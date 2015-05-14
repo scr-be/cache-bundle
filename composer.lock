@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9ac00a059964cc1fad6b4301c125e61d",
+    "hash": "a7ba31a94e15b6ddcf21f573a9eaa830",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1060,12 +1060,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribenet/symfony-mantle-bundle.git",
-                "reference": "2037dd86db38f6f5d5cad1992ecf3e370905219c"
+                "reference": "62263b42be5c01ba1cb4653a8b5b100ea2ba5d33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/2037dd86db38f6f5d5cad1992ecf3e370905219c",
-                "reference": "2037dd86db38f6f5d5cad1992ecf3e370905219c",
+                "url": "https://api.github.com/repos/scribenet/symfony-mantle-bundle/zipball/62263b42be5c01ba1cb4653a8b5b100ea2ba5d33",
+                "reference": "62263b42be5c01ba1cb4653a8b5b100ea2ba5d33",
                 "shasum": ""
             },
             "require": {
@@ -1078,7 +1078,7 @@
                 "incenteev/composer-parameter-handler": "~2.1",
                 "kriswallsmith/assetic": "~1.2",
                 "php": ">=5.6.4",
-                "scribe/cache-bundle": "dev-release/v1.9.6",
+                "scribe/cache-bundle": "1.9.6.*@dev",
                 "sensio/distribution-bundle": "~3.0",
                 "sensio/framework-extra-bundle": "~3.0",
                 "symfony/assetic-bundle": "~2.6",
@@ -1172,7 +1172,7 @@
                 "symfony-framework",
                 "symfony-mantle-bundle"
             ],
-            "time": "2015-05-13 20:12:56"
+            "time": "2015-05-14 06:56:21"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -1569,25 +1569,26 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.6.7",
+            "version": "v2.7.0-BETA2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "0449d0e1178bc8e934520b20432d1705c3b25e7e"
+                "reference": "5cfcce37fa070f7765559156634c9ef2724e9545"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/0449d0e1178bc8e934520b20432d1705c3b25e7e",
-                "reference": "0449d0e1178bc8e934520b20432d1705c3b25e7e",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/5cfcce37fa070f7765559156634c9ef2724e9545",
+                "reference": "5cfcce37fa070f7765559156634c9ef2724e9545",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": "~2.3",
-                "php": ">=5.3.3",
+                "php": ">=5.3.9",
                 "psr/log": "~1.0",
-                "twig/twig": "~1.12,>=1.12.3"
+                "twig/twig": "~1.18"
             },
             "replace": {
+                "symfony/asset": "self.version",
                 "symfony/browser-kit": "self.version",
                 "symfony/class-loader": "self.version",
                 "symfony/config": "self.version",
@@ -1611,7 +1612,6 @@
                 "symfony/monolog-bridge": "self.version",
                 "symfony/options-resolver": "self.version",
                 "symfony/process": "self.version",
-                "symfony/propel1-bridge": "self.version",
                 "symfony/property-access": "self.version",
                 "symfony/proxy-manager-bridge": "self.version",
                 "symfony/routing": "self.version",
@@ -1642,18 +1642,23 @@
                 "ircmaxell/password-compat": "~1.0",
                 "monolog/monolog": "~1.11",
                 "ocramius/proxy-manager": "~0.4|~1.0",
-                "propel/propel1": "~1.6",
-                "symfony/phpunit-bridge": "~2.7"
+                "symfony/phpunit-bridge": "self.version"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Symfony\\": "src/"
+                "psr-4": {
+                    "Symfony\\Bridge\\Doctrine\\": "src/Symfony/Bridge/Doctrine/",
+                    "Symfony\\Bridge\\Monolog\\": "src/Symfony/Bridge/Monolog/",
+                    "Symfony\\Bridge\\ProxyManager\\": "src/Symfony/Bridge/ProxyManager/",
+                    "Symfony\\Bridge\\Swiftmailer\\": "src/Symfony/Bridge/Swiftmailer/",
+                    "Symfony\\Bridge\\Twig\\": "src/Symfony/Bridge/Twig/",
+                    "Symfony\\Bundle\\": "src/Symfony/Bundle/",
+                    "Symfony\\Component\\": "src/Symfony/Component/"
                 },
                 "classmap": [
                     "src/Symfony/Component/HttpFoundation/Resources/stubs",
@@ -1669,20 +1674,20 @@
             ],
             "authors": [
                 {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
                     "name": "Fabien Potencier",
                     "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
                 }
             ],
             "description": "The Symfony PHP framework",
-            "homepage": "http://symfony.com",
+            "homepage": "https://symfony.com",
             "keywords": [
                 "framework"
             ],
-            "time": "2015-05-11 01:58:49"
+            "time": "2015-05-13 20:25:22"
         },
         {
             "name": "twig/extensions",
@@ -3655,17 +3660,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v2.7.0-BETA1",
-            "target-dir": "Symfony/Bridge/PhpUnit",
+            "version": "v2.7.0-BETA2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "b4de95c4aea3590e059cd2fab1e203b354ae0381"
+                "reference": "43a5b2acfd4521fddfca0eb8b53e8d9d3e794fef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/b4de95c4aea3590e059cd2fab1e203b354ae0381",
-                "reference": "b4de95c4aea3590e059cd2fab1e203b354ae0381",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/43a5b2acfd4521fddfca0eb8b53e8d9d3e794fef",
+                "reference": "43a5b2acfd4521fddfca0eb8b53e8d9d3e794fef",
                 "shasum": ""
             },
             "require": {
@@ -3684,7 +3688,7 @@
                 "files": [
                     "bootstrap.php"
                 ],
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Bridge\\PhpUnit\\": ""
                 }
             },
@@ -3694,23 +3698,25 @@
             ],
             "authors": [
                 {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
                     "name": "Nicolas Grekas",
                     "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
                 }
             ],
             "description": "Symfony PHPUnit Bridge",
-            "homepage": "http://symfony.com",
-            "time": "2015-04-05 09:41:58"
+            "homepage": "https://symfony.com",
+            "time": "2015-05-01 14:16:41"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "scribe/mantle-bundle": 20,
+        "symfony/symfony": 10,
+        "symfony/framework-bundle": 10,
         "symfony/phpunit-bridge": 10,
         "doctrine/doctrine-fixtures-bundle": 20,
         "doctrine/data-fixtures": 20,

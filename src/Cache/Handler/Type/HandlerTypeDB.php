@@ -18,6 +18,7 @@ use Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerItemRepository;
 use Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerPrefixRepository;
 use Scribe\Component\DependencyInjection\Aware\EntityManagerAwareTrait;
 use Scribe\Doctrine\Exception\ORMException;
+use Scribe\Utility\Extension;
 
 /**
  * Class HandlerTypeDB.
@@ -42,6 +43,42 @@ class HandlerTypeDB extends AbstractHandlerType
     protected $prefix;
 
     /**
+     * @var bool
+     */
+    protected $initialized;
+
+    /**
+     * @return boolean
+     */
+    public function isInitialized()
+    {
+        return $this->initialized;
+    }
+
+    /**
+     * @param boolean $initialized
+     *
+     * @return $this
+     */
+    public function setInitialized($initialized)
+    {
+        $this->initialized = $initialized;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function setUninitializedAndDisabledHard()
+    {
+        $this->setInitialized(false);
+        $this->setSupportedDecider(function() { return false; });
+
+        return $this;
+    }
+
+    /**
      * Set the required repositories for cache handler.
      *
      * @param $em         EntityManager
@@ -50,10 +87,29 @@ class HandlerTypeDB extends AbstractHandlerType
      *
      * @return $this
      */
-    public function setRepositories(EntityManager $em, CacheDBHandlerItemRepository $itemRepo, CacheDBHandlerPrefixRepository $prefixRepo)
+    public function initManagerAndRepositories(EntityManager $em, CacheDBHandlerItemRepository $itemRepo, CacheDBHandlerPrefixRepository $prefixRepo)
     {
-        $this->setEntityManager($em);
+        if (true !== $this->handleDetermineInitState()) {
+            return $this;
+        }
 
+        $this->setEntityManager($em);
+        $this->setRepositories($itemRepo, $prefixRepo);
+        $this->determinePrefix();
+        $this->dispatchCleanup();
+        $this->setInitialized(true);
+
+        return $this;
+    }
+
+    /**
+     * @param CacheDBHandlerItemRepository   $itemRepo
+     * @param CacheDBHandlerPrefixRepository $prefixRepo
+     *
+     * @return $this
+     */
+    protected function setRepositories(CacheDBHandlerItemRepository $itemRepo, CacheDBHandlerPrefixRepository $prefixRepo)
+    {
         $this->itemRepo = $itemRepo;
         $this->prefixRepo = $prefixRepo;
 
@@ -61,28 +117,53 @@ class HandlerTypeDB extends AbstractHandlerType
     }
 
     /**
+     * @return bool|$this
+     */
+    protected function handleDetermineInitState()
+    {
+        if (false === $this->isSupported()) {
+            return $this->setUninitializedAndDisabledHard();
+        }
+
+        if (false === $this->isEnabled()) {
+            return $this->setUninitializedAndDisabledHard();
+        }
+
+        return true;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function dispatchCleanup()
+    {
+        if (mt_rand(0, 100) === 10) {
+            $this->flushStaleItems();
+        }
+
+        return $this;
+    }
+
+    /**
      * Perform any pre-init repository initialization.
      *
-     * @param bool $forceStaleFlush
-     *
-     * @throws ORMException
+     * @param bool $forceLookup
      *
      * @return $this
      */
-    public function initRepositories($forceStaleFlush = false)
+    protected function determinePrefix($forceLookup = false)
     {
+        if ($this->prefix instanceof CacheDBHandlerPrefix &&
+            true !== $forceLookup) {
+            return $this;
+        }
+
         $prefixSlug = $this->getKeyGenerator()->getKeyPrefix();
 
         try {
-            $prefix = $this->prefixRepo->findOneBySlug($prefixSlug);
+            $this->prefix = $this->prefixRepo->findOneBySlug($prefixSlug);
         } catch (ORMException $e) {
-            $prefix = $this->initNewPrefix($prefixSlug);
-        }
-
-        $this->prefix = $prefix;
-
-        if (true === $forceStaleFlush || mt_rand(1, 100) === 50) {
-            $this->flushStaleItems();
+            $this->prefix = $this->initNewPrefix($prefixSlug);
         }
 
         return $this;
@@ -95,20 +176,13 @@ class HandlerTypeDB extends AbstractHandlerType
      */
     public function flushStaleItems()
     {
-        $em = $this->getEntityManager();
-
-        $items = $this
-            ->itemRepo
-            ->findByPrefix($this->prefix)
-        ;
-
-        foreach ($items as $i) {
-            if ($i->getUpdatedOn() <= (new \DateTime(sprintf('-%d seconds', $i->getTtl())))) {
-                $em->remove($i);
-            }
+        if (false === $this->isInitialized()) {
+            return false;
         }
 
-        $em->flush();
+        if ($this->itemRepo->findStaleCountByPrefix($this->prefix) > 0) {
+            $this->itemRepo->deleteStaleByPrefix($this->prefix);
+        }
 
         return true;
     }
@@ -136,6 +210,8 @@ class HandlerTypeDB extends AbstractHandlerType
     /**
      * Check if the handler type is supported by the current environment.
      *
+     * @param mixed ...$by
+     *
      * @return bool
      */
     public function isSupported(...$by)
@@ -144,7 +220,23 @@ class HandlerTypeDB extends AbstractHandlerType
             return (bool) $decision;
         }
 
-        return (bool) true;
+        return (bool) $this->isSupportedDefaultDecider();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isSupportedDefaultDecider()
+    {
+        if (false === $this->isEnabled() || false === $this->isInitialized()) {
+            return false;
+        }
+
+        $hasValidOrmExtension = Extension::areAnyEnabled(
+            'mysql', 'mysqli', 'pdo_mysql', 'pgsql', 'pdo_pgsql', 'mongo'
+        );
+
+        return (bool) ($hasValidOrmExtension !== false ?: false);
     }
 
     /**
@@ -171,6 +263,10 @@ class HandlerTypeDB extends AbstractHandlerType
      */
     protected function setUsingHandler($data, $key)
     {
+        if (false === $this->isInitialized()) {
+            return false;
+        }
+
         $em = $this->getEntityManager();
         $item = $this->hasDBCacheItem($key);
 
@@ -210,6 +306,10 @@ class HandlerTypeDB extends AbstractHandlerType
      */
     protected function hasDBCacheItem($key)
     {
+        if (false === $this->isInitialized()) {
+            return;
+        }
+
         $em = $this->getEntityManager();
         $item = null;
 
@@ -238,6 +338,10 @@ class HandlerTypeDB extends AbstractHandlerType
      */
     protected function delUsingHandler($key)
     {
+        if (false === $this->isInitialized()) {
+            return false;
+        }
+
         $em = $this->getEntityManager();
 
         if (($item = $this->hasDBCacheItem($key)) instanceof CacheDBHandlerItem) {
@@ -257,20 +361,11 @@ class HandlerTypeDB extends AbstractHandlerType
      */
     protected function flushAllUsingHandler()
     {
-        $em = $this->getEntityManager();
-
-        $items = (array) $this
-            ->itemRepo
-            ->findByPrefix($this->prefix)
-        ;
-
-        foreach ($items as $i) {
-            $em->remove($i);
+        if (false === $this->isInitialized()) {
+            return false;
         }
 
-        $em->flush();
-
-        return true;
+        return (bool) ($this->itemRepo->deleteAllByPrefix($this->prefix) > 0 ?: false);
     }
 }
 

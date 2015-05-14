@@ -184,7 +184,7 @@ trait KeyGeneratorTrait
      *
      * @return mixed[]
      */
-    public function getKeyValues()  
+    public function getKeyValues()
     {
         return (array) $this->keyValues;
     }
@@ -357,7 +357,7 @@ trait KeyGeneratorTrait
      */
     public function hasKeyValuesTranslationClosure()
     {
-        return (bool) (true == ($this->keyValuesTranslationClosure instanceof \Closure));
+        return (bool) (true === ($this->keyValuesTranslationClosure instanceof \Closure));
     }
 
     /**

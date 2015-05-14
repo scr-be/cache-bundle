@@ -23,11 +23,13 @@ services:
 
     s.cache.key_generator:
         class: %s.cache.key_generator.class%
-        lazy:  true
         calls:
             - [setKeyPrefix, [%s.cache.global.prefix%]]
 
     # Cache Chain
+
+    s.cache.chain:
+        alias: s.cache.handler_chain
 
     s.cache.handler_chain:
         class: %s.cache.handler_chain.class%
@@ -36,7 +38,6 @@ services:
 
     s.cache.handler_type.memcached:
         class: %s.cache.handler_type.memcached.class%
-        lazy:  true
         arguments:
             - @s.cache.key_generator
             - %s.cache.handlers.memcached.general.ttl%
@@ -50,7 +51,6 @@ services:
 
     s.cache.handler_type.filesystem:
         class: %s.cache.handler_type.filesystem.class%
-        lazy:  true
         arguments:
             - @s.cache.key_generator
             - %s.cache.handlers.filesystem.general.ttl%
@@ -63,14 +63,12 @@ services:
 
     s.cache.handler_type.db:
         class: %s.cache.handler_type.db.class%
-        lazy:  true
         arguments:
             - @s.cache.key_generator
             - %s.cache.handlers.db.general.ttl%
             - %s.cache.handlers.db.general.priority%
             - %s.cache.handlers.db.general.disabled%
         calls:
-            - [setRepositories, [@doctrine.orm.entity_manager, @s.cache.cache_db_handler_item.repo, @s.cache.cache_db_handler_prefix.repo]]
-            - [initRepositories]
+            - [initManagerAndRepositories, [@doctrine.orm.entity_manager, @s.cache.cache_db_handler_item.repo, @s.cache.cache_db_handler_prefix.repo]]
         tags:
             - { name: s.cache.handler_type }

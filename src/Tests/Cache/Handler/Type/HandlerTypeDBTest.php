@@ -56,8 +56,6 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $this->chain = $this->container->get('s.cache.handler_chain');
         $this->chain->reDetermineActiveHandler('db');
         $this->type = $this->chain->getActiveHandler();
-
-        $this->type->initRepositories(true);
     }
 
     /**
@@ -103,6 +101,68 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         return $this->getNewHandlerTypeEmpty(new KeyGenerator(), 1800, 1, false, $supportedDecider);
     }
 
+    public function testHandlerInNotSupportedState()
+    {
+        $handler = $this->getNewHandlerTypeEmpty(
+            static::$staticContainer->get('s.cache.key_generator'),
+            10, 1, false, function() { return false; }
+        );
+
+        $handler->initManagerAndRepositories(
+            static::$staticContainer->get('doctrine.orm.default_entity_manager'),
+            static::$staticContainer->get('s.cache.cache_db_handler_item.repo'),
+            static::$staticContainer->get('s.cache.cache_db_handler_prefix.repo')
+        );
+
+        static::assertFalse($handler->flushStaleItems());
+        static::assertFalse($handler->set('data', 'key'));
+        static::assertFalse($handler->has('foo', 'bar'));
+        static::assertFalse($handler->del('bar', 'foo'));
+        static::assertFalse($handler->flushAll());
+    }
+
+    public function testHandlerInDisabledStateWithCustomDecider()
+    {
+        $handler = $this->getNewHandlerTypeEmpty(
+            static::$staticContainer->get('s.cache.key_generator'),
+            10, 1, true, function() { return true; }
+        );
+
+        $handler->initManagerAndRepositories(
+            static::$staticContainer->get('doctrine.orm.default_entity_manager'),
+            static::$staticContainer->get('s.cache.cache_db_handler_item.repo'),
+            static::$staticContainer->get('s.cache.cache_db_handler_prefix.repo')
+        );
+
+        static::assertFalse($handler->isSupported());
+        static::assertFalse($handler->flushStaleItems());
+        static::assertFalse($handler->set('data', 'key'));
+        static::assertFalse($handler->has('foo', 'bar'));
+        static::assertFalse($handler->del('bar', 'foo'));
+        static::assertFalse($handler->flushAll());
+    }
+
+    public function testHandlerInDisabledStateWithDefaultDecider()
+    {
+        $handler = $this->getNewHandlerTypeEmpty(
+            static::$staticContainer->get('s.cache.key_generator'),
+            10, 1, true, null
+        );
+
+        $handler->initManagerAndRepositories(
+            static::$staticContainer->get('doctrine.orm.default_entity_manager'),
+            static::$staticContainer->get('s.cache.cache_db_handler_item.repo'),
+            static::$staticContainer->get('s.cache.cache_db_handler_prefix.repo')
+        );
+
+        static::assertFalse($handler->isSupported());
+        static::assertFalse($handler->flushStaleItems());
+        static::assertFalse($handler->set('data', 'key'));
+        static::assertFalse($handler->has('foo', 'bar'));
+        static::assertFalse($handler->del('bar', 'foo'));
+        static::assertFalse($handler->flushAll());
+    }
+
     /**
      * @Title("Confirm an exception is thrown when `get` is called with no cache key")
      * @Features({"Exception Handling"})
@@ -125,8 +185,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
      */
     public function testToStringFQN()
     {
-        $this->assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, (string) $this->type);
-        $this->assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, $this->type->__toString());
+        static::assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, (string) $this->type);
+        static::assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, $this->type->__toString());
     }
 
     /**
@@ -136,8 +196,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
      */
     public function testGetType()
     {
-        $this->assertEquals('db', $this->type->getType());
-        $this->assertEquals(
+        static::assertEquals('db', $this->type->getType());
+        static::assertEquals(
             self::FULLY_QUALIFIED_CLASS_NAME,
             $this->type->getType(true)
         );
@@ -159,13 +219,16 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         sleep(2);
 
         foreach (range(1, 2000) as $i) {
-            $this->type->initRepositories();
-            usleep(2);
+            $this->type->initManagerAndRepositories(
+                static::$staticContainer->get('doctrine.orm.default_entity_manager'),
+                static::$staticContainer->get('s.cache.cache_db_handler_item.repo'),
+                static::$staticContainer->get('s.cache.cache_db_handler_prefix.repo')
+            );
         }
 
-        $this->assertNotEquals($val1, $chain->get(...$key1));
-        $this->assertNotEquals($val2, $chain->get(...$key2));
-        $this->assertNotEquals($val3, $chain->get(...$key3));
+        static::assertNotEquals($val1, $chain->get(...$key1));
+        static::assertNotEquals($val2, $chain->get(...$key2));
+        static::assertNotEquals($val3, $chain->get(...$key3));
 
         $chain->setTtlToDefault();
     }
@@ -187,9 +250,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $chain->set($val2, ...$key2);
         $chain->set($val3, ...$key3);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertEquals($val2, $chain->get(...$key2));
-        $this->assertEquals($val3, $chain->get(...$key3));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertEquals($val2, $chain->get(...$key2));
+        static::assertEquals($val3, $chain->get(...$key3));
     }
 
     /**
@@ -210,17 +273,17 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $chain->set($val2, ...$key2);
         $chain->set($val3, ...$key3);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertEquals($val2, $chain->get(...$key2));
-        $this->assertEquals($val3, $chain->get(...$key3));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertEquals($val2, $chain->get(...$key2));
+        static::assertEquals($val3, $chain->get(...$key3));
 
         sleep(2);
 
         $chain->getActiveHandler()->flushStaleItems();
 
-        $this->assertNotEquals($val1, $chain->get(...$key1));
-        $this->assertNotEquals($val2, $chain->get(...$key2));
-        $this->assertNotEquals($val3, $chain->get(...$key3));
+        static::assertNotEquals($val1, $chain->get(...$key1));
+        static::assertNotEquals($val2, $chain->get(...$key2));
+        static::assertNotEquals($val3, $chain->get(...$key3));
     }
 
     /**
@@ -240,13 +303,13 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $chain->set($val2, ...$key2);
         $chain->set($val3, ...$key3);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertEquals($val2, $chain->get(...$key2));
-        $this->assertEquals($val3, $chain->get(...$key3));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertEquals($val2, $chain->get(...$key2));
+        static::assertEquals($val3, $chain->get(...$key3));
 
-        $this->assertTrue($chain->has(...$key1));
-        $this->assertTrue($chain->has(...$key2));
-        $this->assertTrue($chain->has(...$key3));
+        static::assertTrue($chain->has(...$key1));
+        static::assertTrue($chain->has(...$key2));
+        static::assertTrue($chain->has(...$key3));
     }
 
     /**
@@ -266,23 +329,23 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $chain->set($val2, ...$key2);
         $chain->set($val3, ...$key3);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertEquals($val2, $chain->get(...$key2));
-        $this->assertEquals($val3, $chain->get(...$key3));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertEquals($val2, $chain->get(...$key2));
+        static::assertEquals($val3, $chain->get(...$key3));
 
-        $this->assertTrue($chain->has(...$key1));
-        $this->assertTrue($chain->has(...$key2));
-        $this->assertTrue($chain->has(...$key3));
+        static::assertTrue($chain->has(...$key1));
+        static::assertTrue($chain->has(...$key2));
+        static::assertTrue($chain->has(...$key3));
 
         $chain->flushAll();
 
-        $this->assertNull($chain->get(...$key1));
-        $this->assertNull($chain->get(...$key2));
-        $this->assertNull($chain->get(...$key3));
+        static::assertNull($chain->get(...$key1));
+        static::assertNull($chain->get(...$key2));
+        static::assertNull($chain->get(...$key3));
 
-        $this->assertFalse($chain->has(...$key1));
-        $this->assertFalse($chain->has(...$key2));
-        $this->assertFalse($chain->has(...$key3));
+        static::assertFalse($chain->has(...$key1));
+        static::assertFalse($chain->has(...$key2));
+        static::assertFalse($chain->has(...$key3));
     }
 
     /**
@@ -302,28 +365,28 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $chain->setTtl(2);
         $chain->set($val2, ...$key2);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertTrue($chain->has(...$key1));
-        $this->assertEquals($val2, $chain->get(...$key2));
-        $this->assertTrue($chain->has(...$key2));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertTrue($chain->has(...$key1));
+        static::assertEquals($val2, $chain->get(...$key2));
+        static::assertTrue($chain->has(...$key2));
 
         sleep(4);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertTrue($chain->has(...$key1));
-        $this->assertNotNull($chain->get(...$key1));
-        $this->assertNotEquals($val2, $chain->get(...$key2));
-        $this->assertFalse($chain->has(...$key2));
-        $this->assertNull($chain->get(...$key2));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertTrue($chain->has(...$key1));
+        static::assertNotNull($chain->get(...$key1));
+        static::assertNotEquals($val2, $chain->get(...$key2));
+        static::assertFalse($chain->has(...$key2));
+        static::assertNull($chain->get(...$key2));
 
         $chain->flushAll();
 
-        $this->assertNotEquals($val1, $chain->get(...$key1));
-        $this->assertFalse($chain->has(...$key1));
-        $this->assertNull($chain->get(...$key1));
-        $this->assertNotEquals($val2, $chain->get(...$key2));
-        $this->assertFalse($chain->has(...$key2));
-        $this->assertNull($chain->get(...$key2));
+        static::assertNotEquals($val1, $chain->get(...$key1));
+        static::assertFalse($chain->has(...$key1));
+        static::assertNull($chain->get(...$key1));
+        static::assertNotEquals($val2, $chain->get(...$key2));
+        static::assertFalse($chain->has(...$key2));
+        static::assertNull($chain->get(...$key2));
     }
 
     /**
@@ -342,25 +405,25 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $chain->set($val1, ...$key1);
         $chain->set($val2, ...$key2);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertTrue($chain->has(...$key1));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertTrue($chain->has(...$key1));
 
-        $this->assertEquals($val2, $chain->get(...$key2));
-        $this->assertTrue($chain->has(...$key2));
+        static::assertEquals($val2, $chain->get(...$key2));
+        static::assertTrue($chain->has(...$key2));
 
         $chain->del(...$key1);
 
-        $this->assertNotEquals($val1, $chain->get(...$key1));
-        $this->assertFalse($chain->has(...$key1));
+        static::assertNotEquals($val1, $chain->get(...$key1));
+        static::assertFalse($chain->has(...$key1));
 
         sleep(2);
 
-        $this->assertFalse($chain->has(...$key2));
+        static::assertFalse($chain->has(...$key2));
 
         $chain->flushAll();
 
-        $this->assertNull($chain->get(...$key1));
-        $this->assertNull($chain->get(...$key2));
+        static::assertNull($chain->get(...$key1));
+        static::assertNull($chain->get(...$key2));
     }
 
     /**
@@ -370,12 +433,12 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
      */
     public function testIsNotSupported()
     {
-        $this->assertTrue($this->type->isSupported());
+        static::assertTrue($this->type->isSupported());
 
         $decider = function () { return (bool) false; };
         $this->type->setSupportedDecider($decider);
 
-        $this->assertFalse($this->type->isSupported());
+        static::assertFalse($this->type->isSupported());
     }
 
     /**
@@ -388,10 +451,13 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $decider = function () { return (bool) false; };
         $this->type->setSupportedDecider($decider);
 
-        $this->assertFalse($this->type->isSupported());
+        static::assertFalse($this->type->isSupported());
+        return;
 
-        $this->type->__construct();
-        $this->type->setRepositories(
+        $this->type->__construct(
+            new KeyGenerator()
+        );
+        $this->type->initManagerAndRepositories(
             $this->container->get('doctrine.orm.entity_manager'),
             $this->container->get('s.cache.cache_db_handler_item.repo'),
             $this->container->get('s.cache.cache_db_handler_prefix.repo')
@@ -399,7 +465,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
 
         $this->type->unsetSupportedDecider();
 
-        $this->assertTrue($this->type->isSupported());
+        static::assertTrue($this->type->isSupported());
     }
 
     /**
@@ -412,7 +478,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $chain = $this->chain;
         $chain->setTtl(8);
 
-        $this->assertEquals(8, $chain->getTtl());
+        static::assertEquals(8, $chain->getTtl());
 
         $val1 = $key1 = [1, 2, 3];
         $val2 = $key2 = [2, 3, 4];
@@ -423,31 +489,31 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
 
         $chain->set($val2, ...$key2);
 
-        $this->assertTrue($chain->has(...$key2));
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertEquals($val2, $chain->get(...$key2));
+        static::assertTrue($chain->has(...$key2));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertEquals($val2, $chain->get(...$key2));
 
         sleep(4);
 
-        $this->assertFalse($chain->has(...$key2));
-        $this->assertNull($chain->get(...$key2));
+        static::assertFalse($chain->has(...$key2));
+        static::assertNull($chain->get(...$key2));
 
         $chain->setTtl(8);
         sleep(6);
 
-        $this->assertFalse($chain->has(...$key1));
-        $this->assertNull($chain->get(...$key1));
+        static::assertFalse($chain->has(...$key1));
+        static::assertNull($chain->get(...$key1));
 
         $chain->setTtlToDefault();
 
-        $this->assertEquals(1800, $chain->getTtl());
+        static::assertEquals(1800, $chain->getTtl());
     }
 
     public function testHandlerReturnsNullOnDelOfNonExistantItem()
     {
         $chain = $this->chain;
 
-        $this->assertFalse($chain->del(['this', 'doesnt', 'exist']));
+        static::assertFalse($chain->del(['this', 'doesnt', 'exist']));
     }
 
     public function tearDown()

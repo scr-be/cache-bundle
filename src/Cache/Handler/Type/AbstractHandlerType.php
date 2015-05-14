@@ -94,7 +94,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
             ->setKeyGenerator($keyGenerator)
             ->setTtl($ttl)
             ->setPriority($priority)
-            ->setEnabled($disabled !== true)
+            ->setEnabled($disabled === false)
             ->setSupportedDecider($supportedDecider)
         ;
     }

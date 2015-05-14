@@ -30,6 +30,7 @@ before_install:
     - git submodule update --init --recursive && cd app/config/shared_public && git checkout master && cd ../../../
     - sh app/config/shared_public/tests/travis/php-build-igbinary.sh
     - sh app/config/shared_public/tests/travis/php-build-memcached.sh
+    - sh app/config/shared_public/tests/travis/php-build-twig.sh
     - phpenv config-add app/config/shared_public/tests/travis/config-timezone.ini
     - phpenv rehash
     - mkdir -p build/logs

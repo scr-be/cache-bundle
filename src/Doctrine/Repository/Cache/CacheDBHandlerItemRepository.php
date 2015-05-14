@@ -12,6 +12,7 @@
 namespace Scribe\CacheBundle\Doctrine\Repository\Cache;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem;
 use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix;
 use Scribe\Doctrine\Exception\ORMException;
@@ -61,20 +62,60 @@ class CacheDBHandlerItemRepository extends EntityRepository
     /**
      * @param CacheDBHandlerPrefix $prefix
      *
-     * @return array
+     * @return int
      */
-    public function findByPrefix(CacheDBHandlerPrefix $prefix)
+    public function findStaleCountByPrefix(CacheDBHandlerPrefix $prefix)
     {
-        $q = $this
-            ->createQueryBuilder('i')
+        $qb = $this->createQueryBuilder('item');
+        $q = $qb
+            ->select('count(item.id)')
+            ->where('item.prefix = :prefix')
+            ->andWhere($qb->expr()->lte(':datetimenow', "(item.updated_on + item.ttl)"))
+            ->setParameter('prefix', $prefix)
+            ->setParameter('datetimenow', new \DateTime())
+            ->setMaxResults(1)
+            ->getQuery()
+        ;
+
+        return (int) $q->getSingleScalarResult();
+    }
+
+    /**
+     * @param CacheDBHandlerPrefix $prefix
+     *
+     * @return int
+     */
+    public function deleteStaleByPrefix(CacheDBHandlerPrefix $prefix)
+    {
+        $qb = $this->createQueryBuilder('item');
+        $q = $qb
+            ->delete()
+            ->where('item.prefix = :prefix')
+            ->andWhere($qb->expr()->lte(':datetimenow', "(item.updated_on + item.ttl)"))
+            ->setParameter('prefix', $prefix)
+            ->setParameter('datetimenow', new \DateTime())
+            ->getQuery()
+        ;
+
+        return (int) $q->getResult();
+    }
+
+    /**
+     * @param CacheDBHandlerPrefix $prefix
+     *
+     * @return int
+     */
+    public function deleteAllByPrefix(CacheDBHandlerPrefix $prefix)
+    {
+        $qb = $this->createQueryBuilder('i');
+        $q = $qb
+            ->delete()
             ->where('i.prefix = :prefix')
             ->setParameter('prefix', $prefix)
             ->getQuery()
         ;
 
-        $results = $q->getResult();
-
-        return $results;
+        return (int) $q->getResult();
     }
 }
 

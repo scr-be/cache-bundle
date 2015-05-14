@@ -14,7 +14,6 @@ namespace Scribe\CacheBundle\Cache\Handler\Chain;
 use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeInterface;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
-use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
 
 /**
  * Class HandlerChain.

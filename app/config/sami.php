@@ -11,7 +11,7 @@
 use Sami\Sami;
 use Symfony\Component\Finder\Finder;
 
-$projectRootPath = realpath(__DIR__ . DIRECTORY_SEPARATOR);
+$projectRootPath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 
 $iterator = Finder::create()
     ->files()
@@ -26,7 +26,7 @@ return new Sami($iterator, [
     'title'                => 'scribe/cache-bundle',
     'build_dir'            => $projectRootPath . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'api',
     'cache_dir'            => $projectRootPath . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'sami',
-    'default_opened_level' => 2,
+    'default_opened_level' => 4,
 ]);
 
 /* EOF */

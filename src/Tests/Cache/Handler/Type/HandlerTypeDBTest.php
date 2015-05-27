@@ -11,7 +11,12 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NoResultException;
+use Faker\Factory;
+use Faker\Generator;
+use Faker\ORM\Doctrine\Populator;
+use Scribe\Utility\Serializer\Serializer;
 use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB;
@@ -59,6 +64,14 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
+     * @return EntityManager
+     */
+    public function getEm()
+    {
+        return $this->container->get('doctrine.orm.default_entity_manager');
+    }
+
+    /**
      * getNewHandlerType.
      *
      * @return HandlerTypeDB
@@ -101,6 +114,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         return $this->getNewHandlerTypeEmpty(new KeyGenerator(), 1800, 1, false, $supportedDecider);
     }
 
+    /**
+     * @group CacheHandlerTypeDB
+     */
     public function testHandlerInNotSupportedState()
     {
         $handler = $this->getNewHandlerTypeEmpty(
@@ -121,6 +137,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         static::assertFalse($handler->flushAll());
     }
 
+    /**
+     * @group CacheHandlerTypeDB
+     */
     public function testHandlerInDisabledStateWithCustomDecider()
     {
         $handler = $this->getNewHandlerTypeEmpty(
@@ -142,6 +161,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         static::assertFalse($handler->flushAll());
     }
 
+    /**
+     * @group CacheHandlerTypeDB
+     */
     public function testHandlerInDisabledStateWithDefaultDecider()
     {
         $handler = $this->getNewHandlerTypeEmpty(
@@ -164,9 +186,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm an exception is thrown when `get` is called with no cache key")
-     * @Features({"Exception Handling"})
-     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     * @group CacheHandlerTypeDB
      */
     public function testGetWithoutKeyExceptionHandling()
     {
@@ -179,9 +199,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Attempt to get the fully qualified class name for handler")
-     * @Features({"To String", "Self-Aware"})
-     * @Stories({"Handler should be able to determine what type it is"})
+     * @group CacheHandlerTypeDB
      */
     public function testToStringFQN()
     {
@@ -190,9 +208,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Attempt to get the non-fully qualified class name for handler")
-     * @Features({"To String", "Self-Aware"})
-     * @Stories({"Handler should be able to determine what type it is"})
+     * @group CacheHandlerTypeDB
      */
     public function testGetType()
     {
@@ -203,6 +219,9 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         );
     }
 
+    /**
+     * @group CacheHandlerTypeDB
+     */
     public function testRandomInitRepositoryStaleFlush()
     {
         $chain = $this->chain;
@@ -234,9 +253,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm theDB handler can cache")
-     * @Features({"Can Cache"})
-     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     * @group CacheHandlerTypeDB
      */
     public function testHandlerCanCacheAndFlushAll()
     {
@@ -256,9 +273,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm theDB handler can cache")
-     * @Features({"Can Cache"})
-     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     * @group CacheHandlerTypeDB
      */
     public function testHandlerCanCacheAndFlushStale()
     {
@@ -287,9 +302,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the DB handler can determine if it has a cached item")
-     * @Features({"Can Check Cache"})
-     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     * @group CacheHandlerTypeDB
      */
     public function testHandlerCanCacheAndCheck()
     {
@@ -313,9 +326,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the DB handler can flush its cache")
-     * @Features({"Can Cache", "Can Flush All"})
-     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     * @group CacheHandlerTypeDB
      */
     public function testHandlerCanFlushAll()
     {
@@ -349,9 +360,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the DB handler honors TTL")
-     * @Features({"Can Cache", "Can Flush All", "Can Respect TTL"})
-     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     * @group CacheHandlerTypeDB
      */
     public function testDBHandlerCanCacheWithValidateTtl()
     {
@@ -390,9 +399,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Confirm the DB handler can delete cached values")
-     * @Features({"Can Cache", "Can Flush All", "Can Respect TTL", "Can Delete"})
-     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     * @group CacheHandlerTypeDB
      */
     public function testHandlerCanCacheAndDelete()
     {
@@ -427,9 +434,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Check isSupported closure handler")
-     * @Features({"Option Handling"})
-     * @Stories({"Handler should be able to determine supported state based on passed closure"})
+     * @group CacheHandlerTypeDB
      */
     public function testIsNotSupported()
     {
@@ -442,9 +447,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Check behaviour on internal calls when handler is not supported")
-     * @Features({"Option Handling"})
-     * @Stories({"Handler should be able to determine supported state based on passed closure"})
+     * @group CacheHandlerTypeDB
      */
     public function testIsNotSupportedInternalCalls()
     {
@@ -469,9 +472,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @Title("Handler can have TTL values changed randomly and continue to operate properly")
-     * @Features({"Can Cache", "Can Respect TTL"})
-     * @Stories({"Handler should be able to set/get/has/del/flush"})
+     * @group CacheHandlerTypeDB
      */
     public function testHandlerCanChangeTtl()
     {
@@ -509,18 +510,127 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         static::assertEquals(1800, $chain->getTtl());
     }
 
-    public function testHandlerReturnsNullOnDelOfNonExistantItem()
+    /**
+     * @group CacheHandlerTypeDB
+     */
+    public function testHandlerReturnsNullOnDelOfInvalidItem()
     {
         $chain = $this->chain;
 
         static::assertFalse($chain->del(['this', 'doesnt', 'exist']));
     }
 
+    /**
+     * @group CacheHandlerTypeDB
+     * @group Faker
+     */
+    public function testLotsOfDataWithFaker()
+    {
+        $em = $this->getEm();
+
+        $prefixRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix');
+        $itemRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem');
+        $prefixes = $prefixRepo->findAll();
+        $items = $itemRepo->findAll();
+
+        foreach ($items as $i) {
+            $em->remove($i);
+            $em->flush();
+            $em->clear($i);
+        }
+
+        foreach ($prefixes as $p) {
+            $em->remove($p);
+            $em->flush();
+            $em->clear($p);
+        }
+
+        $keyGenerator = new KeyGenerator();
+
+        $faker = Factory::create();
+
+        $slugger = function() use ($faker) { return 'slug_'.$faker->randomNumber(6); };
+
+        $populator = new Populator($faker, $em);
+        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix', 10, [
+            'slug' => $slugger
+        ]);
+        $populator->execute($em);
+
+        $prefixes = $prefixRepo->findAll();
+        $prefixIds = [];
+
+        static::assertCount(10, $prefixes);
+
+        foreach ($prefixes as $p) {
+            static::assertNotNull($p->getSlug());
+            static::assertNotNull($p->getId());
+
+            $prefixIds[] = $p->getId();
+        }
+
+        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem', 1000, [
+            'k' => function() use ($faker, $keyGenerator) { return $keyGenerator->getKey($faker->paragraph(1), $faker->paragraph(1)); },
+            'value' => function() use ($faker) { return $faker->sentence(50); },
+            'slug' => $slugger,
+            'prefix' => function() use ($faker, $prefixes) { return $faker->randomElement($prefixes); }
+        ]);
+
+        $populator->execute($em);
+
+        $items = $itemRepo->findAll();
+
+        static::assertCount(1000, $items);
+
+        foreach ($items as $i) {
+            static::assertNotNull($i->getSlug());
+            static::assertNotNull($i->getK());
+            static::assertNotNull($i->getValue());
+            static::assertNotNull($i->getTtl());
+            static::assertNotNull($i->getPrefix());
+            static::assertTrue(gettype($i->getSlug()) === 'string');
+            static::assertTrue(gettype($i->getK()) === 'string');
+            static::assertTrue(gettype($i->getValue()) === 'string');
+            static::assertTrue(gettype($i->getTtl()) === 'integer');
+            static::assertInstanceOf('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix', $i->getPrefix());
+            static::assertTrue(in_array($i->getPrefix()->getId(), $prefixIds, true));
+
+            $em->remove($i);
+        }
+
+        $em->flush();
+        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem');
+
+        foreach ($prefixes as $p) {
+            $em->remove($p);
+        }
+
+        $em->flush();
+        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix');
+    }
+
     public function tearDown()
     {
-        if ($this->chain instanceof AbstractHandlerChain) {
-            $this->chain->flushAll();
+        $em = $this->getEm();
+
+        $prefixRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix');
+        $itemRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem');
+        $prefixes = $prefixRepo->findAll();
+        $items = $itemRepo->findAll();
+
+        foreach ($items as $i) {
+            $em->remove($i);
         }
+
+        $em->flush();
+        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem');
+
+        foreach ($prefixes as $p) {
+            $em->remove($p);
+        }
+
+        $em->flush();
+        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix');
 
         if ($this->chain instanceof AbstractHandlerChain) {
             $gen = $keyPrefix = $this->chain->getActiveHandler()->getKeyGenerator();
@@ -533,7 +643,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
                         $em->remove($keyPrefixEntity);
                         $em->flush();
                     }
-                } catch (NoResultException $e) {
+                } catch (\Exception $e) {
                     // do nothing
                 }
             }

@@ -41,7 +41,7 @@ class CacheEngineMock extends AbstractCacheEngine
      *
      * @param mixed,... $keyValues
      *
-     * @return $this;
+     * @return $this
      */
     public function setKey(...$keyValues)
     {
@@ -62,25 +62,23 @@ class CacheEngineMock extends AbstractCacheEngine
      * Overwrite parent implementation of get for mockery handler type.
      *
      * @param mixed,... $keyValues
-     *
-     * @return null
      */
     public function get(...$keyValues)
     {
-        return $this->getUsingHandler($keyValues);
+        return $this->getUsingHandler('');
     }
 
     /**
      * Overwrite parent implementation of set for mockery handler type.
      *
-     * @param string|int|object|callable  $data
-     * @param mixed,...                   $keyValues
+     * @param mixed     $data
+     * @param mixed,... $keyValues
      *
      * @return bool
      */
     public function set($data, ...$keyValues)
     {
-        return $this->setUsingHandler($data, $keyValues);
+        return $this->setUsingHandler('', '');
     }
 
     /**
@@ -92,7 +90,7 @@ class CacheEngineMock extends AbstractCacheEngine
      */
     public function has(...$key)
     {
-        return $this->hasUsingHandler($key);
+        return $this->hasUsingHandler('');
     }
 
     /**
@@ -104,7 +102,7 @@ class CacheEngineMock extends AbstractCacheEngine
      */
     public function del(...$keyValues)
     {
-        return $this->delUsingHandler($keyValues);
+        return $this->delUsingHandler('');
     }
 
     /**
@@ -121,12 +119,10 @@ class CacheEngineMock extends AbstractCacheEngine
      * Retrieve the cached data using the provided key.
      *
      * @param string $key
-     *
-     * @return null
      */
     protected function getUsingHandler($key)
     {
-        return null;
+        return;
     }
 
     /**

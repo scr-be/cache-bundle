@@ -42,8 +42,8 @@ abstract class AbstractCacheChain extends AbstractHandler implements CacheChainI
      */
     public function __construct($disabled = false)
     {
-        $this->handlers     = [];
-        $this->filterMode   = CompilerPassChainInterface::FILTER_MODE_FIRST;
+        $this->handlers = [];
+        $this->filterMode = CompilerPassChainInterface::FILTER_MODE_FIRST;
         $this->restrictions = [
             CompilerPassChainInterface::RESTRICTION_INTERFACE_DEFAULT,
             CacheEngineInterface::INTERFACE_NAME_CACHE,

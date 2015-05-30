@@ -11,7 +11,7 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
-use Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine;
+use Faker\Factory;
 use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
 use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineMemcached;
 use Scribe\CacheBundle\Cache\Handler\Chain\AbstractCacheChain;
@@ -72,6 +72,14 @@ class CacheEngineMemcachedTest extends AbstractMantleKernelTestCase
         $this->typeClean = clone $memcachedHandler;
         $this->chain->setActiveHandler($memcachedHandler);
         $this->type = $this->chain->getActiveHandler();
+    }
+
+    /**
+     * @return CacheEngineMemcached
+     */
+    public function getMemcachedEngineFromContainer()
+    {
+        return static::$staticContainer->get('s.cache.chain')->reDetermineActiveHandler('memcached');
     }
 
     /**
@@ -490,16 +498,82 @@ class CacheEngineMemcachedTest extends AbstractMantleKernelTestCase
         static::assertEquals(1800, $chain->getTtl());
     }
 
+    /**
+     * @group CacheEngine
+     * @group CacheEngineMemcached
+     * @group CacheEngineMemcachedFaker
+     * @group Faker
+     */
+    public function testLotsOfDataWithFaker()
+    {
+        $memcachedEngine = $this->getMemcachedEngineFromContainer();
+        $memcachedEngine->flushAll();
+
+        $dataFaker = Factory::create();
+        $dataFaked = [];
+        $count = 200;
+        $maxTtl = 45;
+
+        for ($i = 0; $i < $count; $i++) {
+            $dataFaked[$i] = [
+                'key' => [$dataFaker->randomNumber(4), $dataFaker->sentence()],
+                'val' => $dataFaker->sentence(12),
+                'ttl' => $dataFaker->numberBetween(10, $maxTtl),
+            ];
+
+            static::assertInstanceOf('Scribe\CacheBundle\Cache\Handler\Chain\CacheChain', $memcachedEngine->setTtl($dataFaked[$i]['ttl']));
+            static::assertFalse($memcachedEngine->has(...$dataFaked[$i]['key']));
+            static::assertNull($memcachedEngine->get(...$dataFaked[$i]['key']));
+            static::assertTrue($memcachedEngine->set($dataFaked[$i]['val'], ...$dataFaked[$i]['key']));
+            $dataFaked[$i]['now'] = (new \DateTime())->format('U');
+            static::assertTrue($memcachedEngine->has(...$dataFaked[$i]['key']));
+            static::assertEquals($dataFaked[$i]['val'], $memcachedEngine->get(...$dataFaked[$i]['key']));
+        }
+
+        $startLoop = (new \DateTime())->format('U');
+
+        while (true) {
+            foreach ($dataFaked as $i => $data) {
+                $startLoopIteration = (new \DateTime())->format('U');
+
+                if (($startLoopIteration - $data['now']) >= ($data['ttl'] + 1)) {
+                    static::assertFalse($memcachedEngine->has(...$data['key']));
+                    static::assertNull($memcachedEngine->get(...$data['key']));
+                    unset($dataFaked[$i]);
+                } elseif (($startLoopIteration - $data['now']) < ($data['ttl'] - 1)) {
+                    static::assertTrue($memcachedEngine->has(...$data['key']));
+                    static::assertEquals($data['val'], $memcachedEngine->get(...$data['key']));
+                }
+            }
+
+            if (count($dataFaked) === 0) {
+                break;
+            }
+
+            if (((new \DateTime())->format('U') - $startLoop) > ($maxTtl + 4)) {
+                static::fail(sprintf('Cached data (%d items) existed beyond the max TTL setting of %d.', count($dataFaked), $maxTtl + 4));
+            }
+        }
+
+        static::assertCount(0, $dataFaked);
+
+        foreach ($dataFaked as $i => $data) {
+            static::assertFalse($memcachedEngine->has(...$data['key']));
+            static::assertNull($memcachedEngine->get(...$data['key']));
+        }
+
+        $memcachedEngine->flushAll();
+    }
+
     public function tearDown()
     {
         if ($this->chain instanceof AbstractCacheChain &&
             $this->chain->getActiveHandler() instanceof \Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine &&
             $this->chain->getActiveHandler()->isEnabled() === true &&
-            $this->chain->getActiveHandler()->isSupported() === true)
-        {
+            $this->chain->getActiveHandler()->isSupported() === true) {
             try {
                 $this->chain->flushAll();
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 // No need to do anything special...some tests may not allow for a flush when they complete.
             }
         }

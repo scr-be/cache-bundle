@@ -21,7 +21,7 @@ interface KeyGeneratorInterface
      *
      * @var int
      */
-    const MODE_KEY_HASH_METHOD_DEFAULT = KeyGeneratorInterface::MODE_KEY_HASH_METHOD_MD5;
+    const MODE_KEY_HASH_METHOD_DEFAULT = self::MODE_KEY_HASH_METHOD_MD5;
 
     /**
      * Use simple md5 function call to generate cache key.
@@ -49,7 +49,7 @@ interface KeyGeneratorInterface
      *
      * @var int
      */
-    const MODE_VALUES_TRANSLATION_METHOD_DEFAULT = KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_INTERNAL;
+    const MODE_VALUES_TRANSLATION_METHOD_DEFAULT = self::MODE_VALUES_TRANSLATION_METHOD_INTERNAL;
 
     /**
      * Use the internal method for translating the passed key values to strings.
@@ -175,7 +175,7 @@ interface KeyGeneratorInterface
      *
      * @return $this
      */
-    public function setKeyValuesTranslationMode($mode = KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_DEFAULT);
+    public function setKeyValuesTranslationMode($mode = self::MODE_VALUES_TRANSLATION_METHOD_DEFAULT);
 
     /**
      * Get the mode used to traverse over and translate the passed key values to strings.
@@ -214,7 +214,7 @@ interface KeyGeneratorInterface
      *
      * @return $this
      */
-    public function setKeyHashMode($mode = KeyGeneratorInterface::MODE_KEY_HASH_METHOD_DEFAULT);
+    public function setKeyHashMode($mode = self::MODE_KEY_HASH_METHOD_DEFAULT);
 
     /**
      * Get the mode used to generate the final cache key.

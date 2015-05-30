@@ -12,11 +12,8 @@
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\NoResultException;
 use Faker\Factory;
-use Faker\Generator;
 use Faker\ORM\Doctrine\Populator;
-use Scribe\Utility\Serializer\Serializer;
 use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase;
@@ -58,6 +55,14 @@ class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
         $this->chain = $this->container->get('s.cache.chain');
         $this->chain->reDetermineActiveHandler('database');
         $this->type = $this->chain->getActiveHandler();
+    }
+
+    /**
+     * @return CacheEngineDatabase
+     */
+    public function getDatabaseEngineFromContainer()
+    {
+        return static::$staticContainer->get('s.cache.chain')->reDetermineActiveHandler('database');
     }
 
     /**
@@ -119,7 +124,7 @@ class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
     {
         $handler = $this->getNewHandlerTypeEmpty(
             static::$staticContainer->get('s.cache.key_generator'),
-            10, 1, false, function() { return false; }
+            10, 1, false, function () { return false; }
         );
 
         $handler->setManagerAndRepositories(
@@ -143,7 +148,7 @@ class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
     {
         $handler = $this->getNewHandlerTypeEmpty(
             static::$staticContainer->get('s.cache.key_generator'),
-            10, 1, true, function() { return false; }
+            10, 1, true, function () { return false; }
         );
 
         $handler->setManagerAndRepositories(
@@ -538,9 +543,10 @@ class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
     /**
      * @group CacheEngine
      * @group CacheEngineDatabase
+     * @group CacheEngineDatabaseFaker
      * @group Faker
      */
-    public function testLotsOfDataWithFaker()
+    public function testLotsOfDataWithFakerForModels()
     {
         $em = $this->getEm();
 
@@ -565,11 +571,11 @@ class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
 
         $faker = Factory::create();
 
-        $slugger = function() use ($faker) { return 'slug_'.$faker->randomNumber(6); };
+        $slugger = function () use ($faker) { return 'slug_'.$faker->randomNumber(6); };
 
         $populator = new Populator($faker, $em);
         $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix', 10, [
-            'slug' => $slugger
+            'slug' => $slugger,
         ]);
         $populator->execute($em);
 
@@ -585,18 +591,18 @@ class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
             $prefixIds[] = $p->getId();
         }
 
-        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem', 1000, [
-            'k' => function() use ($faker, $keyGenerator) { return $keyGenerator->getKey($faker->paragraph(1), $faker->paragraph(1)); },
-            'value' => function() use ($faker) { return $faker->sentence(50); },
+        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem', 100, [
+            'k' => function () use ($faker, $keyGenerator) { return $keyGenerator->getKey($faker->paragraph(1), $faker->paragraph(1)); },
+            'value' => function () use ($faker) { return $faker->sentence(50); },
             'slug' => $slugger,
-            'prefix' => function() use ($faker, $prefixes) { return $faker->randomElement($prefixes); }
+            'prefix' => function () use ($faker, $prefixes) { return $faker->randomElement($prefixes); },
         ]);
 
         $populator->execute($em);
 
         $items = $itemRepo->findAll();
 
-        static::assertCount(1000, $items);
+        static::assertCount(100, $items);
 
         foreach ($items as $i) {
             static::assertNotNull($i->getSlug());
@@ -623,6 +629,109 @@ class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
 
         $em->flush();
         $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix');
+    }
+
+    /**
+     * @group CacheEngine
+     * @group CacheEngineDatabase
+     * @group CacheEngineDatabaseFaker
+     * @group Faker
+     */
+    public function testLotsOfDataWithFaker()
+    {
+        $databaseEngine = $this->getDatabaseEngineFromContainer();
+
+        $dataFaker = Factory::create();
+        $dataFaked = [];
+        $count = 100;
+        $maxTtl = 45;
+        $em = $this->getEm();
+
+        $prefixRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix');
+        $itemRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem');
+        $prefixes = $prefixRepo->findAll();
+        $items = $itemRepo->findAll();
+
+        foreach ($items as $i) {
+            $em->remove($i);
+            $em->flush();
+            $em->clear($i);
+        }
+
+        foreach ($prefixes as $p) {
+            $em->remove($p);
+            $em->flush();
+            $em->clear($p);
+        }
+
+        $populator = new Populator($dataFaker, $em);
+        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix', 1, [
+            'slug' => function () use ($dataFaker) { return 'slug_'.$dataFaker->randomNumber(6); },
+        ]);
+        $populator->execute($em);
+
+        $prefixes = $prefixRepo->findAll();
+
+        static::assertCount(1, $prefixes);
+
+        $p = $prefixes[0];
+
+        static::assertNotNull($p->getSlug());
+        static::assertNotNull($p->getId());
+
+        for ($i = 0; $i < $count; $i++) {
+            $dataFaked[$i] = [
+                'key' => [$dataFaker->randomNumber(4), $dataFaker->sentence()],
+                'val' => $dataFaker->sentence(12),
+                'ttl' => $dataFaker->numberBetween(10, $maxTtl),
+            ];
+
+            static::assertInstanceOf('Scribe\CacheBundle\Cache\Handler\Chain\CacheChain', $databaseEngine->setTtl($dataFaked[$i]['ttl']));
+            static::assertFalse($databaseEngine->has(...$dataFaked[$i]['key']));
+            static::assertNull($databaseEngine->get(...$dataFaked[$i]['key']));
+            static::assertTrue($databaseEngine->set($dataFaked[$i]['val'], ...$dataFaked[$i]['key']));
+            $em->flush();
+            $dataFaked[$i]['now'] = (new \DateTime())->format('U');
+            static::assertTrue($databaseEngine->has(...$dataFaked[$i]['key']));
+            static::assertEquals($dataFaked[$i]['val'], $databaseEngine->get(...$dataFaked[$i]['key']));
+        }
+
+        $startLoop = (new \DateTime())->format('U');
+
+        while (true) {
+            foreach ($dataFaked as $i => $data) {
+                $startLoopIteration = (new \DateTime())->format('U');
+
+                if (($startLoopIteration - $data['now']) >= ($data['ttl'] + 1)) {
+                    static::assertFalse($databaseEngine->has(...$data['key']));
+                    static::assertNull($databaseEngine->get(...$data['key']));
+                    unset($dataFaked[$i]);
+                } elseif (($startLoopIteration - $data['now']) < ($data['ttl'] - 10)) {
+                    static::assertTrue($databaseEngine->has(...$data['key']));
+                    static::assertEquals($data['val'], $databaseEngine->get(...$data['key']));
+                }
+            }
+
+            if (count($dataFaked) === 0) {
+                break;
+            }
+
+            if (((new \DateTime())->format('U') - $startLoop) > ($maxTtl + 4)) {
+                static::fail(sprintf('Cached data (%d items) existed beyond the max TTL setting of %d.', count($dataFaked), $maxTtl + 4));
+            }
+        }
+
+        static::assertCount(0, $dataFaked);
+
+        foreach ($dataFaked as $i => $data) {
+            static::assertFalse($databaseEngine->has(...$data['key']));
+            static::assertNull($databaseEngine->get(...$data['key']));
+        }
+
+        $databaseEngine->flushAll();
+
+        $em->remove($p);
+        $em->flush();
     }
 
     public function tearDown()

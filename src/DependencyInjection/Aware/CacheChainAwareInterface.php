@@ -28,7 +28,7 @@ interface CacheChainAwareInterface
     public function setCacheChain(CacheChainInterface $cacheChain);
 
     /**
-     * Returns the provided cache chain
+     * Returns the provided cache chain.
      *
      * @return CacheChainInterface
      */

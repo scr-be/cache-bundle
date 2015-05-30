@@ -476,7 +476,7 @@ trait KeyGeneratorTrait
         }
 
         $values = $this->getKeyValues();
-        $mode   = $this->getKeyValuesTranslationMode();
+        $mode = $this->getKeyValuesTranslationMode();
 
         if ($mode === KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_INTERNAL) {
             $valuesTranslated = $this->handleKeyValuesTranslationInternal(...$values);
@@ -539,7 +539,7 @@ trait KeyGeneratorTrait
             );
         }
 
-        $closure          = $this->getKeyValuesTranslationClosure();
+        $closure = $this->getKeyValuesTranslationClosure();
         $valuesTranslated = $closure(...$values);
 
         return (array) $valuesTranslated;
@@ -562,7 +562,7 @@ trait KeyGeneratorTrait
         }
 
         $values = $this->getKeyValuesTranslated();
-        $mode   = $this->getKeyHashMode();
+        $mode = $this->getKeyHashMode();
 
         if ($mode === KeyGeneratorInterface::MODE_KEY_HASH_METHOD_MD5) {
             $key = $this->handleKeyValuesTranslatedHashingInternal('md5', ...$values);
@@ -620,7 +620,7 @@ trait KeyGeneratorTrait
         }
 
         $closure = $this->getKeyHashClosure();
-        $key     = $closure(...$values);
+        $key = $closure(...$values);
 
         return (string) $key;
     }

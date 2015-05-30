@@ -403,8 +403,8 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         foreach ($expectedKeyValuesTranslated as &$gotKeyValue) {
             $gotKeyValue = Serializer::sleep($gotKeyValue);
         }
-        $expectedKeyMd5     = 'scribe_cache---eafe0156bff82dfe6f89580709815c72';
-        $expectedKeySha1    = 'scribe_cache---12dfdd120c0d9f80a717d721efdcaf38e833b002';
+        $expectedKeyMd5 = 'scribe_cache---eafe0156bff82dfe6f89580709815c72';
+        $expectedKeySha1 = 'scribe_cache---12dfdd120c0d9f80a717d721efdcaf38e833b002';
         $expectedKeyClosure = 'scribe_cache---acd5f359c29d59ca31a3210f5188eb47d4faa76e9d7d38dcae044226be30a6b88c1de35929531f1ecd0ba6dbef3adf0f47252d95777b3bceaae6f78ff7a46b15';
 
         $key = $kg->getKey(
@@ -449,8 +449,8 @@ class KeyGeneratorTest extends AbstractMantleTestCase
             $gotKeyValue = Serializer::sleep($gotKeyValue);
         }
 
-        $expectedKeyMd5     = 'scribe_cache---1bec05706e94f6002b5d942327e10fbe';
-        $expectedKeySha1    = 'scribe_cache---cd1cfb98b005f2f45743ca6f308c4393779cd8e0';
+        $expectedKeyMd5 = 'scribe_cache---1bec05706e94f6002b5d942327e10fbe';
+        $expectedKeySha1 = 'scribe_cache---cd1cfb98b005f2f45743ca6f308c4393779cd8e0';
         $expectedKeyClosure = 'scribe_cache---aa01f5eb5a96bf0096a5d59eba00b99becb173bbf208c6b7e40d39e0869908fb85c9382a4a46a5f83f16c03686781619347f5ce22cc61404702bcc4f73cac58b';
 
         $kg = $this->getNewKeyGenerator();

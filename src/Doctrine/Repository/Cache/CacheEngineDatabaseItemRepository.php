@@ -24,7 +24,7 @@ class CacheEngineDatabaseItemRepository extends EntityRepository
 {
     /**
      * @param CacheEngineDatabasePrefix $prefix
-     * @param string               $key
+     * @param string                    $key
      *
      * @throws ORMException
      *

@@ -76,60 +76,40 @@ class CacheChain extends AbstractCacheChain
      */
     protected function determineActiveHandlerAutomatic()
     {
-        $chosenHandler = null;
-
         foreach ($this->getHandlerCollection() as $handler) {
-            if (true === $handler->isEnabled() &&
-                true === $handler->isSupported()) {
-                $chosenHandler = $handler;
-                break;
+            if (true === $handler->isEnabled() && true === $handler->isSupported()) {
+                return $this->setActiveHandler($handler);
             }
         }
 
-        if ($chosenHandler instanceof AbstractCacheEngine) {
-            $this->setActiveHandler($chosenHandler);
-        } else {
-            $this->clearActiveHandlerType();
-        }
-
-        return $this;
+        return $this->clearActiveHandlerType();
     }
 
     /**
-     * @param null|string|AbstractCacheEngine $forceSelection
+     * @param string|CacheEngineInterface $forceType
      *
      * @throws RuntimeException
      *
      * @return $this
      */
-    protected function determineActiveHandlerForced($forceSelection)
+    protected function determineActiveHandlerForced($forceType)
     {
-        $chosenHandler = null;
-        $forceSelection = $forceSelection instanceof AbstractCacheEngine ?
-            strtolower($forceSelection->getType()) : strtolower($forceSelection);
+        if ($forceType instanceof CacheEngineInterface) {
+            $forceType = $forceType->getType();
+        }
 
-        foreach ($this->handlers as $handler) {
-            if ($forceSelection === $handler->getType() &&
-                true === $handler->isSupported()) {
-                $chosenHandler = $handler;
-                break;
+        $forceType = strtolower($forceType);
+
+        foreach ($this->getHandlerCollection() as $handler) {
+            if ($forceType === $handler->getType() && true === $handler->isSupported()) {
+                return $this->setActiveHandler($handler);
             }
-
-            continue;
         }
 
-        if (false === ($chosenHandler instanceof AbstractCacheEngine)) {
-            throw new RuntimeException(
-                'Could not find requested cache handler type "%s" in "%s".',
-                null, null, null, $forceSelection, __METHOD__
-            );
-        }
-
-        if (null !== $chosenHandler) {
-            $this->setActiveHandler($chosenHandler);
-        }
-
-        return $this;
+        throw new RuntimeException(
+            'Could not find requested cache handler type "%s" in "%s".',
+            null, null, null, (string) $forceType, __METHOD__
+        );
     }
 }
 

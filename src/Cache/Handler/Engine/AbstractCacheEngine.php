@@ -134,7 +134,7 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isInitialized()
     {
@@ -142,7 +142,7 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
     }
 
     /**
-     * @param boolean $initialized
+     * @param bool $initialized
      *
      * @return $this
      */
@@ -359,7 +359,7 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
     public function get(...$keyValues)
     {
         if ($this->lazyInitialize() === false) {
-            return null;
+            return;
         }
 
         $data = $this->getUsingHandler(
@@ -381,8 +381,8 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
     /**
      * Set a cached value; will overwrite a value with the same key silently.
      *
-     * @param string|int|object|callable  $data
-     * @param mixed,...                   $keyValues
+     * @param string|int|object|callable $data
+     * @param mixed,...                  $keyValues
      *
      * @return bool
      */

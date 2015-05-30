@@ -19,7 +19,7 @@ use Scribe\Utility\UnitTest\AbstractMantleTestCase;
 /**
  * Class CacheChainAwareDeprecatedTest.
  */
-class ChainAwareAwareTest extends AbstractMantleTestCase
+class CacheChainAwareTest extends AbstractMantleTestCase
 {
     /**
      * @var ChainChainAware

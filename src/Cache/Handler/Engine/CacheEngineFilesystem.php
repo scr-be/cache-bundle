@@ -48,14 +48,12 @@ class CacheEngineFilesystem extends AbstractCacheEngine
      */
     public function proposeCacheDirectory($directory)
     {
-
         if (false === mb_strpos($directory, $this->cacheDirectoryRequirement)) {
             $directory .= DIRECTORY_SEPARATOR.$this->cacheDirectoryRequirement;
         }
 
         if ((true === is_dir($directory) && true === is_writable($directory)) ||
-            (true === mkdir($directory, 0777, true)))
-        {
+            (true === mkdir($directory, 0777, true))) {
             $this->setCacheDirectory($directory);
         }
     }

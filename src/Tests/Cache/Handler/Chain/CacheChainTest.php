@@ -402,7 +402,7 @@ class CacheChainTest extends AbstractMantleKernelTestCase
      */
     public function testFilesystemHandlerCanCache2()
     {
-        $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
+        $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
         $object = new \stdClass();
         $object->name = 'test field';
 
@@ -422,7 +422,7 @@ class CacheChainTest extends AbstractMantleKernelTestCase
      */
     public function testFilesystemHandlerCanCache3()
     {
-        $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
+        $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
         $object = new \stdClass();
         $object->name = 'test field';
 
@@ -439,7 +439,7 @@ class CacheChainTest extends AbstractMantleKernelTestCase
      */
     public function testFilesystemHandlerCanCache4()
     {
-        $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
+        $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
         $object = new \stdClass();
         $object->name = 'test field 2';
 
@@ -460,7 +460,7 @@ class CacheChainTest extends AbstractMantleKernelTestCase
      */
     public function testFilesystemHandlerCanCacheAndDelete()
     {
-        $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
+        $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
         $chain->flushAll();
 
         $object = new \stdClass();

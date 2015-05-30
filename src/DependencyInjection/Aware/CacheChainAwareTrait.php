@@ -39,7 +39,7 @@ trait CacheChainAwareTrait
     }
 
     /**
-     * Returns the provided cache chain
+     * Returns the provided cache chain.
      *
      * @return CacheChainInterface
      */

@@ -96,8 +96,7 @@ class CacheEngineDatabase extends AbstractCacheEngine
         }
 
         if ($this->itemRepo === null || $this->prefixRepo === null || $this->em === null ||
-            $this->isSupported() === false || $this->isEnabled() === false)
-        {
+            $this->isSupported() === false || $this->isEnabled() === false) {
             return false;
         }
 

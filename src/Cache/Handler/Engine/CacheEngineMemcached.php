@@ -93,12 +93,12 @@ class CacheEngineMemcached extends AbstractCacheEngine
      * @var string[]
      */
     protected static $optionTypes = [
-        'serializer'           => Memcached::OPT_SERIALIZER,
+        'serializer' => Memcached::OPT_SERIALIZER,
         'libketama_compatible' => Memcached::OPT_LIBKETAMA_COMPATIBLE,
-        'io_no_block'          => Memcached::OPT_NO_BLOCK,
-        'tcp_no_delay'         => Memcached::OPT_TCP_NODELAY,
-        'compression'          => Memcached::OPT_COMPRESSION,
-        'compression_method'   => Memcached::OPT_COMPRESSION_TYPE,
+        'io_no_block' => Memcached::OPT_NO_BLOCK,
+        'tcp_no_delay' => Memcached::OPT_TCP_NODELAY,
+        'compression' => Memcached::OPT_COMPRESSION,
+        'compression_method' => Memcached::OPT_COMPRESSION_TYPE,
     ];
 
     /**
@@ -109,11 +109,11 @@ class CacheEngineMemcached extends AbstractCacheEngine
     protected static $optionValues = [
         'serializer' => [
             'igbinary' => Memcached::SERIALIZER_IGBINARY,
-            'json'     => Memcached::SERIALIZER_JSON,
-            'php'      => Memcached::SERIALIZER_PHP,
+            'json' => Memcached::SERIALIZER_JSON,
+            'php' => Memcached::SERIALIZER_PHP,
         ],
-        'compression_method'  => [
-            'zlib'   => Memcached::COMPRESSION_ZLIB,
+        'compression_method' => [
+            'zlib' => Memcached::COMPRESSION_ZLIB,
             'fastlz' => Memcached::COMPRESSION_FASTLZ,
         ],
     ];
@@ -156,7 +156,7 @@ class CacheEngineMemcached extends AbstractCacheEngine
     }
 
     /**
-     * Utilize lazy initialization to avoid needless creation of the memcached object
+     * Utilize lazy initialization to avoid needless creation of the memcached object.
      *
      * @return bool
      */

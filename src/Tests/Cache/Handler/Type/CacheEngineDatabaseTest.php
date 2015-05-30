@@ -242,11 +242,13 @@ class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
         sleep(2);
 
         foreach (range(1, 2000) as $i) {
-            $this->type->setManagerAndRepositories(
+            $type = clone $this->type;
+            $type->setManagerAndRepositories(
                 static::$staticContainer->get('doctrine.orm.default_entity_manager'),
                 static::$staticContainer->get('s.cache.engine_database_item.repo'),
                 static::$staticContainer->get('s.cache.engine_database_prefix.repo')
             );
+            static::assertNull($type->get(['random', 'key']));
         }
 
         static::assertNotEquals($val1, $chain->get(...$key1));

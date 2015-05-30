@@ -111,6 +111,19 @@ class CacheEngineMockTest extends PHPUnit_Framework_TestCase
             $this->type->getType(true)
         );
     }
+
+    /**
+     * @group CacheEngine
+     * @group CacheEngineMock
+     */
+    public function testMutators()
+    {
+        static::assertNull($this->type->get('something'));
+        static::assertFalse($this->type->set('something', 'something'));
+        static::assertFalse($this->type->has('something'));
+        static::assertFalse($this->type->del('something'));
+        static::assertFalse($this->type->flushAll());
+    }
 }
 
 /* EOF */

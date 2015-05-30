@@ -27,18 +27,6 @@ class CacheEngineMock extends AbstractCacheEngine
     }
 
     /**
-     * Overwrite parent implementation of set key for mockery handler type.
-     *
-     * @param mixed,... $keyValues
-     *
-     * @return $this
-     */
-    public function setKey(...$keyValues)
-    {
-        return $this;
-    }
-
-    /**
      * Overwrite parent implementation of get key for mockery handler type.
      *
      * @return string|null
@@ -46,6 +34,18 @@ class CacheEngineMock extends AbstractCacheEngine
     public function getKey()
     {
         return;
+    }
+
+    /**
+     * Overwrite parent implementation of set key for mockery handler type.
+     *
+     * @param mixed,... $keyValues
+     *
+     * @return $this;
+     */
+    public function setKey(...$keyValues)
+    {
+        return $this;
     }
 
     /**
@@ -59,6 +59,65 @@ class CacheEngineMock extends AbstractCacheEngine
     }
 
     /**
+     * Overwrite parent implementation of get for mockery handler type.
+     *
+     * @param mixed,... $keyValues
+     *
+     * @return null
+     */
+    public function get(...$keyValues)
+    {
+        return $this->getUsingHandler($keyValues);
+    }
+
+    /**
+     * Overwrite parent implementation of set for mockery handler type.
+     *
+     * @param string|int|object|callable  $data
+     * @param mixed,...                   $keyValues
+     *
+     * @return bool
+     */
+    public function set($data, ...$keyValues)
+    {
+        return $this->setUsingHandler($data, $keyValues);
+    }
+
+    /**
+     * Overwrite parent implementation of has for mockery handler type.
+     *
+     * @param string,... $key
+     *
+     * @return bool
+     */
+    public function has(...$key)
+    {
+        return $this->hasUsingHandler($key);
+    }
+
+    /**
+     * Overwrite parent implementation of del for mockery handler type.
+     *
+     * @param string,... $keyValues
+     *
+     * @return bool
+     */
+    public function del(...$keyValues)
+    {
+        return $this->delUsingHandler($keyValues);
+    }
+
+    /**
+     * Overwrite parent implementation of flushAll for mockery handler type.
+     *
+     * @return bool
+     */
+    public function flushAll()
+    {
+        return $this->flushAllUsingHandler();
+    }
+
+    /**
      * Retrieve the cached data using the provided key.
      *
      * @param string $key
@@ -67,7 +126,7 @@ class CacheEngineMock extends AbstractCacheEngine
      */
     protected function getUsingHandler($key)
     {
-        return;
+        return null;
     }
 
     /**

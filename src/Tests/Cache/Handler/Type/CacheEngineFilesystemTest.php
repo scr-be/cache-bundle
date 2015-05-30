@@ -62,6 +62,29 @@ class CacheEngineFilesystemTest extends AbstractMantleTestCase
      * @group CacheEngine
      * @group CacheEngineFilesystem
      */
+    public function testInitOnGet()
+    {
+        $type = $this->getNewHandlerType();
+        $type->get('something');
+        static::assertTrue($type->isInitialized());
+    }
+
+    /**
+     * @group CacheEngine
+     * @group CacheEngineFilesystem
+     */
+    public function testInitOnGetAndDisabled()
+    {
+        $type = $this->getNewHandlerType();
+        $type->setEnabled(false);
+        $type->get('something');
+        static::assertTrue($type->isInitialized());
+    }
+
+    /**
+     * @group CacheEngine
+     * @group CacheEngineFilesystem
+     */
     public function testGetWithoutKeyExceptionHandling()
     {
         $this->setExpectedExceptionRegExp(

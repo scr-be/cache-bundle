@@ -63,6 +63,11 @@ class ChainAwareAwareTest extends AbstractMantleTestCase
         static::assertFalse($this->chainAware->hasCacheChain());
         static::assertEquals($chainHandler, $this->chainAware->getCacheChain());
         static::assertInstanceOf('Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineMock', $this->chainAware->getCacheChain()->getActiveHandler());
+
+        static::assertFalse($this->chainAware->getCacheChain()->hasActiveHandler());
+
+        $this->chainAware->getCacheChain()->addHandler($this->chainAware->getCacheChain()->getActiveHandler());
+        static::assertFalse($this->chainAware->getCacheChain()->hasActiveHandler());
     }
 }
 

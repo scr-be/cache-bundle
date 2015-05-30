@@ -168,7 +168,7 @@ class CacheEngineDatabase extends AbstractCacheEngine
      */
     public function flushStaleItems()
     {
-        if (false === $this->isInitialized()) {
+        if ($this->lazyInitialize() === false) {
             return false;
         }
 

@@ -184,7 +184,6 @@ abstract class AbstractCacheChain extends AbstractHandler implements CacheChainI
      */
     public function hasActiveHandler($filterOutMockedHandlers = true)
     {
-
         return (bool) ($this->activeHandler instanceof AbstractCacheEngine);
     }
 

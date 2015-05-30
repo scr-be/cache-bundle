@@ -217,7 +217,7 @@ class CacheEngineMemcached extends AbstractCacheEngine
      */
     public function getOption($memcachedOptionConstant)
     {
-        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+        if ($this->lazyInitialize() === false) {
             return false;
         }
 

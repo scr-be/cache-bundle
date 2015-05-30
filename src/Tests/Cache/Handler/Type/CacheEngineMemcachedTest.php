@@ -40,6 +40,11 @@ class CacheEngineMemcachedTest extends AbstractMantleKernelTestCase
     public $type;
 
     /**
+     * @var CacheEngineMemcached
+     */
+    public $typeClean;
+
+    /**
      * @var ContainerInterface
      */
     public $container;
@@ -64,6 +69,7 @@ class CacheEngineMemcachedTest extends AbstractMantleKernelTestCase
         if (null === $memcachedHandler) {
             throw new \PHPUnit_Framework_Exception('Could not find Memcached Handler');
         }
+        $this->typeClean = clone $memcachedHandler;
         $this->chain->setActiveHandler($memcachedHandler);
         $this->type = $this->chain->getActiveHandler();
     }
@@ -109,6 +115,52 @@ class CacheEngineMemcachedTest extends AbstractMantleKernelTestCase
         $supportedDecider = function () { return false; };
 
         return $this->getNewHandlerTypeEmpty(new KeyGenerator(), 1800, 1, false, $supportedDecider)->setOptions([])->setServers([]);
+    }
+
+    /**
+     * @group CacheEngine
+     * @group CacheEngineMemcached
+     */
+    public function testInitOnGet()
+    {
+        $type = clone $this->typeClean;
+        $type->get('something');
+        static::assertTrue($type->isInitialized());
+    }
+
+    /**
+     * @group CacheEngine
+     * @group CacheEngineMemcached
+     */
+    public function testInitOnGetAndDisabled()
+    {
+        $type = clone $this->typeClean;
+        $type->setEnabled(false);
+        $type->get('something');
+        static::assertFalse($type->isInitialized());
+    }
+
+    /**
+     * @group CacheEngine
+     * @group CacheEngineMemcached
+     */
+    public function testGetOptionOnNonInitialized()
+    {
+        $type = clone $this->typeClean;
+        $type->getOption(\Memcached::COMPRESSION_ZLIB);
+        static::assertTrue($type->isInitialized());
+    }
+
+    /**
+     * @group CacheEngine
+     * @group CacheEngineMemcached
+     */
+    public function testGetOptionOnNonInitializedAndDisabled()
+    {
+        $type = clone $this->typeClean;
+        $type->setEnabled(false);
+        $type->getOption(\Memcached::COMPRESSION_ZLIB);
+        static::assertFalse($type->isInitialized());
     }
 
     /**

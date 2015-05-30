@@ -358,7 +358,7 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
      */
     public function get(...$keyValues)
     {
-        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+        if ($this->lazyInitialize() === false) {
             return null;
         }
 
@@ -388,7 +388,7 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
      */
     public function set($data, ...$keyValues)
     {
-        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+        if ($this->lazyInitialize() === false) {
             return false;
         }
 
@@ -417,7 +417,7 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
      */
     public function has(...$keyValues)
     {
-        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+        if ($this->lazyInitialize() === false) {
             return false;
         }
 
@@ -444,7 +444,7 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
      */
     public function del(...$keyValues)
     {
-        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+        if ($this->lazyInitialize() === false) {
             return false;
         }
 
@@ -471,7 +471,7 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
      */
     public function flushAll()
     {
-        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+        if ($this->lazyInitialize() === false) {
             return false;
         }
 
@@ -506,10 +506,6 @@ abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngin
      */
     protected function getCurrentKey(...$keyValues)
     {
-        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
-            return false;
-        }
-
         if (count($keyValues) > 0) {
             $this->setKey(...$keyValues);
         }

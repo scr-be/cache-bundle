@@ -17,9 +17,9 @@ use Scribe\Doctrine\Behavior\Model\Sluggable\SluggableBehaviorTrait;
 use Scribe\Doctrine\Exception\SubscriberEventORMException;
 
 /**
- * Class CacheDBHandlerPrefix.
+ * Class CacheEngineDatabasePrefix.
  */
-class CacheDBHandlerPrefix extends AbstractEntity
+class CacheEngineDatabasePrefix extends AbstractEntity
 {
     use SluggableBehaviorTrait;
 
@@ -48,8 +48,8 @@ class CacheDBHandlerPrefix extends AbstractEntity
     public function getAutoSlugFields()
     {
         throw new SubscriberEventORMException(
-            'This entity does not support automatically generating slugs!',
-            SubscriberEventORMException::CODE_ORM_GENERIC
+            'This entity does not support automatically generating slugs in "%s"!',
+            SubscriberEventORMException::CODE_ORM_GENERIC, null, null, __METHOD__
         );
     }
 
@@ -86,11 +86,11 @@ class CacheDBHandlerPrefix extends AbstractEntity
     /**
      * Search the item associations for the provided item.
      *
-     * @param CacheDbHandlerItem $item
+     * @param CacheEngineDatabaseItem $item
      *
      * @return bool
      */
-    public function hasItem(CacheDbHandlerItem $item)
+    public function hasItem(CacheEngineDatabaseItem $item)
     {
         if ($this->items->contains($item)) {
             return true;

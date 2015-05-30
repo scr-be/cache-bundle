@@ -1,0 +1,18 @@
+Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix:
+
+    type:            entity
+    table:           CacheBundle_Engine_Database_Prefix
+    repositoryClass: Scribe\CacheBundle\Doctrine\Repository\Cache\CacheEngineDatabasePrefixRepository
+
+    id:
+
+        id:
+            type:      integer
+            id:        true
+            generator: { strategy: AUTO }
+
+    oneToMany:
+
+        items:
+            targetEntity: CacheEngineDatabaseItem
+            mappedBy:     prefix

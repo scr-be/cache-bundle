@@ -33,7 +33,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->append($this->getGlobalNode())
-                ->append($this->getHandlersNode())
+                ->append($this->getEngineNode())
             ->end()
         ;
 
@@ -72,15 +72,15 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getHandlersNode()
+    private function getEngineNode()
     {
         return (new TreeBuilder())
-            ->root('handlers')
+            ->root('engine')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerMemcachedNode())
-                ->append($this->getHandlerDBNode())
-                ->append($this->getHandlerFilesystemNode())
+                ->append($this->getEngineMemcachedNode())
+                ->append($this->getEngineDatabaseNode())
+                ->append($this->getEngineFilesystemNode())
             ->end()
         ;
     }
@@ -92,7 +92,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getHandlerInnerGenericNode($priority)
+    private function getEngineInnerGenericNode($priority)
     {
         return (new TreeBuilder())
             ->root('general')
@@ -125,13 +125,13 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getHandlerMemcachedNode()
+    private function getEngineMemcachedNode()
     {
         return (new TreeBuilder())
             ->root('memcached')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerInnerGenericNode(1))
+                ->append($this->getEngineInnerGenericNode(1))
                 ->arrayNode('internals_list')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -210,13 +210,13 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getHandlerFilesystemNode()
+    private function getEngineFilesystemNode()
     {
         return (new TreeBuilder())
             ->root('filesystem')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerInnerGenericNode(3))
+                ->append($this->getEngineInnerGenericNode(3))
                 ->scalarNode('cache_dir')
                     ->isRequired()
                     ->defaultValue('/tmp')
@@ -231,13 +231,13 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getHandlerDBNode()
+    private function getEngineDatabaseNode()
     {
         return (new TreeBuilder())
             ->root('db')
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getHandlerInnerGenericNode(2))
+                ->append($this->getEngineInnerGenericNode(2))
             ->end()
         ;
     }

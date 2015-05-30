@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Cache\Handler\Type;
+namespace Scribe\CacheBundle\Cache\Handler\Engine;
 
 /**
- * Class HandlerTypeFilesystem.
+ * Class CacheEngineFilesystem.
  */
-class HandlerTypeFilesystem extends AbstractHandlerType
+class CacheEngineFilesystem extends AbstractCacheEngine
 {
     /**
      * @var string
@@ -26,19 +26,17 @@ class HandlerTypeFilesystem extends AbstractHandlerType
      *
      * @var string|null
      */
-    protected $cacheDirectory = null;
+    protected $cacheDirectory;
 
     /**
-     * Check if the handler type is supported by the current environment.
+     * Check if the handler type is supported using the default decider implementation.
+     *
+     * @param mixed,... $by
      *
      * @return bool
      */
-    public function isSupported(...$by)
+    protected function isSupportedDefaultDecider(...$by)
     {
-        if (null !== ($decision = $this->callSupportedDecider())) {
-            return (bool) $decision;
-        }
-
         return (bool) (true === $this->hasCacheDirectory());
     }
 
@@ -50,12 +48,14 @@ class HandlerTypeFilesystem extends AbstractHandlerType
      */
     public function proposeCacheDirectory($directory)
     {
+
         if (false === mb_strpos($directory, $this->cacheDirectoryRequirement)) {
             $directory .= DIRECTORY_SEPARATOR.$this->cacheDirectoryRequirement;
         }
 
         if ((true === is_dir($directory) && true === is_writable($directory)) ||
-            (true === mkdir($directory, 0777, true))) {
+            (true === mkdir($directory, 0777, true)))
+        {
             $this->setCacheDirectory($directory);
         }
     }

@@ -11,26 +11,27 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
-use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeInterface;
+use Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine;
+use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineInterface;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
+use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
 
 /**
- * Class HandlerChain.
+ * Class CacheChain.
  */
-class HandlerChain extends AbstractHandlerChain
+class CacheChain extends AbstractCacheChain
 {
     /**
      * Stack the provided handler in the correct position on the handlers stack,
      * verifying that another handler does not already have the same priority.
      *
-     * @param HandlerTypeInterface $handler
+     * @param CompilerPassHandlerInterface|\Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineInterface $handler
      *
      * @return $this
      *
      * @throws RuntimeException
      */
-    protected function determineStackPosition(HandlerTypeInterface $handler)
+    protected function determineStackPosition(CompilerPassHandlerInterface $handler)
     {
         static $internalHandlerPriority = 100;
 
@@ -39,11 +40,10 @@ class HandlerChain extends AbstractHandlerChain
         }
 
         if (true === array_key_exists($handlerPriority, $this->handlers)) {
-            throw new RuntimeException(sprintf(
-               'A duplicate priority of %d cannot be set for %s. Please review your config.',
-               $handlerPriority,
-               $handler->getType()
-           ));
+            throw new RuntimeException(
+                'A duplicate priority of %d cannot be set for %s. Please review your config. ("%s")',
+                null, null, null, $handlerPriority, $handler->getType(), __METHOD__
+           );
         }
 
         $this->handlers[$handlerPriority] = $handler;
@@ -56,19 +56,19 @@ class HandlerChain extends AbstractHandlerChain
      * handler by processing them by priority (index value) and checking for the
      * first handler type that is both enabled and supported.
      *
-     * @param null|string|AbstractHandlerType $forceSelection
+     * @param null|string|AbstractCacheEngine $forceType
      *
      * @return $this
      */
-    protected function determineActiveHandler($forceSelection = null)
+    protected function determineActiveHandler($forceType = null)
     {
         ksort($this->handlers);
 
-        if (null === $forceSelection) {
+        if (null === $forceType) {
             return $this->determineActiveHandlerAutomatic();
         }
 
-        return $this->determineActiveHandlerForced($forceSelection);
+        return $this->determineActiveHandlerForced($forceType);
     }
 
     /**
@@ -86,17 +86,17 @@ class HandlerChain extends AbstractHandlerChain
             }
         }
 
-        if ($chosenHandler instanceof AbstractHandlerType) {
+        if ($chosenHandler instanceof AbstractCacheEngine) {
             $this->setActiveHandler($chosenHandler);
         } else {
-            $this->unsetActiveHandlerType();
+            $this->clearActiveHandlerType();
         }
 
         return $this;
     }
 
     /**
-     * @param null|string|AbstractHandlerType $forceSelection
+     * @param null|string|AbstractCacheEngine $forceSelection
      *
      * @throws RuntimeException
      *
@@ -105,7 +105,7 @@ class HandlerChain extends AbstractHandlerChain
     protected function determineActiveHandlerForced($forceSelection)
     {
         $chosenHandler = null;
-        $forceSelection = $forceSelection instanceof AbstractHandlerType ?
+        $forceSelection = $forceSelection instanceof AbstractCacheEngine ?
             strtolower($forceSelection->getType()) : strtolower($forceSelection);
 
         foreach ($this->handlers as $handler) {
@@ -118,12 +118,10 @@ class HandlerChain extends AbstractHandlerChain
             continue;
         }
 
-        if (false === ($chosenHandler instanceof AbstractHandlerType)) {
+        if (false === ($chosenHandler instanceof AbstractCacheEngine)) {
             throw new RuntimeException(
-                sprintf(
-                    'Could not find requested cache handler type "%s".',
-                    $forceSelection
-                )
+                'Could not find requested cache handler type "%s" in "%s".',
+                null, null, null, $forceSelection, __METHOD__
             );
         }
 

@@ -11,20 +11,20 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Type;
 
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem;
+use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineFilesystem;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 use Scribe\Utility\UnitTest\AbstractMantleTestCase;
 
 /**
- * Class HandlerTypeFilesystem.
+ * Class CacheEngineFilesystem.
  */
-class HandlerTypeFilesystemTest extends AbstractMantleTestCase
+class CacheEngineFilesystemTest extends AbstractMantleTestCase
 {
-    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem';
+    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineFilesystem';
 
     /**
-     * @var HandlerTypeFilesystem
+     * @var \Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineFilesystem
      */
     public $type;
 
@@ -48,7 +48,7 @@ class HandlerTypeFilesystemTest extends AbstractMantleTestCase
 
     public function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
-        return new HandlerTypeFilesystem($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
+        return new \Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineFilesystem($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
     }
 
     public function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
@@ -59,11 +59,15 @@ class HandlerTypeFilesystemTest extends AbstractMantleTestCase
     }
 
     /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Cannot attempt to get a cached value without setting a key to retrieve it.
+     * @group CacheEngine
+     * @group CacheEngineFilesystem
      */
     public function testGetWithoutKeyExceptionHandling()
     {
+        $this->setExpectedExceptionRegExp(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException'
+        );
+
         $this
             ->getNewHandlerType()
             ->get()
@@ -71,11 +75,16 @@ class HandlerTypeFilesystemTest extends AbstractMantleTestCase
     }
 
     /**
-     * @expectedException        Scribe\CacheBundle\Exceptions\RuntimeException
-     * @expectedExceptionMessage You cannot cache a resource data type.
+     * @group CacheEngine
+     * @group CacheEngineFilesystem
      */
     public function testSetCacheValueAsResourceExceptionHandling()
     {
+        $this->setExpectedExceptionRegExp(
+            'Scribe\CacheBundle\Exceptions\RuntimeException',
+            '#As a resource cannot be serialized it cannot be passed as a cache value in .*#'
+        );
+
         $this
             ->getNewHandlerType()
             ->setKey('a', 'b', 'c')
@@ -83,16 +92,24 @@ class HandlerTypeFilesystemTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group CacheEngine
+     * @group CacheEngineFilesystem
+     */
     public function testToString()
     {
-        $this->assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, (string) $this->type);
-        $this->assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, $this->type->__toString());
+        static::assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, (string) $this->type);
+        static::assertEquals(self::FULLY_QUALIFIED_CLASS_NAME, $this->type->__toString());
     }
 
+    /**
+     * @group CacheEngine
+     * @group CacheEngineFilesystem
+     */
     public function testGetType()
     {
-        $this->assertEquals('filesystem', $this->type->getType());
-        $this->assertEquals(
+        static::assertEquals('filesystem', $this->type->getType());
+        static::assertEquals(
             self::FULLY_QUALIFIED_CLASS_NAME,
             $this->type->getType(true)
         );
@@ -102,7 +119,7 @@ class HandlerTypeFilesystemTest extends AbstractMantleTestCase
     {
         $type = $this->getNewHandlerTypeNotSupported();
 
-        $this->assertFalse($type->isSupported());
+        static::assertFalse($type->isSupported());
     }
 
     public function tearDown()

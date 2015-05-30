@@ -1,8 +1,8 @@
-Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem:
+Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem:
 
     type:            entity
-    table:           CacheBundle_DatabaseHandler_Item
-    repositoryClass: Scribe\CacheBundle\Doctrine\Repository\Cache\CacheDBHandlerItemRepository
+    table:           CacheBundle_Engine_Database_Item
+    repositoryClass: Scribe\CacheBundle\Doctrine\Repository\Cache\CacheEngineDatabaseItemRepository
 
     id:
 
@@ -27,7 +27,7 @@ Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem:
     manyToOne:
 
         prefix:
-            targetEntity: CacheDBHandlerPrefix
+            targetEntity: CacheEngineDatabasePrefix
             inversedBy:   items
             joinColumn:
                 name:            prefixId

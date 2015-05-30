@@ -17,16 +17,16 @@ use Scribe\Doctrine\Behavior\Model\Sluggable\SluggableBehaviorTrait;
 use Scribe\Doctrine\Behavior\Model\Timestampable\TimestampableBehaviorTrait;
 
 /**
- * Class CacheDBHandlerItem.
+ * Class CacheEngineDatabaseItem.
  */
-class CacheDBHandlerItem extends AbstractEntity
+class CacheEngineDatabaseItem extends AbstractEntity
 {
     use SluggableBehaviorTrait,
         TimestampableBehaviorTrait,
         HasValue;
 
     /**
-     * @var CacheDBHandlerPrefix|null
+     * @var CacheEngineDatabasePrefix|null
      */
     private $prefix;
 
@@ -63,11 +63,11 @@ class CacheDBHandlerItem extends AbstractEntity
     /**
      * Set prefix association.
      *
-     * @param CacheDBHandlerPrefix|null $prefix
+     * @param CacheEngineDatabasePrefix|null $prefix
      *
      * @return $this
      */
-    public function setPrefix(CacheDBHandlerPrefix $prefix = null)
+    public function setPrefix(CacheEngineDatabasePrefix $prefix = null)
     {
         $this->prefix = $prefix;
 
@@ -77,7 +77,7 @@ class CacheDBHandlerItem extends AbstractEntity
     /**
      * Get prefix association.
      *
-     * @return CacheDBHandlerPrefix|null
+     * @return CacheEngineDatabasePrefix|null
      */
     public function getPrefix()
     {

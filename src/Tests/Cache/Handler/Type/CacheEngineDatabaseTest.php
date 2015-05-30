@@ -19,28 +19,25 @@ use Faker\ORM\Doctrine\Populator;
 use Scribe\Utility\Serializer\Serializer;
 use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB;
-use Scribe\CacheBundle\Cache\Handler\Chain\AbstractHandlerChain;
+use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase;
+use Scribe\CacheBundle\Cache\Handler\Chain\AbstractCacheChain;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 
 /**
- * Class HandlerTypeDBTest.
- *
- *
- * @Title("DB Cache Handler Test")
+ * Class CacheEngineDatabaseTest.
  */
-class HandlerTypeDBTest extends AbstractMantleKernelTestCase
+class CacheEngineDatabaseTest extends AbstractMantleKernelTestCase
 {
-    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB';
+    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase';
 
     /**
-     * @var AbstractHandlerChain
+     * @var AbstractCacheChain
      */
     public $chain;
 
     /**
-     * @var HandlerTypeDB
+     * @var \Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase
      */
     public $type;
 
@@ -58,8 +55,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     {
         parent::setUp();
 
-        $this->chain = $this->container->get('s.cache.handler_chain');
-        $this->chain->reDetermineActiveHandler('db');
+        $this->chain = $this->container->get('s.cache.chain');
+        $this->chain->reDetermineActiveHandler('database');
         $this->type = $this->chain->getActiveHandler();
     }
 
@@ -74,7 +71,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     /**
      * getNewHandlerType.
      *
-     * @return HandlerTypeDB
+     * @return \Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase
      */
     public function getNewHandlerType()
     {
@@ -90,11 +87,11 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
      * @param bool                  $disabled
      * @param callable              $supportedDecider
      *
-     * @return HandlerTypeDB
+     * @return \Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase
      */
     public function getNewHandlerTypeEmpty(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false, callable $supportedDecider = null)
     {
-        return new HandlerTypeDB($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
+        return new \Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
     }
 
     /**
@@ -105,7 +102,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
      * @param null                  $priority
      * @param bool                  $disabled
      *
-     * @return HandlerTypeDB
+     * @return \Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase
      */
     public function getNewHandlerTypeNotSupported(KeyGeneratorInterface $keyGenerator = null, $ttl = 1800, $priority = null, $disabled = false)
     {
@@ -115,7 +112,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerInNotSupportedState()
     {
@@ -124,10 +122,10 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
             10, 1, false, function() { return false; }
         );
 
-        $handler->initManagerAndRepositories(
+        $handler->setManagerAndRepositories(
             static::$staticContainer->get('doctrine.orm.default_entity_manager'),
-            static::$staticContainer->get('s.cache.cache_db_handler_item.repo'),
-            static::$staticContainer->get('s.cache.cache_db_handler_prefix.repo')
+            static::$staticContainer->get('s.cache.engine_database_item.repo'),
+            static::$staticContainer->get('s.cache.engine_database_prefix.repo')
         );
 
         static::assertFalse($handler->flushStaleItems());
@@ -138,19 +136,20 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerInDisabledStateWithCustomDecider()
     {
         $handler = $this->getNewHandlerTypeEmpty(
             static::$staticContainer->get('s.cache.key_generator'),
-            10, 1, true, function() { return true; }
+            10, 1, true, function() { return false; }
         );
 
-        $handler->initManagerAndRepositories(
+        $handler->setManagerAndRepositories(
             static::$staticContainer->get('doctrine.orm.default_entity_manager'),
-            static::$staticContainer->get('s.cache.cache_db_handler_item.repo'),
-            static::$staticContainer->get('s.cache.cache_db_handler_prefix.repo')
+            static::$staticContainer->get('s.cache.engine_database_item.repo'),
+            static::$staticContainer->get('s.cache.engine_database_prefix.repo')
         );
 
         static::assertFalse($handler->isSupported());
@@ -162,7 +161,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerInDisabledStateWithDefaultDecider()
     {
@@ -171,10 +171,10 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
             10, 1, true, null
         );
 
-        $handler->initManagerAndRepositories(
+        $handler->setManagerAndRepositories(
             static::$staticContainer->get('doctrine.orm.default_entity_manager'),
-            static::$staticContainer->get('s.cache.cache_db_handler_item.repo'),
-            static::$staticContainer->get('s.cache.cache_db_handler_prefix.repo')
+            static::$staticContainer->get('s.cache.engine_database_item.repo'),
+            static::$staticContainer->get('s.cache.engine_database_prefix.repo')
         );
 
         static::assertFalse($handler->isSupported());
@@ -186,20 +186,22 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testGetWithoutKeyExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
-            'Cannot attempt to get a cached value without setting a key to retrieve it.'
+            '#Cannot attempt to get a cached value without setting a key to retrieve it in .*#'
         );
 
         $this->type->get();
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testToStringFQN()
     {
@@ -208,11 +210,12 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testGetType()
     {
-        static::assertEquals('db', $this->type->getType());
+        static::assertEquals('database', $this->type->getType());
         static::assertEquals(
             self::FULLY_QUALIFIED_CLASS_NAME,
             $this->type->getType(true)
@@ -220,7 +223,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testRandomInitRepositoryStaleFlush()
     {
@@ -238,10 +242,10 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         sleep(2);
 
         foreach (range(1, 2000) as $i) {
-            $this->type->initManagerAndRepositories(
+            $this->type->setManagerAndRepositories(
                 static::$staticContainer->get('doctrine.orm.default_entity_manager'),
-                static::$staticContainer->get('s.cache.cache_db_handler_item.repo'),
-                static::$staticContainer->get('s.cache.cache_db_handler_prefix.repo')
+                static::$staticContainer->get('s.cache.engine_database_item.repo'),
+                static::$staticContainer->get('s.cache.engine_database_prefix.repo')
             );
         }
 
@@ -253,7 +257,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerCanCacheAndFlushAll()
     {
@@ -273,7 +278,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerCanCacheAndFlushStale()
     {
@@ -302,7 +308,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerCanCacheAndCheck()
     {
@@ -326,7 +333,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerCanFlushAll()
     {
@@ -360,7 +368,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testDBHandlerCanCacheWithValidateTtl()
     {
@@ -399,7 +408,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerCanCacheAndDelete()
     {
@@ -434,7 +444,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testIsNotSupported()
     {
@@ -447,7 +458,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testIsNotSupportedInternalCalls()
     {
@@ -455,24 +467,24 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $this->type->setSupportedDecider($decider);
 
         static::assertFalse($this->type->isSupported());
-        return;
 
         $this->type->__construct(
             new KeyGenerator()
         );
-        $this->type->initManagerAndRepositories(
+        $this->type->setManagerAndRepositories(
             $this->container->get('doctrine.orm.entity_manager'),
-            $this->container->get('s.cache.cache_db_handler_item.repo'),
-            $this->container->get('s.cache.cache_db_handler_prefix.repo')
+            $this->container->get('s.cache.engine_database_item.repo'),
+            $this->container->get('s.cache.engine_database_prefix.repo')
         );
 
-        $this->type->unsetSupportedDecider();
+        $this->type->clearSupportedDecider();
 
         static::assertTrue($this->type->isSupported());
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerCanChangeTtl()
     {
@@ -511,7 +523,8 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      */
     public function testHandlerReturnsNullOnDelOfInvalidItem()
     {
@@ -521,15 +534,16 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
     }
 
     /**
-     * @group CacheHandlerTypeDB
+     * @group CacheEngine
+     * @group CacheEngineDatabase
      * @group Faker
      */
     public function testLotsOfDataWithFaker()
     {
         $em = $this->getEm();
 
-        $prefixRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix');
-        $itemRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem');
+        $prefixRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix');
+        $itemRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem');
         $prefixes = $prefixRepo->findAll();
         $items = $itemRepo->findAll();
 
@@ -552,7 +566,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         $slugger = function() use ($faker) { return 'slug_'.$faker->randomNumber(6); };
 
         $populator = new Populator($faker, $em);
-        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix', 10, [
+        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix', 10, [
             'slug' => $slugger
         ]);
         $populator->execute($em);
@@ -569,7 +583,7 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
             $prefixIds[] = $p->getId();
         }
 
-        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem', 1000, [
+        $populator->addEntity('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem', 1000, [
             'k' => function() use ($faker, $keyGenerator) { return $keyGenerator->getKey($faker->paragraph(1), $faker->paragraph(1)); },
             'value' => function() use ($faker) { return $faker->sentence(50); },
             'slug' => $slugger,
@@ -592,29 +606,29 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
             static::assertTrue(gettype($i->getK()) === 'string');
             static::assertTrue(gettype($i->getValue()) === 'string');
             static::assertTrue(gettype($i->getTtl()) === 'integer');
-            static::assertInstanceOf('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix', $i->getPrefix());
+            static::assertInstanceOf('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix', $i->getPrefix());
             static::assertTrue(in_array($i->getPrefix()->getId(), $prefixIds, true));
 
             $em->remove($i);
         }
 
         $em->flush();
-        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem');
+        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem');
 
         foreach ($prefixes as $p) {
             $em->remove($p);
         }
 
         $em->flush();
-        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix');
+        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix');
     }
 
     public function tearDown()
     {
         $em = $this->getEm();
 
-        $prefixRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix');
-        $itemRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem');
+        $prefixRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix');
+        $itemRepo = $em->getRepository('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem');
         $prefixes = $prefixRepo->findAll();
         $items = $itemRepo->findAll();
 
@@ -623,21 +637,21 @@ class HandlerTypeDBTest extends AbstractMantleKernelTestCase
         }
 
         $em->flush();
-        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem');
+        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem');
 
         foreach ($prefixes as $p) {
             $em->remove($p);
         }
 
         $em->flush();
-        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix');
+        $em->clear('Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix');
 
-        if ($this->chain instanceof AbstractHandlerChain) {
+        if ($this->chain instanceof AbstractCacheChain) {
             $gen = $keyPrefix = $this->chain->getActiveHandler()->getKeyGenerator();
             if ($gen instanceof KeyGenerator) {
                 $keyPrefix = $gen->getKeyPrefix();
                 try {
-                    $keyPrefixEntity = $this->container->get('s.cache.cache_db_handler_prefix.repo')->findOneBySlug($keyPrefix);
+                    $keyPrefixEntity = $this->container->get('s.cache.engine_database_prefix.repo')->findOneBySlug($keyPrefix);
                     if ($keyPrefixEntity) {
                         $em = $this->container->get('doctrine.orm.entity_manager');
                         $em->remove($keyPrefixEntity);

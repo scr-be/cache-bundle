@@ -11,30 +11,31 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
+use Scribe\CacheBundle\DependencyInjection\Aware\CacheChainAwareTrait;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
+use Scribe\Utility\Error\DeprecationErrorHandler;
 
 /**
  * Trait HandlerChainAwareTrait.
+ *
+ * @deprecated {@see CacheChainAwareTrait}
  */
 trait HandlerChainAwareTrait
 {
-    /**
-     * An instance of a class implementing KeyGeneratorInterface.
-     *
-     * @var AbstractHandlerChain|null
-     */
-    private $cacheHandlerChain = null;
+    use CacheChainAwareTrait;
 
     /**
      * Set the cache handler chain.
      *
-     * @param AbstractHandlerChain|null $cacheHandlerChain
+     * @param AbstractCacheChain|null $cacheHandlerChain
      *
      * @return $this
      */
-    public function setCacheHandlerChain(AbstractHandlerChain $cacheHandlerChain = null)
+    public function setCacheHandlerChain(AbstractCacheChain $cacheHandlerChain = null)
     {
-        $this->cacheHandlerChain = $cacheHandlerChain;
+        static::triggerDeprecationError(__METHOD__, __LINE__);
+
+        $this->setCacheChain($cacheHandlerChain);
 
         return $this;
     }
@@ -42,13 +43,15 @@ trait HandlerChainAwareTrait
     /**
      * Get the key generator instance.
      *
-     * @return AbstractHandlerChain|null
+     * @return AbstractCacheChain|null
      *
      * @throws RuntimeException When a cache handler chain has not been set.
      */
     public function getCacheHandlerChain()
     {
-        if (false === $this->hasCacheHandlerChain()) {
+        static::triggerDeprecationError(__METHOD__, __LINE__);
+
+        if (false === $this->hasCacheChain()) {
             throw new RuntimeException(sprintf(
                 'You requested a cache chain handler via the method %s declared in trait %s and used in %s, but no handler chain has been set.',
                 __FUNCTION__,
@@ -57,7 +60,7 @@ trait HandlerChainAwareTrait
             ));
         }
 
-        return $this->cacheHandlerChain;
+        return $this->getCacheChain();
     }
 
     /**
@@ -67,7 +70,24 @@ trait HandlerChainAwareTrait
      */
     public function hasCacheHandlerChain()
     {
-        return (bool) ($this->cacheHandlerChain instanceof AbstractHandlerChain);
+        static::triggerDeprecationError(__METHOD__, __LINE__);
+
+        return (bool) $this->hasCacheChain();
+    }
+
+    /**
+     * @param string $method
+     * @param int    $line
+     */
+    public static function triggerDeprecationError($method, $line)
+    {
+        DeprecationErrorHandler::trigger(
+            $method,
+            $line,
+            'This trait (and its coorosponding interface) should not be used in favor of Scribe\\CacheBundle\\DependencyInjection\\Aware\\CacheChainAwareTrait',
+            '2015-05-27 08:04:00 -0400',
+            '2.0.0'
+        );
     }
 }
 

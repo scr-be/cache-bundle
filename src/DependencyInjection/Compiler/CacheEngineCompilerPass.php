@@ -16,7 +16,7 @@ use Scribe\MantleBundle\DependencyInjection\Compiler\AbstractCompilerPass;
 /**
  * Class CacheMethodCompilerPass.
  */
-class CacheHandlerCompilerPass extends AbstractCompilerPass
+class CacheEngineCompilerPass extends AbstractCompilerPass
 {
     /**
      * Return the name of the service that handles registering the handlers (the chain manager)
@@ -25,7 +25,7 @@ class CacheHandlerCompilerPass extends AbstractCompilerPass
      */
     protected function getChainServiceName()
     {
-        return 's.cache.handler_chain';
+        return 's.cache.chain';
     }
 
     /**
@@ -35,7 +35,7 @@ class CacheHandlerCompilerPass extends AbstractCompilerPass
      */
     protected function getHandlerTagName()
     {
-        return 's.cache.handler_type';
+        return 's.cache.engine';
     }
 }
 

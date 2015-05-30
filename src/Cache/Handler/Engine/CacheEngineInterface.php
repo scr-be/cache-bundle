@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Cache\Handler\Type;
+namespace Scribe\CacheBundle\Cache\Handler\Engine;
 
 use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
 
 /**
- * Interface HandlerTypeInterface.
+ * Interface CacheEngineInterface.
  */
-interface HandlerTypeInterface extends CompilerPassHandlerInterface
+interface CacheEngineInterface extends CompilerPassHandlerInterface
 {
     /**
      * The default restriction to check against when adding handler.
@@ -72,7 +72,7 @@ interface HandlerTypeInterface extends CompilerPassHandlerInterface
      *
      * @return $this
      */
-    public function unsetSupportedDecider();
+    public function clearSupportedDecider();
 
     /**
      * Get the optional closure that determines if this cache handler is supported.

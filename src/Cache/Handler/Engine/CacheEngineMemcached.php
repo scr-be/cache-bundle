@@ -9,23 +9,90 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Cache\Handler\Type;
+namespace Scribe\CacheBundle\Cache\Handler\Engine;
 
+use Memcached;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
-use Memcached;
+use Scribe\Utility\Extension;
 
 /**
- * Class HandlerTypeMemcached.
+ * Class CacheEngineMemcached.
  */
-class HandlerTypeMemcached extends AbstractHandlerType
+class CacheEngineMemcached extends AbstractCacheEngine
 {
+    /**
+     * The return values memcached may return for success.
+     *
+     * @var string[]
+     */
+    protected static $memcachedRetSuccess = [
+        0 => 'MEMCACHED_SUCCESS',
+        12 => 'MEMCACHED_DATA_EXISTS',
+        15 => 'MEMCACHED_STORED',
+        22 => 'MEMCACHED_DELETED',
+        23 => 'MEMCACHED_VALUE',
+        24 => 'MEMCACHED_STAT',
+        25 => 'MEMCACHED_ITEM',
+        32 => 'MEMCACHED_BUFFERED',
+    ];
+
+    /**
+     * The return values memcached may return for errors.
+     *
+     * @var string[]
+     */
+    protected static $memcachedRetFailure = [
+        1 => 'MEMCACHED_FAILURE',
+        2 => 'MEMCACHED_HOST_LOOKUP_FAILURE',
+        3 => 'MEMCACHED_CONNECTION_FAILURE',
+        4 => 'MEMCACHED_CONNECTION_BIND_FAILURE',
+        5 => 'MEMCACHED_WRITE_FAILURE',
+        6 => 'MEMCACHED_READ_FAILURE',
+        7 => 'MEMCACHED_UNKNOWN_READ_FAILURE',
+        8 => 'MEMCACHED_PROTOCOL_ERROR',
+        9 => 'MEMCACHED_CLIENT_ERROR',
+        10 => 'MEMCACHED_SERVER_ERROR',
+        11 => 'MEMCACHED_ERROR',
+        13 => 'MEMCACHED_DATA_DOES_NOT_EXIST',
+        14 => 'MEMCACHED_NOTSTORED',
+        16 => 'MEMCACHED_NOTFOUND',
+        17 => 'MEMCACHED_MEMORY_ALLOCATION_FAILURE',
+        18 => 'MEMCACHED_PARTIAL_READ',
+        19 => 'MEMCACHED_SOME_ERRORS',
+        20 => 'MEMCACHED_NO_SERVERS',
+        21 => 'MEMCACHED_END',
+        26 => 'MEMCACHED_ERRNO',
+        27 => 'MEMCACHED_FAIL_UNIX_SOCKET',
+        28 => 'MEMCACHED_NOT_SUPPORTED',
+        29 => 'MEMCACHED_NO_KEY_PROVIDED',
+        30 => 'MEMCACHED_FETCH_NOTFINISHED',
+        31 => 'MEMCACHED_TIMEOUT',
+        33 => 'MEMCACHED_BAD_KEY_PROVIDED',
+        34 => 'MEMCACHED_INVALID_HOST_PROTOCOL',
+        35 => 'MEMCACHED_SERVER_MARKED_DEAD',
+        36 => 'MEMCACHED_UNKNOWN_STAT_KEY',
+        37 => 'MEMCACHED_E2BIG',
+        38 => 'MEMCACHED_INVALID_ARGUMENTS',
+        39 => 'MEMCACHED_KEY_TOO_BIG',
+        40 => 'MEMCACHED_AUTH_PROBLEM',
+        41 => 'MEMCACHED_AUTH_FAILURE',
+        42 => 'MEMCACHED_AUTH_CONTINUE',
+        43 => 'MEMCACHED_PARSE_ERROR',
+        44 => 'MEMCACHED_PARSE_USER_ERROR',
+        45 => 'MEMCACHED_DEPRECATED',
+        46 => 'MEMCACHED_IN_PROGRESS',
+        47 => 'MEMCACHED_SERVER_TEMPORARILY_DISABLED',
+        48 => 'MEMCACHED_SERVER_MEMORY_ALLOCATION_FAILURE',
+        49 => 'MEMCACHED_MAXIMUM_RETURN',
+    ];
+
     /**
      * Available memcached option type strings to their object constant.
      *
-     * @var array
+     * @var string[]
      */
-    protected $optionTypes = [
+    protected static $optionTypes = [
         'serializer'           => Memcached::OPT_SERIALIZER,
         'libketama_compatible' => Memcached::OPT_LIBKETAMA_COMPATIBLE,
         'io_no_block'          => Memcached::OPT_NO_BLOCK,
@@ -37,9 +104,9 @@ class HandlerTypeMemcached extends AbstractHandlerType
     /**
      * Available memcached option type value strings to their object constant.
      *
-     * @var array
+     * @var string[]
      */
-    protected $optionValues = [
+    protected static $optionValues = [
         'serializer' => [
             'igbinary' => Memcached::SERIALIZER_IGBINARY,
             'json'     => Memcached::SERIALIZER_JSON,
@@ -50,6 +117,20 @@ class HandlerTypeMemcached extends AbstractHandlerType
             'fastlz' => Memcached::COMPRESSION_FASTLZ,
         ],
     ];
+
+    /**
+     * Options array to load into Memcached when initialized.
+     *
+     * @var string[]
+     */
+    protected $options = [];
+
+    /**
+     * Servers array to load into Memcached when initialized.
+     *
+     * @var array[]
+     */
+    protected $servers = [];
 
     /**
      * Our memcached object instance.
@@ -71,11 +152,60 @@ class HandlerTypeMemcached extends AbstractHandlerType
     {
         parent::__construct($keyGenerator, $ttl, $priority, $disabled, $supportedDecider);
 
-        if (false === $this->isSupported()) {
-            return;
+        $this->setInitialized(false);
+    }
+
+    /**
+     * Utilize lazy initialization to avoid needless creation of the memcached object
+     *
+     * @return bool
+     */
+    protected function lazyInitialize()
+    {
+        if ($this->isInitialized()) {
+            return true;
         }
 
-        $this->memcached = new Memcached();
+        if ($this->isSupported() === false || $this->isEnabled() === false) {
+            return false;
+        }
+
+        $this->makeMemcachedInstance();
+        $this->applyMemcachedOptions();
+        $this->applyMemcachedServers();
+
+        $this->setInitialized(true);
+
+        return true;
+    }
+
+    /**
+     * Instantiate memcached class if not already created.
+     *
+     * @return $this
+     */
+    protected function makeMemcachedInstance()
+    {
+        if (false === ($this->memcached instanceof Memcached)) {
+            $this->memcached = new Memcached();
+        }
+
+        return $this;
+    }
+
+    /**
+     * An array of option definitions as passed by the DI compiler pass.
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function setOptions(array $options = [])
+    {
+        $this->options = $options;
+        $this->setInitialized(false);
+
+        return $this;
     }
 
     /**
@@ -87,27 +217,29 @@ class HandlerTypeMemcached extends AbstractHandlerType
      */
     public function getOption($memcachedOptionConstant)
     {
+        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+            return false;
+        }
+
         return $this->memcached->getOption($memcachedOptionConstant);
     }
 
     /**
      * An array of option definitions as passed by the DI compiler pass.
      *
-     * @param array $options
+     * @return $this
      */
-    public function setOptions(array $options = [])
+    protected function applyMemcachedOptions()
     {
-        if (true !== $this->isSupported()) {
-            return;
-        }
-
         $resolvedOptions = [];
 
-        foreach ($options as $type => $value) {
+        foreach ($this->options as $type => $value) {
             $this->handleOptionResolution($resolvedOptions, $type, $value);
         }
 
         $this->memcached->setOptions($resolvedOptions);
+
+        return $this;
     }
 
     /**
@@ -134,13 +266,14 @@ class HandlerTypeMemcached extends AbstractHandlerType
      */
     protected function handleOptionTypeResolution($type)
     {
-        if (false === array_key_exists($type, $this->optionTypes)) {
+        if (false === array_key_exists($type, self::$optionTypes)) {
             throw new RuntimeException(
-                sprintf('Unknown memcached option type %s specified.', $type)
+                'Unknown memcached option type %s specified in "%s".',
+                null, null, null, $type, __METHOD__
             );
         }
 
-        return $this->optionTypes[ $type ];
+        return self::$optionTypes[ $type ];
     }
 
     /**
@@ -153,9 +286,9 @@ class HandlerTypeMemcached extends AbstractHandlerType
      */
     protected function handleOptionValueResolution($type, $value)
     {
-        if (true === array_key_exists($type, $this->optionValues) &&
-            true === array_key_exists($value, $this->optionValues[ $type ])) {
-            return $this->optionValues[ $type ][ $value ];
+        if (true === array_key_exists($type, self::$optionValues) &&
+            true === array_key_exists($value, self::$optionValues[ $type ])) {
+            return self::$optionValues[ $type ][ $value ];
         }
 
         return $value;
@@ -163,17 +296,17 @@ class HandlerTypeMemcached extends AbstractHandlerType
 
     /**
      * Array of server definitions to set (generally passed by Symfony's DI).
-     * This will also reset any previously configured servers.
      *
      * @param array $servers
+     *
+     * @return $this
      */
     public function setServers(array $servers = [])
     {
-        if (true === $this->isSupported()) {
-            $this->memcached->resetServerList();
-        }
+        $this->servers = $servers;
+        $this->setInitialized(false);
 
-        $this->addServers($servers);
+        return $this;
     }
 
     /**
@@ -183,16 +316,28 @@ class HandlerTypeMemcached extends AbstractHandlerType
      *
      * @param array $servers
      *
-     * @throws RuntimeException
+     * @return $this
      */
     public function addServers(array $servers = [])
     {
-        if (true !== $this->isSupported()) {
-            return;
+        foreach ($servers as $s) {
+            $this->servers[] = $s;
         }
 
+        $this->setInitialized(false);
+
+        return $this;
+    }
+
+    /**
+     * Array of server definitions to set (generally passed by Symfony's DI).
+     *
+     * @return $this
+     */
+    protected function applyMemcachedServers()
+    {
         $resolvedServers = [];
-        foreach ($servers as $name => $parameters) {
+        foreach ($this->servers as $name => $parameters) {
             $this->handleServerResolution($resolvedServers, $name, $parameters);
         }
 
@@ -212,49 +357,64 @@ class HandlerTypeMemcached extends AbstractHandlerType
     {
         if (false === (count($parameters) === 3)) {
             throw new RuntimeException(
-                'Unknown number of server connection parameters. Please provide 3: ip/host, port, and weight.'
+                'Unknown number of server connection parameters. Please provide 3: ip/host, port, and weight in "%s".',
+                null, null, null, __METHOD__
             );
         }
 
-        $resolvedServers[ $name ] = array_values($parameters);
+        $resolvedServers[$name] = array_values($parameters);
     }
 
     /**
-     * Allows the chain to determine if the handler is supported.
+     * Check if the handler type is supported using the default decider implementation.
      *
-     * @param mixed ...$by
+     * @param mixed,... $by
      *
      * @return bool
      */
-    public function isSupported(...$by)
+    protected function isSupportedDefaultDecider(...$by)
     {
-        if (null !== ($decision = $this->callSupportedDecider())) {
-            return (bool) $decision;
+        if (false === $this->isEnabled()) {
+            return false;
         }
 
-        return (bool) (true === extension_loaded('memcached'));
+        $hasValidOrmExtension = Extension::isEnabled('memcached');
+
+        return (bool) ($hasValidOrmExtension !== false ?: false);
     }
 
     /**
      * Get the result of the last operation based on a comparison of the expected
      * return code and the received return code via an optionally custom callable.
      *
-     * @param int           $expectedCode
-     * @param callable|null $decider
+     * @param int                    $expectedCode
+     * @param callable|\Closure|null $decider
      *
      * @return bool
      */
     protected function isLastActionSuccessful($expectedCode = Memcached::RES_SUCCESS, callable $decider = null)
     {
         if (null === $decider) {
-            $decider = function ($expected, $received) {
-                return (bool) ($received > $expected ? false : true);
-            };
+            $decider = [$this, 'getReturnValueStatus'];
         }
 
-        $receivedCode = $this->memcached->getResultCode();
+        return (bool) $decider($expectedCode, $this->memcached->getResultCode());
+    }
 
-        return (bool) $decider($expectedCode, $receivedCode);
+    /**
+     * Default action success decider.
+     *
+     * @param int $expectedCode
+     * @param int $receivedCode
+     *
+     * @return bool
+     */
+    protected function getReturnValueStatus($expectedCode, $receivedCode)
+    {
+        return (bool) (
+            (int) $expectedCode === (int) $receivedCode ||
+            in_array((int) $receivedCode, self::$memcachedRetSuccess, true)
+        );
     }
 
     /**

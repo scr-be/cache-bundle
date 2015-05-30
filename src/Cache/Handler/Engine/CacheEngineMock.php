@@ -9,31 +9,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Cache\Handler\Type;
+namespace Scribe\CacheBundle\Cache\Handler\Engine;
 
 /**
- * Class HandlerTypeMockery.
+ * Class CacheEngineMock.
  */
-class HandlerTypeMockery extends AbstractHandlerType
+class CacheEngineMock extends AbstractCacheEngine
 {
     /**
      * Check if the handler type is supported by the current environment.
      *
      * @return bool
      */
-    public function isSupported(...$by)
+    public function isSupportedDefaultDecider(...$by)
     {
-        if (null !== ($decision = $this->callSupportedDecider())) {
-            return (bool) $decision;
-        }
-
         return (bool) true;
     }
 
     /**
      * Overwrite parent implementation of set key for mockery handler type.
      *
-     * @param ...mixed $keyValues
+     * @param mixed,... $keyValues
      *
      * @return $this
      */
@@ -67,7 +63,7 @@ class HandlerTypeMockery extends AbstractHandlerType
      *
      * @param string $key
      *
-     * @return string|null
+     * @return null
      */
     protected function getUsingHandler($key)
     {

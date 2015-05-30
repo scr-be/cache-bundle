@@ -9,15 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Exceptions;
-
-use Scribe\Exception\Exception;
+namespace Scribe\CacheBundle\DependencyInjection\Aware;
 
 /**
- * Class CacheBundleException.
+ * Class ChainChainAware.
  */
-class CacheBundleException extends Exception
+class CacheChainAware implements CacheChainAwareInterface
 {
+    use CacheChainAwareTrait;
 }
 
 /* EOF */

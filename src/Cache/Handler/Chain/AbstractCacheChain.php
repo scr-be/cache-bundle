@@ -12,26 +12,26 @@
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
 use Scribe\CacheBundle\Cache\Handler\AbstractHandler;
-use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeInterface;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMockery;
+use Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine;
+use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineInterface;
+use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineMock;
 use Scribe\CacheBundle\Exceptions\RuntimeException;
+use Scribe\CacheBundle\Exceptions\InvalidArgumentException;
 use Scribe\Component\DependencyInjection\Compiler\CompilerPassChainInterface;
 use Scribe\Component\DependencyInjection\Compiler\CompilerPassChainTrait;
 use Scribe\Component\DependencyInjection\Compiler\CompilerPassHandlerInterface;
-use Scribe\Exception\InvalidArgumentException;
 
 /**
- * Class AbstractHandlerChain.
+ * Class AbstractCacheChain.
  */
-abstract class AbstractHandlerChain extends AbstractHandler implements HandlerChainInterface
+abstract class AbstractCacheChain extends AbstractHandler implements CacheChainInterface
 {
     use CompilerPassChainTrait;
 
     /**
      * The handler with the highest priority.
      *
-     * @var HandlerTypeInterface|null
+     * @var CacheEngineInterface|null
      */
     protected $activeHandler = null;
 
@@ -46,7 +46,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
         $this->filterMode   = CompilerPassChainInterface::FILTER_MODE_FIRST;
         $this->restrictions = [
             CompilerPassChainInterface::RESTRICTION_INTERFACE_DEFAULT,
-            HandlerTypeInterface::INTERFACE_NAME_CACHE,
+            CacheEngineInterface::INTERFACE_NAME_CACHE,
         ];
 
         $this->setEnabled(true !== $disabled);
@@ -76,7 +76,7 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      * @throws RuntimeException
      * @throws InvalidArgumentException
      *
-     * @return AbstractHandlerType
+     * @return \Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine
      */
     public function getHandler(...$by)
     {
@@ -100,45 +100,31 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
         }
 
         throw new RuntimeException(
-            sprintf(
-                'The requested handler type "%s" is not available.',
-                $type
-            )
+            'The requested handler type "%s" is not available in "%s".',
+            null, null, null, $type, __METHOD__
         );
-    }
-
-    /**
-     * Check if any handlers have been registered.
-     *
-     * @deprecated
-     *
-     * @return bool
-     */
-    public function hasHandlers()
-    {
-        return (bool) $this->hasHandlerCollection();
     }
 
     /**
      * Re-determine active handler, possibly based on forced selection.
      *
-     * @param null $forceSelection
+     * @param string|null $forceType
      *
-     * @return AbstractHandlerChain
+     * @return AbstractCacheChain
      */
-    public function reDetermineActiveHandler($forceSelection = null)
+    public function reDetermineActiveHandler($forceType = null)
     {
-        return $this->determineActiveHandler($forceSelection);
+        return $this->determineActiveHandler($forceType);
     }
 
     /**
      * Sets the active handler.
      *
-     * @param AbstractHandlerType $handler
+     * @param CompilerPassHandlerInterface $handler
      *
      * @return $this
      */
-    public function setActiveHandler(AbstractHandlerType $handler)
+    public function setActiveHandler(CompilerPassHandlerInterface $handler)
     {
         $this->activeHandler = $handler;
 
@@ -148,38 +134,58 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     /**
      * Gets the active handler.
      *
-     * @return AbstractHandlerType|null
+     * @return \Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine
      *
      * @throws RuntimeException
      */
     public function getActiveHandler()
     {
-        if (true === $this->hasActiveHandler() && true === $this->isEnabled()) {
-            return $this->activeHandler;
+        if (false === $this->isEnabled()) {
+            return $this->getForcedMockHandler();
         }
 
-        if (false === $this->isEnabled()) {
-            if (false === ($this->activeHandler instanceof HandlerTypeMockery)) {
-                $this->activeHandler = new HandlerTypeMockery();
-            }
-
+        if ($this->activeHandler instanceof AbstractCacheEngine) {
             return $this->activeHandler;
         }
 
         throw new RuntimeException(
-            'No enabled and supported cache handler types have been configured. '.
-            'You must configure at least one type or globally disable this bundle.'
+            'No enabled/supported cache engines are configured; you must configure at least one or globally disable this bundle (in "%s").',
+            null, null, null, __METHOD__
         );
+    }
+
+    /**
+     * Returns a mocked handler so a valid Handler API (that doesn't actually mock) is always available.
+     *
+     * @internal
+     *
+     * @return \Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineMock
+     */
+    public function getForcedMockHandler()
+    {
+        if ($this->activeHandler instanceof CacheEngineMock) {
+            return $this->activeHandler;
+        }
+
+        $mockHandler = new CacheEngineMock();
+
+        $this->setActiveHandler($mockHandler);
+
+        return $mockHandler;
     }
 
     /**
      * Checks if an active handler has been set.
      *
+     * @param bool $filterOutMockedHandlers Don't include implementations of Mocked handlers when determining if
+     *                                      a valid active handler is set.
+     *
      * @return bool
      */
-    public function hasActiveHandler()
+    public function hasActiveHandler($filterOutMockedHandlers = true)
     {
-        return (bool) ($this->activeHandler instanceof AbstractHandlerType);
+
+        return (bool) ($this->activeHandler instanceof AbstractCacheEngine);
     }
 
     /**
@@ -196,9 +202,12 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
     }
 
     /**
+     * Quite literally un-sets the chosen active handler. Calling {@see getActiveHandler()} without
+     * re-determining the active handler will provide you with a mocked cache implementation.
+     *
      * @return $this
      */
-    public function unsetActiveHandlerType()
+    public function clearActiveHandlerType()
     {
         $this->activeHandler = null;
 
@@ -342,21 +351,21 @@ abstract class AbstractHandlerChain extends AbstractHandler implements HandlerCh
      *
      * @throws RuntimeException
      *
-     * @param null|string|AbstractHandlerType $forceSelection
+     * @param null|string|\Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine $forceType
      *
      * @return $this
      */
-    abstract protected function determineActiveHandler($forceSelection = null);
+    abstract protected function determineActiveHandler($forceType = null);
 
     /**
      * Stack the provided handler in the correct position on the handlers stack,
      * verifying that another handler does not already have the same priority.
      *
-     * @param HandlerTypeInterface $handler
+     * @param CompilerPassHandlerInterface $handler
      *
      * @return $this
      */
-    abstract protected function determineStackPosition(HandlerTypeInterface $handler);
+    abstract protected function determineStackPosition(CompilerPassHandlerInterface $handler);
 }
 
 /* EOF */

@@ -15,9 +15,9 @@ use Doctrine\ORM\EntityRepository;
 use Scribe\Doctrine\Exception\ORMException;
 
 /**
- * Class CacheDBHandlerPrefixRepository.
+ * Class CacheEngineDatabasePrefixRepository.
  */
-class CacheDBHandlerPrefixRepository extends EntityRepository
+class CacheEngineDatabasePrefixRepository extends EntityRepository
 {
     /**
      * @param string $slug

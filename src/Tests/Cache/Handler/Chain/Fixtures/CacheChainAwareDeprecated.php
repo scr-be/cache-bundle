@@ -15,9 +15,9 @@ use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChainAwareTrait;
 use Scribe\Utility\UnitTest\AbstractMantleTestCase;
 
 /**
- * Class ObjectChainAware.
+ * Class CacheChainAwareDeprecated.
  */
-class ObjectChainAware extends AbstractMantleTestCase
+class CacheChainAwareDeprecated extends AbstractMantleTestCase
 {
     use HandlerChainAwareTrait;
 }

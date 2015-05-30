@@ -11,18 +11,20 @@
 
 namespace Scribe\CacheBundle\Cache\Handler\Chain;
 
-use Scribe\CacheBundle\Cache\Handler\Type\AbstractHandlerType;
+use Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine;
 use Scribe\Component\DependencyInjection\Compiler\CompilerPassChainInterface;
 
 /**
  * Interface CacheCompilerPassChainInterface.
+ *
+ * @deprecated {@see Scribe\CacheBundle\DependencyInjection\Aware\CacheChainAwareTrait}
  */
 interface HandlerChainInterface extends CompilerPassChainInterface
 {
     /**
      * Gets the active handler.
      *
-     * @return AbstractHandlerType
+     * @return \Scribe\CacheBundle\Cache\Handler\Engine\AbstractCacheEngine
      */
     public function getActiveHandler();
 

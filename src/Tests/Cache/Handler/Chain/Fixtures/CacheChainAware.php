@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Exceptions;
+namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain\Fixtures;
 
-use Scribe\Exception\Exception;
+use Scribe\CacheBundle\DependencyInjection\Aware\CacheChainAware as BaseCacheChainAware;
 
 /**
- * Class CacheBundleException.
+ * Class CacheChainAware.
  */
-class CacheBundleException extends Exception
+class CacheChainAware extends BaseCacheChainAware
 {
 }
 

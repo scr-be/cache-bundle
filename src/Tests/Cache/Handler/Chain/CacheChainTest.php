@@ -11,19 +11,19 @@
 
 namespace Scribe\CacheBundle\Tests\Cache\Handler\Chain;
 
-use Scribe\CacheBundle\Cache\Handler\Chain\HandlerChain;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeDB;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeFilesystem;
-use Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached;
+use Scribe\CacheBundle\Cache\Handler\Chain\CacheChain;
+use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineDatabase;
+use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineFilesystem;
+use Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineMemcached;
 use Scribe\CacheBundle\KeyGenerator\KeyGenerator;
 use Scribe\Utility\UnitTest\AbstractMantleKernelTestCase;
 
 /**
- * Class HandlerChainTest.
+ * Class CacheChainTest.
  */
-class HandlerChainTest extends AbstractMantleKernelTestCase
+class CacheChainTest extends AbstractMantleKernelTestCase
 {
-    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Tests\Cache\Handler\Chain\HandlerChain';
+    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\Tests\Cache\Handler\Chain\CacheChain';
 
     protected $handlerChain;
 
@@ -36,7 +36,7 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
 
     protected function getNewHandlerChain($disabled = false)
     {
-        return new HandlerChain($disabled);
+        return new CacheChain($disabled);
     }
 
     protected function setHandlerTypesToChain($chain, ...$types)
@@ -52,8 +52,8 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->setHandlerTypesToChain(
             $this->getNewHandlerChain($disabled),
-            new HandlerTypeMemcached(new KeyGenerator(), 1800, 11),
-            new HandlerTypeFilesystem(new KeyGenerator(), 1800, 20)
+            new CacheEngineMemcached(new KeyGenerator(), 1800, 11),
+            new CacheEngineFilesystem(new KeyGenerator(), 1800, 20)
         );
 
         return $chain;
@@ -63,8 +63,8 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->setHandlerTypesToChain(
             $this->getNewHandlerChain($disabled),
-            new HandlerTypeMemcached(new KeyGenerator(), 1800, 2),
-            new HandlerTypeFilesystem(new KeyGenerator(), 1800, 2)
+            new CacheEngineMemcached(new KeyGenerator(), 1800, 2),
+            new CacheEngineFilesystem(new KeyGenerator(), 1800, 2)
         );
 
         return $chain;
@@ -74,7 +74,7 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
     {
         $chain = $this->setHandlerTypesToChain(
             $this->getNewHandlerChain($disabled),
-            new HandlerTypeMemcached(new KeyGenerator())
+            new CacheEngineMemcached(new KeyGenerator())
         );
 
         return $chain;
@@ -82,7 +82,7 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
 
     protected function getNewHandlerChainWithFilesystemHandlerType($disabled = false)
     {
-        $filesystemHandlerType = new HandlerTypeFilesystem(new KeyGenerator());
+        $filesystemHandlerType = new CacheEngineFilesystem(new KeyGenerator());
         $filesystemHandlerType->proposeCacheDirectory('/tmp');
 
         $chain = $this->setHandlerTypesToChain(
@@ -102,124 +102,150 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
         return $chain;
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testChainFromContainer()
     {
-        $chain = $this->container->get('s.cache.handler_chain');
+        $chain = $this->container->get('s.cache.chain');
         $chain->reDetermineActiveHandler('memcached');
-        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+        static::assertEquals('memcached', $chain->getActiveHandler()->getType());
         $chain->reDetermineActiveHandler('MemCacheD');
-        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
-        $type = new HandlerTypeMemcached();
+        static::assertEquals('memcached', $chain->getActiveHandler()->getType());
+        $type = new CacheEngineMemcached();
         $chain->reDetermineActiveHandler($type);
-        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+        static::assertEquals('memcached', $chain->getActiveHandler()->getType());
 
-        $chain->reDetermineActiveHandler('db');
-        $this->assertEquals('db', $chain->getActiveHandler()->getType());
-        $chain->reDetermineActiveHandler('DB');
-        $this->assertEquals('db', $chain->getActiveHandler()->getType());
-        $type = new HandlerTypeDB();
+        $chain->reDetermineActiveHandler('database');
+        static::assertEquals('database', $chain->getActiveHandler()->getType());
+        $chain->reDetermineActiveHandler('DaTaBaSE');
+        static::assertEquals('database', $chain->getActiveHandler()->getType());
+        $type = new CacheEngineDatabase();
         $chain->reDetermineActiveHandler($type);
-        $this->assertEquals('db', $chain->getActiveHandler()->getType());
+        static::assertEquals('database', $chain->getActiveHandler()->getType());
 
         $chain->reDetermineActiveHandler('filesystem');
-        $this->assertEquals('filesystem', $chain->getActiveHandler()->getType());
+        static::assertEquals('filesystem', $chain->getActiveHandler()->getType());
         $chain->reDetermineActiveHandler('FileSystem');
-        $this->assertEquals('filesystem', $chain->getActiveHandler()->getType());
-        $type = new HandlerTypeFilesystem();
+        static::assertEquals('filesystem', $chain->getActiveHandler()->getType());
+        $type = new CacheEngineFilesystem();
         $chain->reDetermineActiveHandler($type);
-        $this->assertEquals('filesystem', $chain->getActiveHandler()->getType());
+        static::assertEquals('filesystem', $chain->getActiveHandler()->getType());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testChainExceptionFromContainerWithInvalidForcedHandler()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Could not find requested cache handler type "invalid-chain-handler".'
+            '#Could not find requested cache handler type "invalid-chain-handler" in .*#'
         );
 
-        $chain = $this->container->get('s.cache.handler_chain');
+        $chain = $this->container->get('s.cache.chain');
         $chain->reDetermineActiveHandler('invalid-chain-handler');
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testChainExceptionFromContainerWithInvalidHandlerGetRequest()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'The requested handler type "invalid-chain-handler" is not available.'
+            '#The requested handler type "invalid-chain-handler" is not available in .*#'
         );
 
-        $chain = $this->container->get('s.cache.handler_chain');
+        $chain = $this->container->get('s.cache.chain');
         $chain->getHandler('invalid-chain-handler');
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testHasPriority()
     {
         $chain = $this->getNewHandlerChainWithAllHandlerTypes();
 
-        $this->assertTrue($chain->getActiveHandler()->hasPriority());
+        static::assertTrue($chain->getActiveHandler()->hasPriority());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testEnsureDefaultChainHasHandler()
     {
-        $this->assertTrue($this->handlerChain->hasHandlers());
+        static::assertTrue($this->handlerChain->hasHandlerCollection());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testActiveHandlerIsFilesystem()
     {
         $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
 
-        $this->assertEquals('filesystem', $chain->getActiveHandlerType());
+        static::assertEquals('filesystem', $chain->getActiveHandlerType());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testNoActiveHandler()
     {
         $chain = $this->getNewHandlerChainWithNoHandlerTypes(true);
 
-        $this->assertFalse($chain->isEnabled());
-        $this->assertFalse($chain->hasHandlers());
-        $this->assertFalse($chain->del(1, 2, 3));
-        $this->assertFalse($chain->flushAll());
+        static::assertFalse($chain->isEnabled());
+        static::assertFalse($chain->hasHandlerCollection());
+        static::assertFalse($chain->del(1, 2, 3));
+        static::assertFalse($chain->flushAll());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testChainHandlerDefaultPriorities()
     {
-        $chain = $this->container->get('s.cache.handler_chain');
+        $chain = $this->container->get('s.cache.chain');
         $handlers = $chain->getHandlerCollection();
 
-        $this->assertEquals(3, count($handlers));
-        $this->assertEquals('memcached', $handlers[1]->getType());
-        $this->assertEquals('db', $handlers[2]->getType());
-        $this->assertEquals('filesystem', $handlers[3]->getType());
+        static::assertEquals(3, count($handlers));
+        static::assertEquals('memcached', $handlers[1]->getType());
+        static::assertEquals('database', $handlers[2]->getType());
+        static::assertEquals('filesystem', $handlers[3]->getType());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testChainHandlerRePrioritize()
     {
-        $chain = $this->container->get('s.cache.handler_chain');
+        $chain = $this->container->get('s.cache.chain');
         $handlers = $chain->getHandlerCollection();
 
-        $this->assertEquals(3, count($handlers));
-        $this->assertEquals('memcached', $handlers[1]->getType());
-        $this->assertEquals('db', $handlers[2]->getType());
-        $this->assertEquals('filesystem', $handlers[3]->getType());
+        static::assertEquals(3, count($handlers));
+        static::assertEquals('memcached', $handlers[1]->getType());
+        static::assertEquals('database', $handlers[2]->getType());
+        static::assertEquals('filesystem', $handlers[3]->getType());
 
-        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+        static::assertEquals('memcached', $chain->getActiveHandler()->getType());
 
         $chain->getHandler('memcached')->setSupportedDecider(function () { return false; });
         $chain->reDetermineActiveHandler();
-        $this->assertEquals('db', $chain->getActiveHandler()->getType());
+        static::assertEquals('database', $chain->getActiveHandler()->getType());
 
-        $chain->getHandler('db')->setSupportedDecider(function () { return false; });
+        $chain->getHandler('database')->setSupportedDecider(function () { return false; });
         $chain->reDetermineActiveHandler();
-        $this->assertEquals('filesystem', $chain->getActiveHandler()->getType());
+        static::assertEquals('filesystem', $chain->getActiveHandler()->getType());
 
-        $chain->getHandler('memcached')->unsetSupportedDecider();
+        $chain->getHandler('memcached')->clearSupportedDecider();
         $chain->reDetermineActiveHandler();
-        $this->assertEquals('memcached', $chain->getActiveHandler()->getType());
+        static::assertEquals('memcached', $chain->getActiveHandler()->getType());
 
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'No enabled and supported cache handler types have been configured. '.
-            'You must configure at least one type or globally disable this bundle.'
+            '#No enabled/supported cache engines are configured; you must configure at least one or globally disable this bundle .*#'
         );
 
         $chain->getHandler('memcached')->setSupportedDecider(function () { return false; });
@@ -228,76 +254,100 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
         $chain->getActiveHandler();
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testNoActiveHandlerIsSupported()
     {
         $chain = $this->getNewHandlerChainWithNoHandlerTypes(true);
 
-        $this->assertTrue($chain->getActiveHandler()->isSupported());
+        static::assertTrue($chain->getActiveHandler()->isSupported());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testNoActiveHandlerExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'No enabled and supported cache handler types have been configured. You must configure at least one type or globally disable this bundle.'
+            '#No enabled/supported cache engines are configured; you must configure at least one or globally disable this bundle .*#'
         );
 
         $chain = $this->getNewHandlerChainWithNoHandlerTypes();
         $chain->setKey('one', 'two', 'three');
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testGetActiveHandlerTypeForMemcached()
     {
         $chain = $this->getNewHandlerChainWithMemcachedHandlerType();
 
-        $this->assertEquals('memcached', $chain->getActiveHandlerType());
-        $this->assertEquals(
-            'Scribe\CacheBundle\Cache\Handler\Type\HandlerTypeMemcached',
+        static::assertEquals('memcached', $chain->getActiveHandlerType());
+        static::assertEquals(
+            'Scribe\CacheBundle\Cache\Handler\Engine\CacheEngineMemcached',
             $chain->getActiveHandlerType(true)
         );
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testHandlerChainMutatorKey()
     {
         $chain = $this->getNewHandlerChainWithAllHandlerTypes();
-        $this->assertFalse($chain->hasKey());
+        static::assertFalse($chain->hasKey());
 
         $chain->setKey('one', 'two', 'three');
-        $this->assertEquals('scribe_cache---1a0f618cfb0e759487cb8a0edef79f57', $chain->getKey());
+        static::assertEquals('scribe_cache---1a0f618cfb0e759487cb8a0edef79f57', $chain->getKey());
 
         $chain->setEnabled(false);
-        $this->assertNull($chain->getKey());
+        static::assertNull($chain->getKey());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testHandlerChainWhenDisabled()
     {
         $chain = $this->getNewHandlerChainWithAllHandlerTypes();
         $chain->setEnabled(false);
 
-        $this->assertEquals($chain, $chain->setKey('one', 'two', 'three'));
-        $this->assertFalse($chain->set('some-data'));
-        $this->assertNull($chain->get());
-        $this->assertFalse($chain->has());
+        static::assertEquals($chain, $chain->setKey('one', 'two', 'three'));
+        static::assertFalse($chain->set('some-data'));
+        static::assertNull($chain->get());
+        static::assertFalse($chain->has());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testHandlerChainDoesNotHaveKey()
     {
         $chain = $this->getNewHandlerChainWithAllHandlerTypes();
 
-        $this->assertFalse($chain->has(rand()));
+        static::assertFalse($chain->has(rand()));
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testHandlerChainCanExcludeHandlerViaConfig()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'No enabled and supported cache handler types have been configured. You must configure at least one type or globally disable this bundle.'
+            '#No enabled/supported cache engines are configured; you must configure at least one or globally disable this bundle .*#'
         );
 
         $chain = $this->getNewHandlerChainWithNoHandlerTypes(false);
         $chain->set('some-value', 'the', 'string', 'for', 'key');
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testHandlerChainWithConflictingHandlerPrioritiesExceptionHandling()
     {
         $this->setExpectedException(
@@ -308,36 +358,48 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
         $this->getNewHandlerChainWithConflictingHandlerPriorities();
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testHandlerChainGetExceptionIncorrectParamCount()
     {
-        $this->setExpectedException(
-            'Scribe\Exception\InvalidArgumentException',
-            'Invalid number of arguments provided to "getHandler" in "Scribe\CacheBundle\Cache\Handler\Chain\AbstractHandlerChain".'
+        $this->setExpectedExceptionRegExp(
+            'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
+            '#Invalid number of arguments provided to "getHandler" in .*#'
         );
 
         $chain = $this->getNewHandlerChain(false);
         $chain->getHandler(1, 2, 3);
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testSetHandlers()
     {
         $chain = $this->getNewHandlerChain(false);
-        $this->assertFalse($chain->hasHandlers());
+        static::assertFalse($chain->hasHandlerCollection());
         $chain->setHandlerCollection([
-            new HandlerTypeMemcached(new KeyGenerator()),
-            new HandlerTypeFilesystem(new KeyGenerator()),
+            new CacheEngineMemcached(new KeyGenerator()),
+            new CacheEngineFilesystem(new KeyGenerator()),
         ]);
-        $this->assertTrue($chain->hasHandlers());
+        static::assertTrue($chain->hasHandlerCollection());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testFilesystemHandlerCanCache()
     {
         $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
         $chain->set('random-string', 'the-key-to-random-string');
 
-        $this->assertEquals('random-string', $chain->get());
+        static::assertEquals('random-string', $chain->get());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testFilesystemHandlerCanCache2()
     {
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
@@ -349,12 +411,15 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
             ->set('random-string-2')
         ;
 
-        $this->assertEquals('random-string-2', $chain->get());
-        $this->assertEquals('random-string-2', $chain->get(
+        static::assertEquals('random-string-2', $chain->get());
+        static::assertEquals('random-string-2', $chain->get(
             'a', 'random', 'key', 1, 2, 3, ['an', 'array', 'of', 'items'], $object
         ));
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testFilesystemHandlerCanCache3()
     {
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
@@ -363,12 +428,15 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
 
         $chain->set('random-string-2', 'a', 'random', 'key', 1, 2, 3, ['an', 'array', 'of', 'items'], $object);
 
-        $this->assertEquals('random-string-2', $chain->get());
-        $this->assertEquals('random-string-2', $chain->get(
+        static::assertEquals('random-string-2', $chain->get());
+        static::assertEquals('random-string-2', $chain->get(
             'a', 'random', 'key', 1, 2, 3, ['an', 'array', 'of', 'items'], $object
         ));
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testFilesystemHandlerCanCache4()
     {
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
@@ -377,16 +445,19 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
 
         $chain->setKey('a', 'random', 'key', 1, 2, 3, $object);
 
-        $this->assertNull($chain->get());
+        static::assertNull($chain->get());
 
         $chain->set('random-string-3');
-        $this->assertNotNull($chain->get());
-        $this->assertEquals('random-string-3', $chain->get());
-        $this->assertEquals('random-string-3', $chain->get(
+        static::assertNotNull($chain->get());
+        static::assertEquals('random-string-3', $chain->get());
+        static::assertEquals('random-string-3', $chain->get(
             'a', 'random', 'key', 1, 2, 3, $object
         ));
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testFilesystemHandlerCanCacheAndDelete()
     {
         $chain  = $this->getNewHandlerChainWithFilesystemHandlerType();
@@ -397,20 +468,23 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
 
         $chain->setKey('a', 'random', 'key', 1, 2, 3, $object);
 
-        $this->assertNull($chain->get());
+        static::assertNull($chain->get());
 
         $chain->set('random-string-3');
-        $this->assertNotNull($chain->get());
-        $this->assertEquals('random-string-3', $chain->get());
-        $this->assertEquals('random-string-3', $chain->get(
+        static::assertNotNull($chain->get());
+        static::assertEquals('random-string-3', $chain->get());
+        static::assertEquals('random-string-3', $chain->get(
             'a', 'random', 'key', 1, 2, 3, $object
         ));
 
-        $this->assertTrue($chain->del());
+        static::assertTrue($chain->del());
         sleep(1);
-        $this->assertNull($chain->get());
+        static::assertNull($chain->get());
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testFilesystemHandlerCanCacheAndFlushAll()
     {
         $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
@@ -423,17 +497,20 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
         $chain->set($val2, ...$key2);
         $chain->set($val3, ...$key3);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertEquals($val2, $chain->get(...$key2));
-        $this->assertEquals($val3, $chain->get(...$key3));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertEquals($val2, $chain->get(...$key2));
+        static::assertEquals($val3, $chain->get(...$key3));
 
         $chain->flushAll();
 
-        $this->assertNull($chain->get(...$key1));
-        $this->assertNull($chain->get(...$key2));
-        $this->assertNull($chain->get(...$key3));
+        static::assertNull($chain->get(...$key1));
+        static::assertNull($chain->get(...$key2));
+        static::assertNull($chain->get(...$key3));
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testFilesystemHandlerCanCacheAndDeleteWhenStale()
     {
         $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
@@ -443,21 +520,24 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
 
         $chain->set($val1, ...$key1);
 
-        $this->assertEquals($val1, $chain->get(...$key1));
+        static::assertEquals($val1, $chain->get(...$key1));
 
         sleep(2);
 
-        $this->assertFalse($chain->has(...$key1));
+        static::assertFalse($chain->has(...$key1));
 
-        $this->assertNull($chain->get(...$key1));
+        static::assertNull($chain->get(...$key1));
     }
 
+    /**
+     * @group CacheChain
+     */
     public function testFilesystemHandlerCanChangeTtl()
     {
         $chain = $this->getNewHandlerChainWithFilesystemHandlerType();
         $chain->setTtl(8);
 
-        $this->assertEquals(8, $chain->getTtl());
+        static::assertEquals(8, $chain->getTtl());
 
         $val1 = $key1 = [1, 2, 3];
         $val2 = $key2 = [2, 3, 4];
@@ -468,25 +548,25 @@ class HandlerChainTest extends AbstractMantleKernelTestCase
 
         $chain->set($val2, ...$key2);
 
-        $this->assertTrue($chain->has(...$key1));
-        $this->assertTrue($chain->has(...$key2));
-        $this->assertEquals($val1, $chain->get(...$key1));
-        $this->assertEquals($val2, $chain->get(...$key2));
+        static::assertTrue($chain->has(...$key1));
+        static::assertTrue($chain->has(...$key2));
+        static::assertEquals($val1, $chain->get(...$key1));
+        static::assertEquals($val2, $chain->get(...$key2));
 
         sleep(4);
 
-        $this->assertFalse($chain->has(...$key2));
-        $this->assertNull($chain->get(...$key2));
+        static::assertFalse($chain->has(...$key2));
+        static::assertNull($chain->get(...$key2));
 
         $chain->setTtl(8);
         sleep(6);
 
-        $this->assertFalse($chain->has(...$key1));
-        $this->assertNull($chain->get(...$key1));
+        static::assertFalse($chain->has(...$key1));
+        static::assertNull($chain->get(...$key1));
 
         $chain->setTtlToDefault();
 
-        $this->assertEquals(1800, $chain->getTtl());
+        static::assertEquals(1800, $chain->getTtl());
     }
 
     public function tearDown()

@@ -100,30 +100,39 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ];
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testCanInstantiateClass()
     {
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             self::FULLY_QUALIFIED_CLASS_NAME,
             $this->getNewKeyGenerator()
         );
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyStringMutatorMethods()
     {
         $kg = $this->getNewKeyGenerator();
-        $this->assertNotTrue($kg->hasKeyString());
-        $this->assertNull($kg->getKeyString());
+        static::assertNotTrue($kg->hasKeyString());
+        static::assertNull($kg->getKeyString());
 
         $kg->setKeyString('some-key');
-        $this->assertEquals('some-key', $kg->getKeyString());
-        $this->assertTrue($kg->hasKeyString());
+        static::assertEquals('some-key', $kg->getKeyString());
+        static::assertTrue($kg->hasKeyString());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyStringSetterExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'The final translated and hashed key must be a string.'
+            '#The final translated and hashed key must be a string in .*#'
         );
 
         $this
@@ -132,45 +141,54 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesMutatorMethods()
     {
         $kg = $this->getNewKeyGenerator();
-        $this->assertNotTrue($kg->hasKeyValues());
-        $this->assertEquals([], $kg->getKeyValues());
+        static::assertNotTrue($kg->hasKeyValues());
+        static::assertEquals([], $kg->getKeyValues());
 
         $kg->setKeyValues('val1', 'val2');
-        $this->assertEquals(['val1', 'val2'], $kg->getKeyValues());
+        static::assertEquals(['val1', 'val2'], $kg->getKeyValues());
 
         $kg->addKeyValues('val3');
-        $this->assertEquals(['val1', 'val2', 'val3'], $kg->getKeyValues());
-        $this->assertTrue($kg->hasKeyValues());
+        static::assertEquals(['val1', 'val2', 'val3'], $kg->getKeyValues());
+        static::assertTrue($kg->hasKeyValues());
 
         $kg->setKeyValues();
-        $this->assertNotTrue($kg->hasKeyValues());
+        static::assertNotTrue($kg->hasKeyValues());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesTranslatedMutatorMethods()
     {
         $kg = $this->getNewKeyGenerator();
-        $this->assertNotTrue($kg->hasKeyValuesTranslated());
-        $this->assertEquals([], $kg->getKeyValuesTranslated());
+        static::assertNotTrue($kg->hasKeyValuesTranslated());
+        static::assertEquals([], $kg->getKeyValuesTranslated());
 
         $kg->setKeyValuesTranslated('val1', 'val2');
-        $this->assertEquals(['val1', 'val2'], $kg->getKeyValuesTranslated());
+        static::assertEquals(['val1', 'val2'], $kg->getKeyValuesTranslated());
 
         $kg->addKeyValuesTranslated('val3');
-        $this->assertEquals(['val1', 'val2', 'val3'], $kg->getKeyValuesTranslated());
-        $this->assertTrue($kg->hasKeyValuesTranslated());
+        static::assertEquals(['val1', 'val2', 'val3'], $kg->getKeyValuesTranslated());
+        static::assertTrue($kg->hasKeyValuesTranslated());
 
         $kg->setKeyValuesTranslated();
-        $this->assertNotTrue($kg->hasKeyValuesTranslated());
+        static::assertNotTrue($kg->hasKeyValuesTranslated());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesTranslatedSetterExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
-            'A passed translated value was not properly converted to a string.'
+            '#A passed translated value was not properly converted to a string .*#'
         );
 
         $kg = $this
@@ -179,11 +197,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesTranslatedAdderExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
-            'A passed translated value was not properly converted to a string.'
+            '#A passed translated value was not properly converted to a string in .*#'
         );
 
         $kg = $this
@@ -192,23 +213,29 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesTranslationModeMutatorMethods()
     {
         $kg = $this->getNewKeyGenerator();
-        $this->assertEquals(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_DEFAULT, $kg->getKeyValuesTranslationMode());
+        static::assertEquals(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_DEFAULT, $kg->getKeyValuesTranslationMode());
 
         $kg->setKeyValuesTranslationMode(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_INTERNAL);
-        $this->assertEquals(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_INTERNAL, $kg->getKeyValuesTranslationMode());
+        static::assertEquals(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_INTERNAL, $kg->getKeyValuesTranslationMode());
 
         $kg->setKeyValuesTranslationMode(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_CLOSURE);
-        $this->assertEquals(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_CLOSURE, $kg->getKeyValuesTranslationMode());
+        static::assertEquals(KeyGeneratorInterface::MODE_VALUES_TRANSLATION_METHOD_CLOSURE, $kg->getKeyValuesTranslationMode());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesTranslationModeSetterExceptionHandlingNonInt()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
-            'An invalid key for values translation mode was detected.'
+            '#An invalid key for values translation mode was detected in .*#'
         );
 
         $kg = $this
@@ -217,11 +244,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesTranslationModeSetterExceptionHandlingInvalidInt()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
-            'An invalid key for values translation mode of 123456789 was detected and cannot be used.'
+            '#An invalid key for values translation mode of 123456789 was detected and cannot be used in .*#'
         );
 
         $kg = $this
@@ -230,23 +260,29 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesTranslationClosureMutatorMethods()
     {
         $kg = $this->getNewKeyGenerator();
-        $this->assertNull($kg->getKeyValuesTranslationClosure());
-        $this->assertNotTrue($kg->hasKeyValuesTranslationClosure());
+        static::assertNull($kg->getKeyValuesTranslationClosure());
+        static::assertNotTrue($kg->hasKeyValuesTranslationClosure());
 
         $expected = $this->getKeyValuesTranslationClosure();
         $kg->setKeyValuesTranslationClosure($expected);
-        $this->assertTrue($kg->hasKeyValuesTranslationClosure());
-        $this->assertEquals($expected, $kg->getKeyValuesTranslationClosure());
-        $this->assertInstanceOf('Closure', $kg->getKeyValuesTranslationClosure());
+        static::assertTrue($kg->hasKeyValuesTranslationClosure());
+        static::assertEquals($expected, $kg->getKeyValuesTranslationClosure());
+        static::assertInstanceOf('Closure', $kg->getKeyValuesTranslationClosure());
 
         $kg->setKeyValuesTranslationClosure(null);
-        $this->assertNull($kg->getKeyValuesTranslationClosure());
-        $this->assertNotTrue($kg->hasKeyValuesTranslationClosure());
+        static::assertNull($kg->getKeyValuesTranslationClosure());
+        static::assertNotTrue($kg->hasKeyValuesTranslationClosure());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyValuesTranslationClosureSetterTypeHint()
     {
         $this->setExpectedExceptionRegExp(
@@ -260,29 +296,35 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyHashModeMutatorMethods()
     {
         $kg = $this->getNewKeyGenerator();
-        $this->assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_DEFAULT, $kg->getKeyHashMode());
+        static::assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_DEFAULT, $kg->getKeyHashMode());
 
         $kg->setKeyHashMode(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_MD5);
-        $this->assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_MD5, $kg->getKeyHashMode());
+        static::assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_MD5, $kg->getKeyHashMode());
 
         $kg->setKeyHashMode(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1);
-        $this->assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1, $kg->getKeyHashMode());
+        static::assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1, $kg->getKeyHashMode());
 
         $kg->setKeyHashMode(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1);
-        $this->assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1, $kg->getKeyHashMode());
+        static::assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1, $kg->getKeyHashMode());
 
         $kg->setKeyHashMode(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_CLOSURE);
-        $this->assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_CLOSURE, $kg->getKeyHashMode());
+        static::assertEquals(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_CLOSURE, $kg->getKeyHashMode());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyHashModeSetterExceptionHandlingNonInt()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
-            'An invalid key for hash mode was detected.'
+            '#An invalid key for hash mode was detected in .*#'
         );
 
         $kg = $this
@@ -291,11 +333,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyHashModeSetterExceptionHandlingInvalidInt()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\InvalidArgumentException',
-            'An invalid key for hash mode of 123456789 was detected and cannot be used.'
+            '#An invalid key for hash mode of 123456789 was detected and cannot be used in .*#'
         );
 
         $kg = $this
@@ -304,23 +349,29 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyHashClosureMutatorMethods()
     {
         $kg = $this->getNewKeyGenerator();
-        $this->assertNull($kg->getKeyHashClosure());
-        $this->assertNotTrue($kg->hasKeyHashClosure());
+        static::assertNull($kg->getKeyHashClosure());
+        static::assertNotTrue($kg->hasKeyHashClosure());
 
         $expected = $this->getKeyHashClosure();
         $kg->setKeyHashClosure($expected);
-        $this->assertTrue($kg->hasKeyHashClosure());
-        $this->assertEquals($expected, $kg->getKeyHashClosure());
-        $this->assertInstanceOf('Closure', $kg->getKeyHashClosure());
+        static::assertTrue($kg->hasKeyHashClosure());
+        static::assertEquals($expected, $kg->getKeyHashClosure());
+        static::assertInstanceOf('Closure', $kg->getKeyHashClosure());
 
         $kg->setKeyHashClosure(null);
-        $this->assertNull($kg->getKeyHashClosure());
-        $this->assertNotTrue($kg->hasKeyHashClosure());
+        static::assertNull($kg->getKeyHashClosure());
+        static::assertNotTrue($kg->hasKeyHashClosure());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testKeyHashClosureSetterTypeHint()
     {
         $this->setExpectedExceptionRegExp(
@@ -334,6 +385,9 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testCanGenerateKeyShortForm()
     {
         $kg = $this->getNewKeyGenerator();
@@ -357,18 +411,21 @@ class KeyGeneratorTest extends AbstractMantleTestCase
             ...$expectedKeyValues
         );
 
-        $this->assertEquals($expectedKeyValues, $kg->getKeyValues());
-        $this->assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
-        $this->assertEquals($expectedKeyMd5, $kg->getKey());
+        static::assertEquals($expectedKeyValues, $kg->getKeyValues());
+        static::assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
+        static::assertEquals($expectedKeyMd5, $kg->getKey());
 
         $kg->setKeyHashMode(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_SHA1);
-        $this->assertEquals($expectedKeySha1, $kg->getKey());
+        static::assertEquals($expectedKeySha1, $kg->getKey());
 
         $kg->setKeyHashMode(KeyGeneratorInterface::MODE_KEY_HASH_METHOD_CLOSURE);
         $kg->setKeyHashClosure($this->getKeyHashClosure());
-        $this->assertEquals($expectedKeyClosure, $kg->getKey());
+        static::assertEquals($expectedKeyClosure, $kg->getKey());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testCanGenerateKeyLongForm()
     {
         $stdClass1 = new \stdClass();
@@ -405,11 +462,11 @@ class KeyGeneratorTest extends AbstractMantleTestCase
             ->getKey()
         ;
 
-        $this->assertEquals($expectedKeyValues, $kg->getKeyValues());
+        static::assertEquals($expectedKeyValues, $kg->getKeyValues());
 
-        $this->assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
-        $this->assertEquals($expectedKeyMd5, $key);
-        $this->assertEquals($expectedKeyMd5, $kg->getKey());
+        static::assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
+        static::assertEquals($expectedKeyMd5, $key);
+        static::assertEquals($expectedKeyMd5, $kg->getKey());
 
         $kg = $this->getNewKeyGenerator();
         $key = $kg
@@ -420,10 +477,10 @@ class KeyGeneratorTest extends AbstractMantleTestCase
             ->getKey()
         ;
 
-        $this->assertEquals($expectedKeyValues, $kg->getKeyValues());
-        $this->assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
-        $this->assertEquals($expectedKeyMd5, $key);
-        $this->assertEquals($expectedKeyMd5, $kg->getKey());
+        static::assertEquals($expectedKeyValues, $kg->getKeyValues());
+        static::assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
+        static::assertEquals($expectedKeyMd5, $key);
+        static::assertEquals($expectedKeyMd5, $kg->getKey());
 
         $kg = $this->getNewKeyGenerator();
         $key = $kg
@@ -435,10 +492,10 @@ class KeyGeneratorTest extends AbstractMantleTestCase
             ->getKey()
         ;
 
-        $this->assertEquals($expectedKeyValues, $kg->getKeyValues());
-        $this->assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
-        $this->assertEquals($expectedKeyMd5, $key);
-        $this->assertEquals($expectedKeyMd5, $kg->getKey());
+        static::assertEquals($expectedKeyValues, $kg->getKeyValues());
+        static::assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
+        static::assertEquals($expectedKeyMd5, $key);
+        static::assertEquals($expectedKeyMd5, $kg->getKey());
 
         $kg = $this->getNewKeyGenerator();
         $key = $kg
@@ -449,10 +506,10 @@ class KeyGeneratorTest extends AbstractMantleTestCase
             ->getKey()
         ;
 
-        $this->assertEquals($expectedKeyValues, $kg->getKeyValues());
-        $this->assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
-        $this->assertEquals($expectedKeyMd5, $key);
-        $this->assertEquals($expectedKeyMd5, $kg->getKey());
+        static::assertEquals($expectedKeyValues, $kg->getKeyValues());
+        static::assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
+        static::assertEquals($expectedKeyMd5, $key);
+        static::assertEquals($expectedKeyMd5, $kg->getKey());
 
         $kg = $this->getNewKeyGenerator();
         $key = $kg
@@ -463,10 +520,10 @@ class KeyGeneratorTest extends AbstractMantleTestCase
             ->getKey()
         ;
 
-        $this->assertEquals($expectedKeyValues, $kg->getKeyValues());
-        $this->assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
-        $this->assertEquals($expectedKeySha1, $key);
-        $this->assertEquals($expectedKeySha1, $kg->getKey());
+        static::assertEquals($expectedKeyValues, $kg->getKeyValues());
+        static::assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
+        static::assertEquals($expectedKeySha1, $key);
+        static::assertEquals($expectedKeySha1, $kg->getKey());
 
         $kg = $this->getNewKeyGenerator();
         $key = $kg
@@ -478,17 +535,20 @@ class KeyGeneratorTest extends AbstractMantleTestCase
             ->getKey()
         ;
 
-        $this->assertEquals($expectedKeyValues, $kg->getKeyValues());
-        $this->assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
-        $this->assertEquals($expectedKeyClosure, $key);
-        $this->assertEquals($expectedKeyClosure, $kg->getKey());
+        static::assertEquals($expectedKeyValues, $kg->getKeyValues());
+        static::assertEquals($expectedKeyValuesTranslated, $kg->getKeyValuesTranslated());
+        static::assertEquals($expectedKeyClosure, $key);
+        static::assertEquals($expectedKeyClosure, $kg->getKey());
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testHandleKeyValuesTranslationNoKeyValuesExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Could not generate key without any values provided to base the key on.'
+            '#Could not generate key without any values provided to base the key .*#'
         );
 
         list($kg, $method) = $this->getReflectionForMethod('handleKeyValuesTranslation');
@@ -497,11 +557,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $method->invokeArgs($kg, []);
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testHandleKeyValuesTranslationInvalidModeExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Could not handle key values translation during key generation as invalid mode was set.'
+            '#Could not handle key values translation during key generation as invalid mode was set .*#'
         );
 
         list($kg, $method, $prop) = $this->getReflectionForMethodAndProperty('handleKeyValuesTranslation', 'keyValuesTranslationMode');
@@ -511,11 +574,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $method->invokeArgs($kg, []);
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testHandleKeyValuesTranslationInternalExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'PHP resources (such as DB connections, file handles, etc) cannot be used as key values using the internal translation method.'
+            '#PHP resources \(such as DB connections, file handles, etc\) cannot be used as key values using the internal translation method .*#'
         );
 
         $kg = $this
@@ -524,11 +590,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testHandleKeyValuesTranslationClosureExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Could not handle key value translation as closure mode was set but no closure was defined.'
+            '#Could not handle key value translation as closure mode was set but no closure was defined .*#'
         );
 
         $key = $this
@@ -539,11 +608,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         ;
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testHandleKeyValuesTranslatedHashingNoKeyExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Could not generate key without any translated values provided to base the key on.'
+            '#Could not generate key without any translated values provided to base the key on .*#'
         );
 
         list($kg, $method) = $this->getReflectionForMethod('handleKeyValuesTranslatedHashing');
@@ -552,11 +624,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $method->invokeArgs($kg, []);
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testHandleKeyValuesTranslatedHashingInvalidModeExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Could not handle key hashing during key generation as invalid mode was set.'
+            '#Could not handle key hashing during key generation as invalid mode was set .*#'
         );
 
         list($kg, $method, $prop) = $this->getReflectionForMethodAndProperty('handleKeyValuesTranslatedHashing', 'keyHashMode');
@@ -566,11 +641,14 @@ class KeyGeneratorTest extends AbstractMantleTestCase
         $method->invokeArgs($kg, []);
     }
 
+    /**
+     * @group KeyGenerator
+     */
     public function testHandleKeyValuesTranslatedHashingClosureExceptionHandling()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             'Scribe\CacheBundle\Exceptions\RuntimeException',
-            'Could not handle key hashing as closure mode was set but no closure was defined.'
+            '#Could not handle key hashing as closure mode was set but no closure was defined .*#'
         );
 
         $key = $this

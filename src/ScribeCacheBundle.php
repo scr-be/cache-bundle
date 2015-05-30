@@ -13,7 +13,7 @@ namespace Scribe\CacheBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Scribe\CacheBundle\DependencyInjection\Compiler\CacheHandlerCompilerPass;
+use Scribe\CacheBundle\DependencyInjection\Compiler\CacheEngineCompilerPass;
 
 /**
  * Class ScribeCacheBundle.
@@ -29,7 +29,7 @@ class ScribeCacheBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new CacheHandlerCompilerPass());
+        $container->addCompilerPass(new CacheEngineCompilerPass());
     }
 }
 

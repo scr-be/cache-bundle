@@ -13,24 +13,24 @@ namespace Scribe\CacheBundle\Doctrine\Repository\Cache;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
-use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerItem;
-use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheDBHandlerPrefix;
+use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabaseItem;
+use Scribe\CacheBundle\Doctrine\Entity\Cache\CacheEngineDatabasePrefix;
 use Scribe\Doctrine\Exception\ORMException;
 
 /**
- * Class CacheDBHandlerItemRepository.
+ * Class CacheEngineDatabaseItemRepository.
  */
-class CacheDBHandlerItemRepository extends EntityRepository
+class CacheEngineDatabaseItemRepository extends EntityRepository
 {
     /**
-     * @param CacheDBHandlerPrefix $prefix
+     * @param CacheEngineDatabasePrefix $prefix
      * @param string               $key
      *
      * @throws ORMException
      *
-     * @return CacheDBHandlerItem
+     * @return CacheEngineDatabaseItem
      */
-    public function findOneByPrefixAndKey(CacheDBHandlerPrefix $prefix, $key)
+    public function findOneByPrefixAndKey(CacheEngineDatabasePrefix $prefix, $key)
     {
         $q = $this
             ->createQueryBuilder('i')
@@ -46,13 +46,8 @@ class CacheDBHandlerItemRepository extends EntityRepository
             $result = $q->getSingleResult();
         } catch (\Exception $e) {
             throw new ORMException(
-                sprintf(
-                    'Could not fetch the requested cache item for the provided key "%s" and prefix "%s".',
-                    $key,
-                    $prefix->getSlug()
-                ),
-                ORMException::CODE_ORM_GENERIC,
-                $e
+                'Could not fetch the requested cache item for the provided key "%s" and prefix "%s" in "%s".',
+                ORMException::CODE_ORM_GENERIC, $e, null, $key, $prefix->getSlug(), __METHOD__
             );
         }
 
@@ -60,17 +55,17 @@ class CacheDBHandlerItemRepository extends EntityRepository
     }
 
     /**
-     * @param CacheDBHandlerPrefix $prefix
+     * @param CacheEngineDatabasePrefix $prefix
      *
      * @return int
      */
-    public function findStaleCountByPrefix(CacheDBHandlerPrefix $prefix)
+    public function findStaleCountByPrefix(CacheEngineDatabasePrefix $prefix)
     {
         $qb = $this->createQueryBuilder('item');
         $q = $qb
             ->select('count(item.id)')
             ->where('item.prefix = :prefix')
-            ->andWhere($qb->expr()->lte(':datetimenow', "(item.updated_on + item.ttl)"))
+            ->andWhere($qb->expr()->lte(':datetimenow', '(item.updated_on + item.ttl)'))
             ->setParameter('prefix', $prefix)
             ->setParameter('datetimenow', new \DateTime())
             ->setMaxResults(1)
@@ -81,17 +76,17 @@ class CacheDBHandlerItemRepository extends EntityRepository
     }
 
     /**
-     * @param CacheDBHandlerPrefix $prefix
+     * @param CacheEngineDatabasePrefix $prefix
      *
      * @return int
      */
-    public function deleteStaleByPrefix(CacheDBHandlerPrefix $prefix)
+    public function deleteStaleByPrefix(CacheEngineDatabasePrefix $prefix)
     {
         $qb = $this->createQueryBuilder('item');
         $q = $qb
             ->delete()
             ->where('item.prefix = :prefix')
-            ->andWhere($qb->expr()->lte(':datetimenow', "(item.updated_on + item.ttl)"))
+            ->andWhere($qb->expr()->lte(':datetimenow', '(item.updated_on + item.ttl)'))
             ->setParameter('prefix', $prefix)
             ->setParameter('datetimenow', new \DateTime())
             ->getQuery()
@@ -101,11 +96,11 @@ class CacheDBHandlerItemRepository extends EntityRepository
     }
 
     /**
-     * @param CacheDBHandlerPrefix $prefix
+     * @param CacheEngineDatabasePrefix $prefix
      *
      * @return int
      */
-    public function deleteAllByPrefix(CacheDBHandlerPrefix $prefix)
+    public function deleteAllByPrefix(CacheEngineDatabasePrefix $prefix)
     {
         $qb = $this->createQueryBuilder('i');
         $q = $qb

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Cache\Handler\Type;
+namespace Scribe\CacheBundle\Cache\Handler\Engine;
 
 use Scribe\Utility\ClassInfo;
 use Scribe\Utility\Serializer\Serializer;
@@ -20,9 +20,9 @@ use Scribe\CacheBundle\KeyGenerator\KeyGeneratorAwareTrait;
 use Scribe\CacheBundle\KeyGenerator\KeyGeneratorInterface;
 
 /**
- * Class AbstractHandlerType.
+ * Class AbstractCacheEngine.
  */
-abstract class AbstractHandlerType extends AbstractHandler implements HandlerTypeInterface
+abstract class AbstractCacheEngine extends AbstractHandler implements CacheEngineInterface
 {
     use KeyGeneratorAwareTrait;
 
@@ -34,7 +34,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     protected $versions = [];
 
     /**
-     * If {@see AbstractHandlerType::$versions} is null, this callable can be
+     * If {@see AbstractCacheEngine::$versions} is null, this callable can be
      * optionally defined to determine the versions of the relevant software
      * interaction layer.
      *
@@ -75,7 +75,12 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      *
      * @var callable|null
      */
-    protected $supportedDecider = null;
+    protected $supportedDecider;
+
+    /**
+     * @var bool
+     */
+    protected $initialized;
 
     /**
      * Setup the class instance with the required properties.
@@ -96,16 +101,57 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
             ->setPriority($priority)
             ->setEnabled($disabled === false)
             ->setSupportedDecider($supportedDecider)
+            ->setInitialized(true)
         ;
     }
 
     /**
-     * Handler-specific implementation to determine if the caching method is
-     * supported by the current platform.
+     * Type casting object will return its fully-qualified class name.
      *
-     * @return bool
+     * @return string
      */
-    abstract public function isSupported(...$by);
+    public function __toString()
+    {
+        return (string) $this->getType(true);
+    }
+
+    /**
+     * Get the handler type.
+     *
+     * @param bool $fqcn
+     *
+     * @return string
+     */
+    public function getType($fqcn = false)
+    {
+        if ($fqcn === true) {
+            return (string) ClassInfo::getNamespaceByInstance($this).ClassInfo::getClassNameByInstance($this);
+        }
+
+        return (string) strtolower(
+            str_replace('CacheEngine', '', ClassInfo::getClassNameByInstance($this))
+        );
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInitialized()
+    {
+        return (bool) $this->initialized;
+    }
+
+    /**
+     * @param boolean $initialized
+     *
+     * @return $this
+     */
+    public function setInitialized($initialized)
+    {
+        $this->initialized = $initialized;
+
+        return $this;
+    }
 
     /**
      * Set the optional closure that determines if this cache handler is supported.
@@ -119,18 +165,6 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
         if (true === ($decider instanceof \Closure)) {
             $this->supportedDecider = $decider;
         }
-
-        return $this;
-    }
-
-    /**
-     * Un-set the optional closure that determines if this cache handler is supported.
-     *
-     * @return $this
-     */
-    public function unsetSupportedDecider()
-    {
-        $this->supportedDecider = null;
 
         return $this;
     }
@@ -156,11 +190,40 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     }
 
     /**
+     * Un-set the optional closure that determines if this cache handler is supported.
+     *
+     * @return $this
+     */
+    public function clearSupportedDecider()
+    {
+        $this->supportedDecider = null;
+
+        return $this;
+    }
+
+    /**
+     * Check if the handler type is supported by the current environment based *first* an optional user-specified
+     * callback decider, or if one is not defined, the default decider implementation for the given type.
+     *
+     * @return bool
+     */
+    public function isSupported(...$by)
+    {
+        if (null !== ($decision = $this->isSupportedUserDecider(...$by))) {
+            return (bool) $decision;
+        }
+
+        return (bool) $this->isSupportedDefaultDecider(...$by);
+    }
+
+    /**
      * Attempt to call the optional closure that determines if this cache handler is supported.
+     *
+     * @param mixed,... $by
      *
      * @return bool|null
      */
-    protected function callSupportedDecider()
+    protected function isSupportedUserDecider(...$by)
     {
         if (false === $this->hasSupportedDecider()) {
             return;
@@ -168,13 +231,22 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
 
         $decider = $this->getSupportedDecider();
 
-        return (bool) ($decider());
+        return (bool) ($decider(...$by));
     }
+
+    /**
+     * Check if the handler type is supported using the default decider implementation.
+     *
+     * @param mixed,... $by
+     *
+     * @return bool
+     */
+    abstract protected function isSupportedDefaultDecider(...$by);
 
     /**
      * Set the value(s) that create the cache key.
      *
-     * @param ...mixed $keyValues
+     * @param mixed,... $keyValues
      *
      * @return $this
      */
@@ -195,7 +267,7 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function getKey()
     {
-        return (string) $this->getKeyGenerator()->getKey(...[]);
+        return (string) $this->getKeyGenerator()->getKey();
     }
 
     /**
@@ -280,12 +352,16 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      * Attempt to get a cached value; returns null if value does not exist or
      * is stale.
      *
-     * @param ...mixed $keyValues
+     * @param mixed,... $keyValues
      *
      * @return string|int|object|callable|null
      */
     public function get(...$keyValues)
     {
+        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+            return null;
+        }
+
         $data = $this->getUsingHandler(
             $this->getCurrentKey(...$keyValues)
         );
@@ -305,13 +381,17 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     /**
      * Set a cached value; will overwrite a value with the same key silently.
      *
-     * @param string|int|object|callable $data
-     * @param ...mixed                   $keyValues
+     * @param string|int|object|callable  $data
+     * @param mixed,...                   $keyValues
      *
      * @return bool
      */
     public function set($data, ...$keyValues)
     {
+        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+            return false;
+        }
+
         return $this->setUsingHandler(
             $this->sanitizeSubmittedCacheData($data),
             $this->getCurrentKey(...$keyValues)
@@ -337,6 +417,10 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function has(...$keyValues)
     {
+        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+            return false;
+        }
+
         return (bool) $this->hasUsingHandler(
             $this->getCurrentKey(...$keyValues)
         );
@@ -360,6 +444,10 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function del(...$keyValues)
     {
+        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+            return false;
+        }
+
         return (bool) $this->delUsingHandler(
             $this->getCurrentKey(...$keyValues)
         );
@@ -383,6 +471,10 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     public function flushAll()
     {
+        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+            return false;
+        }
+
         return (bool) $this->flushAllUsingHandler();
     }
 
@@ -394,29 +486,42 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
     abstract protected function flushAllUsingHandler();
 
     /**
+     * By default there is nothing to lazy initialize.
+     *
+     * @return bool
+     */
+    protected function lazyInitialize()
+    {
+        return true;
+    }
+
+    /**
      * Get the previously set key or set the key based on the passed values.
      *
-     * @param ...$keyValues
-     *
-     * @return string
+     * @param mixed $keyValues,...
      *
      * @throws InvalidArgumentException
+     *
+     * @return string
      */
     protected function getCurrentKey(...$keyValues)
     {
-        if (true === (count($keyValues) > 0)) {
-            $this->setKey(...$keyValues);
+        if ($this->isInitialized() === false && $this->lazyInitialize() === false) {
+            return false;
+        }
 
+        if (count($keyValues) > 0) {
+            $this->setKey(...$keyValues);
+        }
+
+        if (true === $this->hasKey()) {
             return $this->getKey();
         }
 
-        if (false === $this->hasKey()) {
-            throw new InvalidArgumentException(
-                'Cannot attempt to get a cached value without setting a key to retrieve it.'
-            );
-        }
-
-        return $this->getKey();
+        throw new InvalidArgumentException(
+            'Cannot attempt to get a cached value without setting a key to retrieve it in %s.',
+            null, null, null, __METHOD__
+        );
     }
 
     /**
@@ -428,57 +533,28 @@ abstract class AbstractHandlerType extends AbstractHandler implements HandlerTyp
      */
     protected function sanitizeReturnedCacheData($data)
     {
-        if (null === $data) {
-            return;
-        }
-
-        return Serializer::wake($data);
+        return ($data !== null ? Serializer::wake($data) : null);
     }
 
     /**
-     * Serialize data to be cached (object, int, string, etc).
+     * Serialize data to be cached (object, int, string, etc). Cannot be a resource type.
      *
      * @param mixed $data
      *
-     * @return string
-     *
      * @throws RuntimeException If resource data type is given
+     *
+     * @return string
      */
     protected function sanitizeSubmittedCacheData($data)
     {
-        if (true === is_resource($data)) {
-            throw new RuntimeException(
-                'You cannot cache a resource data type.'
-            );
+        if (is_resource($data) === false) {
+            return Serializer::sleep($data);
         }
 
-        return Serializer::sleep($data);
-    }
-
-    /**
-     * Get the handler type.
-     *
-     * @return string
-     */
-    public function getType($fqcn = false)
-    {
-        if ($fqcn === true) {
-            return (string) ClassInfo::getNamespaceByInstance($this).ClassInfo::getClassNameByInstance($this);
-        }
-
-        return (string) strtolower(
-            str_replace('HandlerType', '', ClassInfo::getClassNameByInstance($this))
+        throw new RuntimeException(
+            'As a resource cannot be serialized it cannot be passed as a cache value in "%s".',
+            null, null, null, __METHOD__
         );
-    }
-
-    /**
-     * Type casting object will return its fully-qualified class name.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->getType(true);
     }
 }
 

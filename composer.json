@@ -39,19 +39,20 @@
     ],
     "require" : {
         "php"                                  : ">=5.6.4",
-        "scribe/mantle-bundle"                 : "2.0.*@dev"
+        "scribe/mantle-bundle"                 : "~2.0|~2.1@dev"
     },
     "require-dev" : {
         "ext-memcached"                        : "~2.2",
         "ext-igbinary"                         : "~1.2",
         "ext-tidy"                             : "~2.0",
         "ext-mysqli"                           : "*",
-        "symfony/symfony"                      : "~2.7.0",
-        "symfony/framework-bundle"             : "~2.7.0",
-        "symfony/stopwatch"                    : "~2.7.0",
-        "symfony/var-dumper"                   : "~2.7.0",
-        "symfony/debug-bundle"                 : "~2.7.0",
-        "symfony/phpunit-bridge"               : "~2.7.0",
+        "ext-pdo"                              : "*",
+        "symfony/symfony"                      : "~2.7|~2.8@dev",
+        "symfony/framework-bundle"             : "~2.7|~2.8@dev",
+        "symfony/stopwatch"                    : "~2.7|~2.8@dev",
+        "symfony/var-dumper"                   : "~2.7|~2.8@dev",
+        "symfony/debug-bundle"                 : "~2.7|~2.8@dev",
+        "symfony/phpunit-bridge"               : "~2.7|~2.8@dev",
         "phpunit/phpunit"                      : "~4.6",
         "sensio/generator-bundle"              : "~2.5",
         "doctrine/orm"                         : "~2.5",
@@ -60,16 +61,13 @@
         "doctrine/doctrine-bundle"             : "~1.4",
         "doctrine/doctrine-fixtures-bundle"    : "2.2.*@dev",
         "doctrine/data-fixtures"               : "1.0.*@dev",
-        "doctrine/migrations"                  : "1.0.*@dev",
-        "doctrine/doctrine-migrations-bundle"  : "~1.0",
         "sensiolabs/security-checker"          : "~2.0",
-        "scrutinizer/ocular"                   : "~1.1.1",
-        "satooshi/php-coveralls"               : "dev-multipleroot",
-        "chriskite/phactory"                   : "~0.4.3",
-        "fzaninotto/faker"                     : "~1.5.0",
+        "scrutinizer/ocular"                   : "~1.1",
+        "satooshi/php-coveralls"               : "*",
+        "chriskite/phactory"                   : "~0.4",
+        "fzaninotto/faker"                     : "~1.5",
         "sami/sami"                            : "~3.0",
-        "nikic/php-parser"                     : ">=1.0,<1.2",
-        "pdepend/pdepend"                      : "~2.0"
+        "nikic/php-parser"                     : ">=1.0,<1.2"
     },
     "autoload" : {
         "psr-4" : {
@@ -85,11 +83,5 @@
         "branch-alias": {
             "dev-master": "2.0-dev"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "https://github.com/scribenet/php-coveralls.git"
-        }
-    ]
+    }
 }

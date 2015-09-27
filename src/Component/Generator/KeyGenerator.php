@@ -129,7 +129,7 @@ class KeyGenerator implements KeyGeneratorInterface
      * Get/generate key. If no parameters are provided, previously compiled key returned (if available). If parameters
      * are provided, key is only re-generated when values are different from previous compilation.
      *
-     * @param mixed,... $values
+     * @param mixed,... $keyValues
      *
      * @throws RuntimeException If no key is available.
      *

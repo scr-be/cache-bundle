@@ -1,6 +1,6 @@
 ---
 
-parameters:
+parameters :
 
     # Key Generator
 
@@ -12,14 +12,14 @@ parameters:
 
     # Cache Manager
 
-    s.cache.manager.class          : Scribe\CacheBundle\Cache\Manager\CacheManager
+    s.cache.manager.class          : Scribe\CacheBundle\Component\Manager\CacheManager
 
     # Cache Method
 
     s.cache.method_memcached.class : Scribe\CacheBundle\Component\Cache\Memcached\MemcachedCacheMethod
     s.cache.method_mock.class      : Scribe\CacheBundle\Component\Cache\Mock\MockCacheMethod
 
-services:
+services :
 
     # Key Generator
 
@@ -39,10 +39,12 @@ services:
     s.cache :
         class     : %s.cache.manager.class%
         arguments :
-            - @s.cache.registrar
+            - %s.cache.global.enabled%
         calls :
-            - [ setEnabled, [ %s.cache.global.enabled% ] ]
-            - [ determineEnginePriority                  ]
+            - [ setRegistrar, [ @s.cache.registrar ] ]
+
+    s.cache.chain :
+        alias : s.cache
 
     # Cache Attendants
 

@@ -11,25 +11,22 @@
 
 namespace Scribe\CacheBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Scribe\CacheBundle\DependencyInjection\Compiler\CacheEngineCompilerPass;
+use Scribe\CacheBundle\DependencyInjection\Compiler\Pass\CacheCompilerPass;
+use Scribe\WonkaBundle\Component\Bundle\AbstractCompilerAwareBundle;
 
 /**
  * Class ScribeCacheBundle.
  */
-class ScribeCacheBundle extends Bundle
+class ScribeCacheBundle extends AbstractCompilerAwareBundle
 {
     /**
-     * Fresh container to build on specific to this bundle (later merge info global container).
-     *
-     * @param ContainerBuilder $container
+     * @return array
      */
-    public function build(ContainerBuilder $container)
+    public function getCompilerPassInstances()
     {
-        parent::build($container);
-
-        $container->addCompilerPass(new CacheEngineCompilerPass());
+        return [
+            new CacheCompilerPass(),
+        ];
     }
 }
 

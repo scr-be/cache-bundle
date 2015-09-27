@@ -11,24 +11,13 @@
 
 namespace Scribe\CacheBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Scribe\Component\DependencyInjection\AbstractExtension;
+use Scribe\WonkaBundle\Component\DependencyInjection\AbstractExtension;
 
 /**
  * Class ScribeCacheExtension.
  */
 class ScribeCacheExtension extends AbstractExtension
 {
-    /**
-     * Load the configuration directives/files for this bundle.
-     *
-     * @param array            $configs
-     * @param ContainerBuilder $container
-     */
-    public function load(array $configs, ContainerBuilder $container)
-    {
-        $this->autoLoad($configs, $container, new Configuration(), 's.cache');
-    }
 }
 
 /* EOF */

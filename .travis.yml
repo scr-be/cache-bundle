@@ -1,9 +1,5 @@
 language: php
 
-branches:
-  only:
-    - master
-
 env:
   global:
     - SYMFONY_DEPRECATIONS_HELPER=weak
@@ -33,7 +29,6 @@ before_install:
   - git submodule update --init --recursive && cd app/config/shared_public && git checkout master && cd ../../../
   - sh app/config/shared_public/tests/travis/php-build-igbinary.sh
   - sh app/config/shared_public/tests/travis/php-build-memcached.sh
-  - sh app/config/shared_public/tests/travis/php-build-twig.sh
   - phpenv config-add app/config/shared_public/tests/travis/config-timezone.ini
   - phpenv rehash
   - mkdir -p build/logs
@@ -43,11 +38,6 @@ install:
   - travis_retry composer self-update
   - travis_retry composer clear-cache
   - travis_retry composer install --no-interaction || travis_retry composer update --no-interaction
-
-before_script:
-  - app/console doctrine:database:create --no-interaction
-  - app/console doctrine:schema:create --no-interaction
-  - app/console doctrine:fixtures:load --no-interaction
 
 script:
   - bin/phpunit --verbose --configuration phpunit.xml.dist

@@ -12,60 +12,56 @@
 
 namespace Scribe\CacheBundle\Tests;
 
-use PHPUnit_Framework_TestCase;
-use ReflectionClass;
-use Scribe\CacheBundle\ScribeCacheBundle;
+use Scribe\Wonka\Utility\UnitTest\WonkaTestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ScribeCacheBundleTest.
  */
-class ScribeCacheBundleTest extends PHPUnit_Framework_TestCase
+class ScribeCacheBundleTest extends WonkaTestCase
 {
-    const FULLY_QUALIFIED_CLASS_NAME = 'Scribe\CacheBundle\ScribeCacheBundle';
-
     /**
-     * @var ContainerInterface
+     * @var \AppKernel
      */
-    private $container;
+    static $kernel;
 
     public function setUp()
     {
         $kernel = new \AppKernel('test', true);
         $kernel->boot();
-        $this->container = $kernel->getContainer();
+
+        self::$kernel = $kernel;
     }
 
-    public function getNewBundle()
+    public function tearDown()
     {
-        return new ScribeCacheBundle();
+        self::$kernel->shutdown();
     }
 
-    public function getReflection()
+    public function test_kernel_build_container()
     {
-        return new ReflectionClass(self::FULLY_QUALIFIED_CLASS_NAME);
+        static::assertInstanceOf('Symfony\Component\DependencyInjection\ContainerInterface', self::$kernel->getContainer());
     }
 
-    public function testCanBuildContainer()
+    public function test_has_cache_service()
     {
-        static::assertTrue(($this->container instanceof Container));
+        static::assertTrue(self::$kernel->getContainer()->has('s.cache'));
     }
 
-    public function testCanAccessContainerServices()
+    public function test_cache_compiler_pass()
     {
-        static::assertTrue($this->container->has('s.cache.chain'));
-    }
+        static::assertTrue(self::$kernel->getContainer()->has('s.cache.registrar'));
+        $registrar = self::$kernel->getContainer()->get('s.cache.registrar');
 
-    public function testCanApplyCompilerPass()
-    {
-        /*
-        $this->assertTrue($this->container->has('s.cache.chain'));
-        $methodChain = $this->container->get('s.cache.chain');
-        $this->assertNotEquals([], $methodChain->getHandlerCollection());
-        $this->assertTrue($methodChain->hasHandlers());
-        $this->assertEquals(3, count($methodChain->getHandlerCollection()));
-        */
+        static::assertInstanceOf('Scribe\CacheBundle\DependencyInjection\Compiler\Registrar\CacheCompilerRegistrar', $registrar);
+        static::assertCount(2, $registrar->getAttendantCollection());
+
+        static::assertTrue(self::$kernel->getContainer()->has('s.cache.key_generator'));
+        $g = self::$kernel->getContainer()->get('s.cache.key_generator');
+        foreach ($registrar->getAttendantCollection() as $attendant) {
+            static::assertEquals($g, $attendant->getKeyGenerator());
+        }
     }
 }
 

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "33fc89dfea8280cd537c1ff0a52e110c",
-    "content-hash": "e34a15bbf075cf78a0ce1d7877448074",
+    "hash": "f2cb96d16d40df239c2bc74fc79d84a9",
+    "content-hash": "42b65c04cc3bc311c8d452c954f3b6da",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -449,16 +449,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scr-be/wonka-bundle.git",
-                "reference": "925268c3287fa2f1f2c3183496fe13e2d0314ea5"
+                "reference": "e2b07290044ff8f3a9286197558b053e941650ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scr-be/wonka-bundle/zipball/925268c3287fa2f1f2c3183496fe13e2d0314ea5",
-                "reference": "925268c3287fa2f1f2c3183496fe13e2d0314ea5",
+                "url": "https://api.github.com/repos/scr-be/wonka-bundle/zipball/e2b07290044ff8f3a9286197558b053e941650ee",
+                "reference": "e2b07290044ff8f3a9286197558b053e941650ee",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.4,~5.6",
+                "php": ">=5.6.4,~5.6|~7.0",
                 "scribe/wonka-library": "~0.1@dev"
             },
             "require-dev": {
@@ -466,7 +466,6 @@
                 "doctrine/doctrine-fixtures-bundle": "~2.0|~3.0",
                 "doctrine/doctrine-migrations-bundle": "~1.0",
                 "doctrine/migrations": "~1.0|~2.0",
-                "ext-json": "*",
                 "nikic/php-parser": ">=1.0,<1.2",
                 "phpunit/phpunit": "~4.8",
                 "sami/sami": "~3.0",
@@ -526,7 +525,7 @@
                 "scribenet",
                 "wonka-bundle"
             ],
-            "time": "2015-09-27 15:43:26"
+            "time": "2015-10-01 12:10:11"
         },
         {
             "name": "scribe/wonka-library",
@@ -534,16 +533,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scr-be/wonka-library.git",
-                "reference": "3e030d4f725763ec245fb3dd9ce7c3ea4e0290ad"
+                "reference": "42e8a6b900034e3c7c7f6b620d9249a0998c79fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scr-be/wonka-library/zipball/3e030d4f725763ec245fb3dd9ce7c3ea4e0290ad",
-                "reference": "3e030d4f725763ec245fb3dd9ce7c3ea4e0290ad",
+                "url": "https://api.github.com/repos/scr-be/wonka-library/zipball/42e8a6b900034e3c7c7f6b620d9249a0998c79fe",
+                "reference": "42e8a6b900034e3c7c7f6b620d9249a0998c79fe",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.4,~5.6"
+                "php": ">=5.6.4,~5.6|~7.0"
             },
             "conflict": {
                 "scribe/mantle-bundle": "<2.1.0"
@@ -596,7 +595,7 @@
                 "scribenet",
                 "wonka-library"
             ],
-            "time": "2015-09-22 17:42:53"
+            "time": "2015-10-01 12:07:57"
         },
         {
             "name": "symfony/security-acl",
@@ -662,12 +661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "4b942741e58624557f9a23ad1c178ba6c31ee628"
+                "reference": "b107f235c2c96bc13c6ffc378c5b04936e82603c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/4b942741e58624557f9a23ad1c178ba6c31ee628",
-                "reference": "4b942741e58624557f9a23ad1c178ba6c31ee628",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/b107f235c2c96bc13c6ffc378c5b04936e82603c",
+                "reference": "b107f235c2c96bc13c6ffc378c5b04936e82603c",
                 "shasum": ""
             },
             "require": {
@@ -701,6 +700,7 @@
                 "symfony/http-foundation": "self.version",
                 "symfony/http-kernel": "self.version",
                 "symfony/intl": "self.version",
+                "symfony/ldap": "self.version",
                 "symfony/locale": "self.version",
                 "symfony/monolog-bridge": "self.version",
                 "symfony/options-resolver": "self.version",
@@ -782,7 +782,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-09-27 14:47:35"
+            "time": "2015-10-01 12:34:19"
         },
         {
             "name": "twig/twig",
@@ -1874,16 +1874,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.9",
+            "version": "4.8.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "73fad41adb5b7bc3a494bb930d90648df1d5e74b"
+                "reference": "463163747474815c5ccd4ae12b5b355ec12158e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/73fad41adb5b7bc3a494bb930d90648df1d5e74b",
-                "reference": "73fad41adb5b7bc3a494bb930d90648df1d5e74b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/463163747474815c5ccd4ae12b5b355ec12158e8",
+                "reference": "463163747474815c5ccd4ae12b5b355ec12158e8",
                 "shasum": ""
             },
             "require": {
@@ -1942,7 +1942,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-09-20 12:56:44"
+            "time": "2015-10-01 09:14:30"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2625,16 +2625,16 @@
         },
         {
             "name": "symfony/monolog-bundle",
-            "version": "dev-master",
+            "version": "v2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "a6494a97c0daac540e7c04b67832c56d68a644ed"
+                "reference": "78883d8c1cfa523ac3a28a482b7793036b243f7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/a6494a97c0daac540e7c04b67832c56d68a644ed",
-                "reference": "a6494a97c0daac540e7c04b67832c56d68a644ed",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/78883d8c1cfa523ac3a28a482b7793036b243f7d",
+                "reference": "78883d8c1cfa523ac3a28a482b7793036b243f7d",
                 "shasum": ""
             },
             "require": {
@@ -2652,7 +2652,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7.x-dev"
+                    "dev-master": "2.8.x-dev"
                 }
             },
             "autoload": {
@@ -2680,7 +2680,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2015-09-25 10:42:33"
+            "time": "2015-09-29 17:13:11"
         },
         {
             "name": "symfony/phpunit-bridge",
@@ -2751,10 +2751,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6.4,~5.6",
+        "php": ">=5.6.4,~5.6|~7.0",
         "ext-memcached": "~2.2"
     },
-    "platform-dev": {
-        "ext-igbinary": "~1.2"
-    }
+    "platform-dev": []
 }

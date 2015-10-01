@@ -54,7 +54,7 @@ class MemcachedCacheMethodTest extends KernelTestCase
     public function test_options_default()
     {
         $keys = ['serializer', 'libketama_compatible', 'no_block', 'tcp_nodelay', 'compression', 'compression_type'];
-        $values = ['serializer_igbinary', false, true, true, false, 'compression_fastlz'];
+        $values = ['serializer_php', false, true, true, false, 'compression_fastlz'];
 
         foreach ($keys as $i => $k) {
             self::assertArrayHasKey($k, self::$m->getOptions());

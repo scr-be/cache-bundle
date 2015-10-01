@@ -16,3 +16,12 @@ scribe_cache:
         enabled: true
     generator:
         prefix: 'scribe-cache-bundle-test'
+    method:
+        memcached:
+            options_list:
+                serializer: serializer_php
+            servers_list:
+                default:
+                    host: 127.0.0.1
+                    port: 11211
+                    weight: 0

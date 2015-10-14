@@ -2,6 +2,7 @@ language: php
 
 env:
   global:
+    - SYMFONY_DEPRECATIONS_HELPER=weak
     - secure: GFZ4RQeYo9a57V0HUxJjIheB1q+bIRBvLt3j26TB5wusu3AEI3BAM4v/uyCAWEKO0fafW2J4L/RM5lINclH8u2C1gtzGG2nZ5NlKt7b8dM3WawZOqQaMbhgjgzR1NO3oIzSDouwvsPlTnz3pNvec73CJYsydllQJcCRNJLOEEEw=
 
 matrix:
@@ -31,7 +32,7 @@ install:
   - travis_retry composer install --no-interaction || travis_retry composer update --no-interaction
 
 script:
-  - bin/phpunit --verbose
+  - bin/phpunit --verbose --configuration phpunit.xml.dist
 
 after_success:
   - bash app/config/shared_public/build/env/report-success_send-coverage.sh

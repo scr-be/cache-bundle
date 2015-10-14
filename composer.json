@@ -2,12 +2,12 @@
     "name"        : "scribe/cache-bundle",
     "license"     : "MIT",
     "type"        : "project",
-    "homepage"    : "https://wonka-bundle.oss.scr.be/home",
+    "homepage"    : "https://cache-bundle.oss.scr.be/home",
     "description" : "Extensible, run-time resolved cache chain handler, supporting any interface-compatible tagged service the ability to act as a provider. Native support for Memcached, database, and filesystem handlers.",
     "support" : {
         "email"  : "rmf@scr.be",
-        "issues" : "https://wonka-bundle.oss.scr.be/issues",
-        "source" : "https://wonka-bundle.oss.scr.be/git",
+        "issues" : "https://cache-bundle.oss.scr.be/issues",
+        "source" : "https://cache-bundle.oss.scr.be/git",
         "irc"    : "irc://irc.efnet.org/scribe"
     },
     "keywords"   : [

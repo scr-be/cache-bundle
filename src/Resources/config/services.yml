@@ -1,5 +1,72 @@
 ---
 
-imports:
-    - { resource: services_general.yml }
-    - { resource: services_doctrine.yml }
+parameters :
+
+    # Key Generator
+
+    s.cache.key_generator.class    : Scribe\CacheBundle\Component\Generator\KeyGenerator
+
+    # Cache Registrar
+
+    s.cache.registrar.class        : Scribe\CacheBundle\DependencyInjection\Compiler\Registrar\CacheCompilerRegistrar
+
+    # Cache Manager
+
+    s.cache.manager.class          : Scribe\CacheBundle\Component\Manager\CacheManager
+
+    # Cache Method
+
+    s.cache.method_memcached.class : Scribe\CacheBundle\Component\Cache\Memcached\MemcachedCacheMethod
+    s.cache.method_mock.class      : Scribe\CacheBundle\Component\Cache\Mock\MockCacheMethod
+
+services :
+
+    # Key Generator
+
+    s.cache.key_generator :
+        class : %s.cache.key_generator.class%
+        calls :
+            - [ setPrefix,    [ %s.cache.generator.prefix%    ] ]
+            - [ setAlgorithm, [ %s.cache.generator.algorithm% ] ]
+
+    # Cache Registrar
+
+    s.cache.registrar :
+        class : %s.cache.registrar.class%
+
+    # Cache Manager
+
+    s.cache :
+        class     : %s.cache.manager.class%
+        arguments :
+            - %s.cache.global.enabled%
+        calls :
+            - [ setRegistrar, [ @s.cache.registrar ] ]
+
+    s.cache.chain :
+        alias : s.cache
+
+    # Cache Attendants
+
+    s.cache.method_memcached :
+        class     : %s.cache.method_memcached.class%
+        arguments :
+            - %s.cache.method.memcached.general.enabled%
+            - %s.cache.method.memcached.general.ttl%
+        calls :
+            - [ setKeyGenerator, [ @s.cache.key_generator ] ]
+            - [ setOptions,      [ %s.cache.method.memcached.options% ] ]
+            - [ setServers,      [ %s.cache.method.memcached.servers% ] ]
+        tags  :
+            - { name : s.cache.attendant, priority : %s.cache.method.memcached.general.priority% }
+
+    s.cache.method_mock :
+        class     : %s.cache.method_mock.class%
+        arguments :
+            - %s.cache.method.mock.general.enabled%
+        calls :
+            - [ setKeyGenerator, [ @s.cache.key_generator ] ]
+        tags  :
+            - { name : s.cache.attendant, priority : %s.cache.method.mock.general.priority% }
+
+...

@@ -1,0 +1,27 @@
+framework:
+    secret:          "Secret for tests!"
+    router:          { resource: "%kernel.root_dir%/config/routing.yml" }
+    session:         ~
+    default_locale:  en
+    translator:      { fallback: en }
+    profiler:        { only_exceptions: false }
+
+monolog:
+    handlers:
+        main:
+             type: "null"
+
+scribe_cache:
+    global:
+        enabled: true
+    generator:
+        prefix: 'scribe-cache-bundle-test'
+    method:
+        memcached:
+            options_list:
+                serializer: serializer_php
+            servers_list:
+                default:
+                    host: 127.0.0.1
+                    port: 11211
+                    weight: 0

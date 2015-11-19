@@ -11,165 +11,127 @@
 
 namespace Scribe\CacheBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Scribe\WonkaBundle\Component\DependencyInjection\AbstractConfiguration;
 
 /**
  * Class Configuration.
  */
-class Configuration implements ConfigurationInterface
+class Configuration extends AbstractConfiguration
 {
-    /**
-     * Create the config tree builder object.
-     *
-     * @return TreeBuilder
-     */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('scribe_cache');
-
-        $rootNode
+        $this
+            ->getBuilderRoot()
+            ->getNodeBuilder()
             ->children()
                 ->append($this->getGlobalNode())
-                ->append($this->getEngineNode())
-            ->end()
-        ;
+                ->append($this->getGeneratorNode())
+                ->append($this->getMethodNode())
+            ->end();
 
-        return $treeBuilder;
+        return $this
+            ->getBuilderRoot()
+            ->getTreeBuilder();
     }
 
-    /**
-     * Define the global state config of the cache bundle.
-     *
-     * @return NodeDefinition
-     */
     private function getGlobalNode()
     {
-        return (new TreeBuilder())
-            ->root('global')
+        return $this
+            ->getBuilder('global')
+            ->getNodeBuilder()
             ->addDefaultsIfNotSet()
             ->children()
                 ->booleanNode('enabled')
                     ->defaultTrue()
-                    ->info(
-                        'To disable all caching operations within this bundle globally, you can set this value to false.'
-                    )
+                    ->info('Enabled and disabled all caching operations.')
                 ->end()
+            ->end();
+    }
+
+    private function getGeneratorNode()
+    {
+        return $this
+            ->getBuilder('generator')
+            ->getNodeBuilder()
+            ->addDefaultsIfNotSet()
+            ->children()
                 ->scalarNode('prefix')
-                    ->defaultValue('scribe_cache')
-                    ->info(
-                        'A unique prefix to assign to all cache keys managed by this bundle. This allows for flushing of cache values without potentially clearing values managed by other applications or other bundles.'
-                    )
+                    ->defaultValue('cache-key-generator')
+                    ->info('String used to avoid collision of cache values by prepending a unique prefix to keys created.')
                 ->end()
-            ->end()
-        ;
+                ->scalarNode('algorithm')
+                    ->defaultValue('md5')
+                    ->info('Algorithm used to hash keys. Available values can be found via hash_algos() output.')
+                ->end()
+            ->end();
     }
 
-    /**
-     * Define the per-handler configuration options.
-     *
-     * @return NodeDefinition
-     */
-    private function getEngineNode()
+    private function getMethodNode()
     {
-        return (new TreeBuilder())
-            ->root('engine')
+        return $this
+            ->getBuilder('method')
+            ->getNodeBuilder()
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getEngineMemcachedNode())
-                ->append($this->getEngineDatabaseNode())
-                ->append($this->getEngineFilesystemNode())
-            ->end()
-        ;
+                ->append($this->getMethodMemcachedNode())
+                ->append($this->getMethodMockNode())
+            ->end();
     }
 
-    /**
-     * getHandlerTypeGenericInnerNode.
-     *
-     * @param int $priority
-     *
-     * @return NodeDefinition
-     */
-    private function getEngineInnerGenericNode($priority)
+    private function getMethodMemcachedNode()
     {
-        return (new TreeBuilder())
-            ->root('general')
+        return $this
+            ->getBuilder('memcached')
+            ->getNodeBuilder()
             ->addDefaultsIfNotSet()
             ->children()
-                ->booleanNode('disabled')
-                    ->defaultFalse()
-                    ->info('Allows for disabling this cache handler specifically.')
+                ->arrayNode('general')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')
+                            ->defaultTrue()
+                            ->info('Toggle this cache method on or off.')
+                        ->end()
+                        ->integerNode('priority')
+                            ->defaultValue(0)
+                            ->min(0)
+                            ->info('Set the priority for this cache method.')
+                        ->end()
+                            ->integerNode('ttl')
+                            ->defaultValue(3600)
+                            ->min(1)
+                            ->info('Set default TTL for cache data.')
+                        ->end()
+                    ->end()
                 ->end()
-                ->integerNode('priority')
-                    ->defaultValue($priority)
-                    ->min(1)->max(99)
-                    ->info(
-                        'When resolving a supported handler type based on the default cache handler chain, define the priority this handler type should have.'
-                    )
-                ->end()
-                ->integerNode('ttl')
-                    ->defaultValue(1800)
-                    ->min(0)->max(2592000)
-                    ->info(
-                        'The TTL (time to live) for data cached using this handler type, defined in seconds.'
-                    )
-                ->end()
-            ->end()
-        ;
-    }
-
-    /**
-     * Define the memcached handler configuration options.
-     *
-     * @return NodeDefinition
-     */
-    private function getEngineMemcachedNode()
-    {
-        return (new TreeBuilder())
-            ->root('memcached')
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->append($this->getEngineInnerGenericNode(1))
-                ->arrayNode('internals_list')
+                ->arrayNode('options_list')
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->enumNode('serializer')
-                            ->values(['igbinary', 'php', 'json'])
-                            ->defaultValue('igbinary')
-                            ->info(
-                                'Set the default serializer for memcache objected. Note that while the "json" and "json_array" serializer is fast and compact, it only works on UTF-8 data and does not fully implement serializing. Do note that the default value of "igbinary" will automatically fallback to "php" in the event that the igbinary php module is not loaded or memcached was not compiled with igbinary support.'
-                            )
+                            ->values(['serializer_igbinary', 'serializer_php', 'serializer_json'])
+                            ->defaultValue('serializer_igbinary')
+                            ->info('Set the serializer.')
                         ->end()
                         ->booleanNode('libketama_compatible')
                             ->defaultFalse()
-                            ->info(
-                                'Enables or disables compatibility with libketama-like behavior. Recommended when other libketama-based clients (Python, Ruby, etc.) will be utalizing the same keys.'
-                            )
+                            ->info('Toggle libketama-compatible behavior.')
                         ->end()
-                        ->booleanNode('io_no_block')
-                            ->defaultFalse()
-                            ->info(
-                                'Enables or disables asynchronous I/O. This is the fastest transport available for storage functions.'
-                            )
+                        ->booleanNode('no_block')
+                            ->defaultTrue()
+                            ->info('Toggle asynchronous I/O.')
                         ->end()
-                        ->booleanNode('tcp_no_delay')
-                            ->defaultFalse()
-                            ->info(
-                                'Enables or disables the no-delay feature for connecting sockets (may be faster in some environments).'
-                            )
+                        ->booleanNode('tcp_nodelay')
+                            ->defaultTrue()
+                            ->info('Toggle TCP no-delay.')
                         ->end()
                         ->booleanNode('compression')
-                            ->defaultTrue()
-                            ->info(
-                                'Enable or disable payload compression. When enabled, items longer than a certain threshold will be compressed. For further configuration, you must set proper INI settings for memcached.'
-                            )
+                            ->defaultFalse()
+                            ->info('Toggle compression.')
                         ->end()
-                        ->enumNode('compression_method')
-                            ->values(['zlib', 'fastlz'])
-                            ->defaultValue('fastlz')
-                            ->info('Set the compression method used.')
+                        ->enumNode('compression_type')
+                            ->values(['compression_zlib', 'compression_fastlz'])
+                            ->defaultValue('compression_fastlz')
+                            ->info('Set the compression method.')
                         ->end()
                     ->end()
                 ->end()
@@ -193,53 +155,38 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->integerNode('weight')
                                 ->defaultValue(0)
-                                ->min(0)->max(100)
-                                ->info(
-                                    'The weight of the server relative to the total weight of all the servers in the pool. This controls the probability of the server being selected for operations.'
-                                )
+                                ->min(0)
+                                ->max(1000)
+                                ->info('The weight of the server relative to the total weight of all the servers in the pool.')
                             ->end()
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
-    /**
-     * Define the filesystem handler configuration options.
-     *
-     * @return NodeDefinition
-     */
-    private function getEngineFilesystemNode()
+    private function getMethodMockNode()
     {
-        return (new TreeBuilder())
-            ->root('filesystem')
+        return $this
+            ->getBuilder('mock')
+            ->getNodeBuilder()
             ->addDefaultsIfNotSet()
             ->children()
-                ->append($this->getEngineInnerGenericNode(3))
-                ->scalarNode('cache_dir')
-                    ->isRequired()
-                    ->defaultValue('/tmp')
-                    ->info('The directory to use for filesystem caching.')
+                ->arrayNode('general')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')
+                            ->defaultFalse()
+                            ->info('Toggle this cache method on or off.')
+                        ->end()
+                            ->integerNode('priority')
+                            ->defaultValue(9999)
+                            ->min(0)
+                            ->info('Set the priority for this cache method.')
+                        ->end()
+                    ->end()
                 ->end()
-            ->end()
-        ;
-    }
-
-    /**
-     * Define the filesystem handler configuration options.
-     *
-     * @return NodeDefinition
-     */
-    private function getEngineDatabaseNode()
-    {
-        return (new TreeBuilder())
-            ->root('db')
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->append($this->getEngineInnerGenericNode(2))
-            ->end()
-        ;
+            ->end();
     }
 }
 

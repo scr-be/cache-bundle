@@ -41,7 +41,7 @@ services :
         arguments :
             - %s.cache.global.enabled%
         calls :
-            - [ setRegistrar, [ @s.cache.registrar ] ]
+            - [ setRegistrar, [ '@s.cache.registrar' ] ]
 
     s.cache.chain :
         alias : s.cache
@@ -54,7 +54,7 @@ services :
             - %s.cache.method.memcached.general.enabled%
             - %s.cache.method.memcached.general.ttl%
         calls :
-            - [ setKeyGenerator, [ @s.cache.key_generator ] ]
+            - [ setKeyGenerator, [ '@s.cache.key_generator' ] ]
             - [ setOptions,      [ %s.cache.method.memcached.options% ] ]
             - [ setServers,      [ %s.cache.method.memcached.servers% ] ]
         tags  :
@@ -65,7 +65,7 @@ services :
         arguments :
             - %s.cache.method.mock.general.enabled%
         calls :
-            - [ setKeyGenerator, [ @s.cache.key_generator ] ]
+            - [ setKeyGenerator, [ '@s.cache.key_generator' ] ]
         tags  :
             - { name : s.cache.attendant, priority : %s.cache.method.mock.general.priority% }
 

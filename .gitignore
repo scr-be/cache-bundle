@@ -37,6 +37,7 @@ composer.lock
 /phpunit.xml
 
 # Build data
+build/
 !build/.gitkeep
 
 # IDEA Directories

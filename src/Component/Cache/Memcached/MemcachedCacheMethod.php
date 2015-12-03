@@ -165,7 +165,7 @@ class MemcachedCacheMethod extends AbstractCacheMethod implements MemcachedCache
     /**
      * Normalize option type state.
      *
-     * @param mixed  $state
+     * @param mixed $state
      *
      * @return mixed
      */
@@ -251,7 +251,7 @@ class MemcachedCacheMethod extends AbstractCacheMethod implements MemcachedCache
      */
     protected function normalizeServerOptions($name, array $options)
     {
-        $options['port']   = (int) (array_key_exists('port',   $options) ? $options['port']   : self::DEFAULT_PORT  );
+        $options['port'] = (int) (array_key_exists('port',   $options) ? $options['port']   : self::DEFAULT_PORT);
         $options['weight'] = (int) (array_key_exists('weight', $options) ? $options['weight'] : self::DEFAULT_WEIGHT);
 
         if (array_keys($options) !== ['host', 'port', 'weight']) {
@@ -285,7 +285,7 @@ class MemcachedCacheMethod extends AbstractCacheMethod implements MemcachedCache
         $data = $this->m->get($key);
 
         if (!$this->isSuccessful()) {
-            return null;
+            return;
         }
 
         return $data;

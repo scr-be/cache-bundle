@@ -57,9 +57,9 @@ abstract class AbstractCacheMethod extends AbstractCompilerAttendant implements 
     final public function __construct($enabled, $ttl = 0)
     {
         parent::__construct([
-            'ttl'         => (int) $ttl,
-            'defaultTtl'  => (int) $ttl,
-            'enabled'     => (bool) $enabled,
+            'ttl' => (int) $ttl,
+            'defaultTtl' => (int) $ttl,
+            'enabled' => (bool) $enabled,
             'initialized' => false,
         ]);
     }

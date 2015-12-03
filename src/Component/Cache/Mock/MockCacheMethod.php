@@ -27,7 +27,7 @@ class MockCacheMethod extends AbstractCacheMethod
      */
     protected function getCacheEntry($key)
     {
-        return null;
+        return;
     }
 
     /**

@@ -24,7 +24,7 @@ class CacheCompilerRegistrar extends AbstractCompilerRegistrar
      */
     public function __construct(...$parameters)
     {
-        $parameters['interfaceCollection'] = [ CacheMethodInterface::INTERFACE_CACHE_NAME ];
+        $parameters['interfaceCollection'] = [CacheMethodInterface::INTERFACE_CACHE_NAME];
 
         parent::__construct($parameters);
     }

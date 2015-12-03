@@ -85,7 +85,7 @@ class KeyGenerator implements KeyGeneratorInterface
     public function setAlgorithm($algorithm)
     {
         if (!in_array((string) $algorithm, hash_algos())) {
-            throw new InvalidArgumentException('Invalid hash algorithm of "%s" provided to key generator.', null, null, (string)$algorithm);
+            throw new InvalidArgumentException('Invalid hash algorithm of "%s" provided to key generator.', null, null, (string) $algorithm);
         }
 
         $this->algorithm = (string) $algorithm;
@@ -155,7 +155,7 @@ class KeyGenerator implements KeyGeneratorInterface
     {
         if (count($keyValues) > 0 && $this->valueCollection !== $keyValues) {
             $this->valueCollection = $keyValues;
-            $this->key = (string) $this->prefix . hash($this->algorithm, SerializerFactory::create()->serializeData($keyValues), false);
+            $this->key = (string) $this->prefix.hash($this->algorithm, SerializerFactory::create()->serializeData($keyValues), false);
         }
 
         return $this;

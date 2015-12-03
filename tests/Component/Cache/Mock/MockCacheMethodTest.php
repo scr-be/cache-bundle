@@ -12,8 +12,6 @@
 namespace Scribe\CacheBundle\Tests\Component\Generator\KeyGenerator;
 
 use Scribe\WonkaBundle\Utility\TestCase\KernelTestCase;
-use Scribe\Wonka\Utility\Serializer\Serializer;
-use Scribe\CacheBundle\Component\Generator\KeyGenerator;
 use Scribe\CacheBundle\Component\Cache\Memcached\MemcachedCacheMethod;
 
 /**
@@ -24,7 +22,7 @@ class MockCacheMethodTest extends KernelTestCase
     /**
      * @var MemcachedCacheMethod
      */
-    static $m;
+    public static $m;
 
     public function setUp()
     {

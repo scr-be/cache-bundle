@@ -69,8 +69,8 @@ class KeyGeneratorTest extends WonkaTestCase
         $prefixSet = ['', 'prefix-1', 'another-prefix'];
 
         foreach (hash_algos() as $algorithm) {
-            foreach (range(0, count($keySets)-1) as $i) {
-                foreach (range(0, count($prefixSet)-1) as $j) {
+            foreach (range(0, count($keySets) - 1) as $i) {
+                foreach (range(0, count($prefixSet) - 1) as $j) {
                     $expected = $prefixSet[$j].hash($algorithm, Serializer::sleep($keySets[$i]), false);
                     $g->setAlgorithm($algorithm);
                     $g->setPrefix($prefixSet[$j]);

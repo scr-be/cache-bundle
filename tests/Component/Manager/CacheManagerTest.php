@@ -22,7 +22,7 @@ class CacheManagerTest extends KernelTestCase
     /**
      * @var CacheManager
      */
-    static $m;
+    public static $m;
 
     public function setUp()
     {

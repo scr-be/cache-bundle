@@ -24,7 +24,7 @@ class MemcachedCacheMethodTest extends KernelTestCase
     /**
      * @var MemcachedCacheMethod
      */
-    static $m;
+    public static $m;
 
     public function setUp()
     {
@@ -90,7 +90,7 @@ class MemcachedCacheMethodTest extends KernelTestCase
     public function test_servers_invalid()
     {
         $servers['invalid_server'] = [
-            'ip' => '127.0.0.1'
+            'ip' => '127.0.0.1',
         ];
 
         self::setExpectedException('Scribe\\Wonka\\Exception\\InvalidArgumentException');
@@ -187,7 +187,7 @@ class MemcachedCacheMethodTest extends KernelTestCase
         }
 
         foreach (range(0, count($dataSet) - 1) as $i) {
-            sleep($waitSet[$i]-2);
+            sleep($waitSet[$i] - 2);
             self::$m->setKey(...$keysSet[$i]);
             self::assertTrue(self::$m->has());
             self::assertEquals($dataSet[$i], self::$m->get());

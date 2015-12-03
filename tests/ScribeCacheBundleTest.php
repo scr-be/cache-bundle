@@ -13,8 +13,6 @@
 namespace Scribe\CacheBundle\Tests;
 
 use Scribe\Wonka\Utility\UnitTest\WonkaTestCase;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ScribeCacheBundleTest.
@@ -24,7 +22,7 @@ class ScribeCacheBundleTest extends WonkaTestCase
     /**
      * @var \AppKernel
      */
-    static $kernel;
+    public static $kernel;
 
     public function setUp()
     {

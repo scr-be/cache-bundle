@@ -206,6 +206,10 @@ class MemcachedCacheMethod extends AbstractCacheMethod implements MemcachedCache
      */
     protected function setUpServers()
     {
+        if (0 !== count($this->m->getServerList())) {
+            return $this;
+        }
+
         $normalized = [];
 
         foreach ($this->serverCollection as $name => $options) {

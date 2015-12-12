@@ -13,6 +13,7 @@ namespace Scribe\CacheBundle\DependencyInjection\Aware;
 
 use Scribe\CacheBundle\Component\Manager\CacheManagerInterface;
 use Scribe\CacheBundle\Component\Cache\CacheMethodInterface;
+use Scribe\Wonka\Exception\RuntimeException;
 
 /**
  * Trait CacheManagerAwareTrait.
@@ -20,18 +21,16 @@ use Scribe\CacheBundle\Component\Cache\CacheMethodInterface;
 trait CacheManagerAwareTrait
 {
     /**
-     * @var CacheManagerInterface
+     * @var CacheManagerInterface|null
      */
     protected $cacheManager;
 
     /**
-     * Set the key generator instance.
-     *
      * @param CacheManagerInterface $cacheManager
      *
      * @return $this
      */
-    public function setCacheManager(CacheManagerInterface $cacheManager)
+    public function setCacheManager(CacheManagerInterface $cacheManager = null)
     {
         $this->cacheManager = $cacheManager;
 
@@ -39,8 +38,6 @@ trait CacheManagerAwareTrait
     }
 
     /**
-     * Get the key generator instance.
-     *
      * @return CacheManagerInterface
      */
     public function getCacheManager()
@@ -53,9 +50,23 @@ trait CacheManagerAwareTrait
      */
     public function getCache()
     {
-        return $this
-            ->cacheManager
-            ->getActive();
+        if ($this->isCacheAvailable() === true) {
+            return $this->cacheManager->getActive();
+        }
+
+        throw new RuntimeException('Cache manager is not available.');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCacheAvailable()
+    {
+        if ($this->cacheManager === null) {
+            return false;
+        }
+
+        return (bool) ($this->getCacheManager()->isEnabled());
     }
 }
 

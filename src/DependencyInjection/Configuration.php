@@ -22,7 +22,7 @@ class Configuration extends AbstractConfiguration
     {
         $this
             ->getBuilderRoot()
-            ->getNodeBuilder()
+            ->getNodeDefinition()
             ->children()
                 ->append($this->getGlobalNode())
                 ->append($this->getGeneratorNode())
@@ -38,7 +38,7 @@ class Configuration extends AbstractConfiguration
     {
         return $this
             ->getBuilder('global')
-            ->getNodeBuilder()
+            ->getNodeDefinition()
             ->addDefaultsIfNotSet()
             ->children()
                 ->booleanNode('enabled')
@@ -52,7 +52,7 @@ class Configuration extends AbstractConfiguration
     {
         return $this
             ->getBuilder('generator')
-            ->getNodeBuilder()
+            ->getNodeDefinition()
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('prefix')
@@ -70,7 +70,7 @@ class Configuration extends AbstractConfiguration
     {
         return $this
             ->getBuilder('method')
-            ->getNodeBuilder()
+            ->getNodeDefinition()
             ->addDefaultsIfNotSet()
             ->children()
                 ->append($this->getMethodMemcachedNode())
@@ -82,7 +82,7 @@ class Configuration extends AbstractConfiguration
     {
         return $this
             ->getBuilder('memcached')
-            ->getNodeBuilder()
+            ->getNodeDefinition()
             ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('general')
@@ -169,7 +169,7 @@ class Configuration extends AbstractConfiguration
     {
         return $this
             ->getBuilder('mock')
-            ->getNodeBuilder()
+            ->getNodeDefinition()
             ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('general')

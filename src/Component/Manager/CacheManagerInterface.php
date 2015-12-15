@@ -3,7 +3,7 @@
 /*
  * This file is part of the Scribe Cache Bundle.
  *
- * (c) Scribe Inc. <source@scribe.software>
+ * (c) Scribe Inc. <oss@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.

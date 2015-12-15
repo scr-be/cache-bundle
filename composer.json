@@ -23,7 +23,7 @@
     ],
     "require" : {
         "php"                          : ">=5.6.4,~5.6|~7.0",
-        "scr-be/wonka-bundle"          : "~0.2",
+        "scr-be/wonka-bundle"          : "~0.3",
         "symfony/dependency-injection" : "~2.8|~3.0"
     },
     "require-dev" : {
@@ -53,5 +53,10 @@
     "prefer-stable"     : true,
     "config": {
         "bin-dir" : "bin"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master" : "2.3-dev"
+        }
     }
 }

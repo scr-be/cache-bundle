@@ -1,17 +1,17 @@
 {
-    "name"        : "scr-be/teavee-object-cache-bundle",
+    "name"        : "scr-be/teavee-object-teavee-object-cache-bundle",
     "license"     : "MIT",
     "type"        : "project",
-    "homepage"    : "https://scr.be/cache-bundle",
+    "homepage"    : "https://scr.be/teavee-object-cache-bundle",
     "description" : "Extensible, run-time resolved cache chain handler, supporting any interface-compatible tagged service the ability to act as a provider. Native support for Memcached, database, and filesystem handlers.",
     "support" : {
         "email"  : "rmf@scr.be",
-        "issues" : "https://scr.be/cache-bundle/issues",
-        "source" : "https://scr.be/cache-bundle/git",
+        "issues" : "https://scr.be/teavee-object-cache-bundle/issues",
+        "source" : "https://scr.be/teavee-object-cache-bundle/git",
         "irc"    : "irc://irc.efnet.org/scribe"
     },
     "keywords"   : [
-        "cache-bundle", "teavee-object-cache-bundle-bundle", "cache", "memcached", "database", "filesystem", "bundle", "symfony", "symfony2", "symfony-framework", "scribe", "scr", "scribenet", "scribeinc", "scribe-software",         "scribe-services"
+        "object-cache-bundle", "teavee-object-cache-bundle", "cache", "memcached", "database", "filesystem", "bundle", "symfony", "symfony2", "symfony-framework", "scribe", "scr", "scribenet", "scribeinc", "scribe-software", "scribe-services"
     ],
     "authors"    : [
         {

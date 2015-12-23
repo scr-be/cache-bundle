@@ -1,29 +1,30 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <oss@scr.be>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\DependencyInjection\Compiler\Pass;
+namespace Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Compiler;
 
 use Scribe\WonkaBundle\Component\DependencyInjection\Compiler\Pass\AbstractCompilerPass;
 
 /**
- * Class CacheCompilerPass.
+ * Class AttendantCompilerPass.
  */
-class CacheCompilerPass extends AbstractCompilerPass
+class AttendantCompilerPass extends AbstractCompilerPass
 {
     /**
      * @return string
      */
     public function getRegistrarSrvName()
     {
-        return 's.cache.registrar';
+        return 's.object_cache.registrar';
     }
 
     /**
@@ -31,7 +32,7 @@ class CacheCompilerPass extends AbstractCompilerPass
      */
     public function getAttendantTagName()
     {
-        return 's.cache.attendant';
+        return 's.object_cache.attendant';
     }
 }
 

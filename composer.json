@@ -1,5 +1,5 @@
 {
-    "name"        : "scr-be/cache-bundle",
+    "name"        : "scr-be/teavee-object-cache-bundle",
     "license"     : "MIT",
     "type"        : "project",
     "homepage"    : "https://scr.be/cache-bundle",
@@ -11,7 +11,7 @@
         "irc"    : "irc://irc.efnet.org/scribe"
     },
     "keywords"   : [
-        "cache-bundle", "scribe-cache-bundle", "cache", "memcached", "database", "filesystem", "bundle", "symfony", "symfony2", "symfony-framework", "scribe", "scr", "scribenet", "scribeinc", "scribe-software",         "scribe-services"
+        "cache-bundle", "teavee-object-cache-bundle-bundle", "cache", "memcached", "database", "filesystem", "bundle", "symfony", "symfony2", "symfony-framework", "scribe", "scr", "scribenet", "scribeinc", "scribe-software",         "scribe-services"
     ],
     "authors"    : [
         {
@@ -41,12 +41,13 @@
     },
     "autoload" : {
         "psr-4" : {
-            "Scribe\\CacheBundle\\" : "src/"
+            "Scribe\\Teavee\\ObjectCacheBundle\\" : "src/",
+            "Scribe\\CacheBundle\\" : "src-deprecated/"
         }
     },
     "autoload-dev" : {
         "psr-4" : {
-            "Scribe\\CacheBundle\\Tests\\" : "tests/"
+            "Scribe\\Teavee\\ObjectCachingBundle\\Tests\\" : "tests/"
         }
     },
     "minimum-stability" : "dev",

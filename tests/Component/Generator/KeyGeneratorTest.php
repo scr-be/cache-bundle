@@ -1,19 +1,20 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <source@scribe.software>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Tests\Component\Generator\KeyGenerator;
+namespace Scribe\Teavee\ObjectCacheBundle\Tests\Component\Generator\KeyGenerator;
 
 use Scribe\WonkaBundle\Utility\TestCase\WonkaTestCase;
 use Scribe\Wonka\Utility\Serializer\Serializer;
-use Scribe\CacheBundle\Component\Generator\KeyGenerator;
+use Scribe\Teavee\ObjectCacheBundle\Component\Generator\KeyGenerator;
 
 /**
  * Class KeyGeneratorTest.
@@ -22,7 +23,7 @@ class KeyGeneratorTest extends WonkaTestCase
 {
     public function test_interface()
     {
-        self::assertInstanceOf('Scribe\\CacheBundle\\Component\\Generator\\KeyGeneratorInterface', new KeyGenerator());
+        self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Generator\\KeyGeneratorInterface', new KeyGenerator());
     }
 
     public function test_set_prefix()

@@ -2,12 +2,13 @@
 
 | CI Test Results | Code Review     | Test Coverage   |
 |:---------------:|:---------------:|:---------------:|
-| [![Travis](https://scr.be/cache-bundle/travis_shield)](https://scr.be/cache-bundle/travis) | [![Codacy](https://scr.be/cache-bundle/codacy_shield)](https://scr.be/cache-bundle/codacy) | [![Coveralls](https://scr.be/cache-bundle/coveralls_shield)](https://scr.be/cache-bundle/coveralls) |
+| [![Travis](https://scr.be/teavee-object-caching-bundle/travis_shield)](https://scr.be/teavee-object-caching-bundle/travis) | [![Codacy](https://scr.be/teavee-object-caching-bundle/codacy_shield)](https://scr.be/teavee-object-caching-bundle/codacy) | [![Coveralls](https://scr.be/teavee-object-caching-bundle/coveralls_shield)](https://scr.be/teavee-object-caching-bundle/coveralls) |
 
 ## Overview
 
-The `scr-be/cache-bundle` project provides a simple, yet robust and extensible caching
-abstraction layer.
+The `scr-be/teavee-object-caching-bundle` project provides a simple, robust, and extensible caching abstraction
+layer with support for custom backends through Symfony compiler tag registration and a central manager implementation.
+Support only provided Memcached by default.
 
 - Memcached support.
 
@@ -16,7 +17,7 @@ and icons.
 
 > This project is one of a [collection](https://src.run) of open-source, PHP
 > libraries and Symfony bundles maintained by [Rob Frawley 2nd](https://scr.be/rmf)
-> and [collaborators](https://github.com/scr-be/cache-bundle/graphs/contributors),
+> and [collaborators](https://github.com/scr-be/teavee-object-caching-bundle/graphs/contributors),
 > often under the employ of [Scribe Inc](https://scr.be/).
 
 ## Install
@@ -25,7 +26,7 @@ Include this package within your project using [Composer](https://getcomposer.co
 by executing the following command.
 
 ```bash
-composer require scr-be/cache-bundle
+composer require scr-be/teavee-object-caching-bundle
 ```
 
 Enable the bundle by adding the following line in the *app/AppKernel.php* file
@@ -39,7 +40,7 @@ class AppKernel extends Kernel
     {
         $bundles = array(
             // ...
-            new Scribe\CacheBundle\ScribeCacheBundle(),
+            new Scribe\Teavee\ObjectCachingBundle\ScribeTeaveeObjectCachingBundle(),
         );
         // ...
     }
@@ -67,19 +68,19 @@ section. This documentation is auto-generated using the excellent
 ## License
 
 This project is licensed under the
-[MIT License](https://github.com/scr-be/cache-bundle/blob/master/LICENSE.md), an
+[MIT License](https://github.com/scr-be/teavee-object-caching-bundle/blob/master/LICENSE.md), an
 [FSF](https://en.wikipedia.org/wiki/Free_Software_Foundation)/[OSI](https://en.wikipedia.org/wiki/Open_Source_Initiative)
 [approved](https://en.wikipedia.org/wiki/Comparison_of_free_and_open-source_software_licenses#Approvals) and
 [GPL compatible](https://en.wikipedia.org/wiki/GNU_General_Public_License#Compatibility_and_multi-licensing)
 permissive free software license. Review the
-[LICENSE.md](https://github.com/scr-be/cache-bundle/blob/master/LICENSE.md)
+[LICENSE.md](https://github.com/scr-be/teavee-object-caching-bundle/blob/master/LICENSE.md)
 file distributed with this source code for additional information.
 
 # Resource Info/Links
 
 | Purpose | Status |
 |:-------:|:------:|
-| Latest Release (Packagist) | [![Packagist](https://scr.be/cache-bundle/packagist_shield)](https://scr.be/cache-bundle/packagist) |
-| Documentation (API)        | [![License](https://scr.be/cache-bundle/api_shield)](https://scr.be/cache-bundle/api) |
-| Dependency Information     | [![Gemnasium](https://scr.be/cache-bundle/gemnasium_shield)](https://scr.be/cache-bundle/gemnasium) |
-| License (MIT)              | [![License](https://scr.be/cache-bundle/license_shield)](https://scr.be/cache-bundle/license) |
+| Latest Release (Packagist) | [![Packagist](https://scr.be/teavee-object-caching-bundle/packagist_shield)](https://scr.be/teavee-object-caching-bundle/packagist) |
+| Documentation (API)        | [![License](https://scr.be/teavee-object-caching-bundle/api_shield)](https://scr.be/teavee-object-caching-bundle/api) |
+| Dependency Information     | [![Gemnasium](https://scr.be/teavee-object-caching-bundle/gemnasium_shield)](https://scr.be/teavee-object-caching-bundle/gemnasium) |
+| License (MIT)              | [![License](https://scr.be/teavee-object-caching-bundle/license_shield)](https://scr.be/teavee-object-caching-bundle/license) |

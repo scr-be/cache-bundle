@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <oss@scr.be>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\DependencyInjection;
+namespace Scribe\Teavee\ObjectCacheBundle\DependencyInjection;
 
 use Scribe\WonkaBundle\Component\DependencyInjection\AbstractConfiguration;
 
@@ -18,13 +19,16 @@ use Scribe\WonkaBundle\Component\DependencyInjection\AbstractConfiguration;
  */
 class Configuration extends AbstractConfiguration
 {
+    /**
+     * @return TreeBuilder
+     */
     public function getConfigTreeBuilder()
     {
         $this
             ->getBuilderRoot()
             ->getNodeDefinition()
+            ->canBeEnabled()
             ->children()
-                ->append($this->getGlobalNode())
                 ->append($this->getGeneratorNode())
                 ->append($this->getMethodNode())
             ->end();
@@ -34,20 +38,9 @@ class Configuration extends AbstractConfiguration
             ->getTreeBuilder();
     }
 
-    private function getGlobalNode()
-    {
-        return $this
-            ->getBuilder('global')
-            ->getNodeDefinition()
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->booleanNode('enabled')
-                    ->defaultTrue()
-                    ->info('Enabled and disabled all caching operations.')
-                ->end()
-            ->end();
-    }
-
+    /**
+     * @return ArrayNodeDefinition
+     */
     private function getGeneratorNode()
     {
         return $this
@@ -56,7 +49,7 @@ class Configuration extends AbstractConfiguration
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('prefix')
-                    ->defaultValue('cache-key-generator')
+                    ->defaultValue('dflt-key-prefix')
                     ->info('String used to avoid collision of cache values by prepending a unique prefix to keys created.')
                 ->end()
                 ->scalarNode('algorithm')
@@ -66,10 +59,13 @@ class Configuration extends AbstractConfiguration
             ->end();
     }
 
+    /**
+     * @return ArrayNodeDefinition
+     */
     private function getMethodNode()
     {
         return $this
-            ->getBuilder('method')
+            ->getBuilder('attendant')
             ->getNodeDefinition()
             ->addDefaultsIfNotSet()
             ->children()
@@ -78,6 +74,9 @@ class Configuration extends AbstractConfiguration
             ->end();
     }
 
+    /**
+     * @return ArrayNodeDefinition
+     */
     private function getMethodMemcachedNode()
     {
         return $this
@@ -85,25 +84,7 @@ class Configuration extends AbstractConfiguration
             ->getNodeDefinition()
             ->addDefaultsIfNotSet()
             ->children()
-                ->arrayNode('general')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('enabled')
-                            ->defaultTrue()
-                            ->info('Toggle this cache method on or off.')
-                        ->end()
-                        ->integerNode('priority')
-                            ->defaultValue(0)
-                            ->min(0)
-                            ->info('Set the priority for this cache method.')
-                        ->end()
-                            ->integerNode('ttl')
-                            ->defaultValue(3600)
-                            ->min(1)
-                            ->info('Set default TTL for cache data.')
-                        ->end()
-                    ->end()
-                ->end()
+                ->append($this->getAttendantGeneralNode(0, false))
                 ->arrayNode('options_list')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -165,6 +146,9 @@ class Configuration extends AbstractConfiguration
             ->end();
     }
 
+    /**
+     * @return ArrayNodeDefinition
+     */
     private function getMethodMockNode()
     {
         return $this
@@ -172,21 +156,46 @@ class Configuration extends AbstractConfiguration
             ->getNodeDefinition()
             ->addDefaultsIfNotSet()
             ->children()
-                ->arrayNode('general')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('enabled')
-                            ->defaultFalse()
-                            ->info('Toggle this cache method on or off.')
-                        ->end()
-                            ->integerNode('priority')
-                            ->defaultValue(9999)
-                            ->min(0)
-                            ->info('Set the priority for this cache method.')
-                        ->end()
-                    ->end()
+                ->append($this->getAttendantGeneralNode(9, true))
+            ->end();
+    }
+
+
+    /**
+     * @param int  $priority
+     * @param bool $isMock
+     * 
+     * @return ArrayNodeDefinition
+     */
+    private function getAttendantGeneralNode($priority, $isMock = false)
+    {
+        $b = $this
+            ->getGhostBuilder('general')
+            ->getNodeDefinition()
+            ->addDefaultsIfNotSet()
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->booleanNode('enabled')
+                    ->defaultValue((bool) !$isMock)
+                    ->info('Toggle this cache method on or off.')
+                ->end()
+                ->integerNode('priority')
+                    ->defaultValue((int) $priority)
+                    ->min(0)
+                    ->info('Set the priority for this cache method.')
+                ->end();
+
+        if ($isMock !== true) {
+            return $b
+                ->integerNode('ttl')
+                    ->defaultValue(3600)
+                    ->min(1)
+                    ->info('Set default TTL for cache data (in seconds).')
                 ->end()
             ->end();
+        }
+
+        return $b->end();
     }
 }
 

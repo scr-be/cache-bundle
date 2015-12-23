@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <source@scribe.software>
- * (c) Matthias Noback <
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Tests;
+namespace Scribe\Teavee\ObjectCacheBundle\Tests;
 
 use Scribe\Wonka\Utility\UnitTest\WonkaTestCase;
 
 /**
- * Class ScribeCacheBundleTest.
+ * Class ScribeTeaveeObjectCacheBundleTest.
  */
-class ScribeCacheBundleTest extends WonkaTestCase
+class ScribeTeaveeObjectCacheBundleTest extends WonkaTestCase
 {
     /**
      * @var \AppKernel
@@ -49,14 +49,14 @@ class ScribeCacheBundleTest extends WonkaTestCase
 
     public function test_cache_compiler_pass()
     {
-        static::assertTrue(self::$kernel->getContainer()->has('s.cache.registrar'));
-        $registrar = self::$kernel->getContainer()->get('s.cache.registrar');
+        static::assertTrue(self::$kernel->getContainer()->has('s.object_cache.registrar'));
+        $registrar = self::$kernel->getContainer()->get('s.object_cache.registrar');
 
-        static::assertInstanceOf('Scribe\CacheBundle\DependencyInjection\Compiler\Registrar\CacheCompilerRegistrar', $registrar);
+        static::assertInstanceOf('Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Compiler\Registrar\CacheCompilerRegistrar', $registrar);
         static::assertCount(2, $registrar->getAttendantCollection());
 
-        static::assertTrue(self::$kernel->getContainer()->has('s.cache.key_generator'));
-        $g = self::$kernel->getContainer()->get('s.cache.key_generator');
+        static::assertTrue(self::$kernel->getContainer()->has('s.object_cache.key_generator'));
+        $g = self::$kernel->getContainer()->get('s.object_cache.key_generator');
         foreach ($registrar->getAttendantCollection() as $attendant) {
             static::assertEquals($g, $attendant->getKeyGenerator());
         }

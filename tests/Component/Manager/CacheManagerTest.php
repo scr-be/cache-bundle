@@ -1,18 +1,19 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <source@scribe.software>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Tests\Component\Generator\Manager;
+namespace Scribe\Teavee\ObjectCacheBundle\Tests\Component\Generator\Manager;
 
 use Scribe\WonkaBundle\Utility\TestCase\KernelTestCase;
-use Scribe\CacheBundle\Component\Manager\CacheManager;
+use Scribe\Teavee\ObjectCacheBundle\Component\Manager\CacheManager;
 
 /**
  * Class CacheManagerTest.
@@ -29,16 +30,17 @@ class CacheManagerTest extends KernelTestCase
         parent::setUp();
 
         self::$m = self::$staticContainer->get('s.cache');
+        self::$m = self::$staticContainer->get('s.cache');
     }
 
     public function test_interface()
     {
-        self::assertInstanceOf('Scribe\\CacheBundle\\Component\\Manager\\CacheManagerInterface', self::$m);
+        self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Manager\\CacheManagerInterface', self::$m);
     }
 
     public function test_active_cache()
     {
-        self::assertInstanceOf('Scribe\\CacheBundle\\Component\\Cache\\Memcached\\MemcachedCacheMethod', self::$m->getActive());
+        self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Cache\\Memcached\\MemcachedAttendant', self::$m->getActive());
     }
 
     public function test_disabled_global()
@@ -54,8 +56,16 @@ class CacheManagerTest extends KernelTestCase
         self::assertTrue(self::$m->getActive()->isEnabled());
         self::$m->getActive()->setEnabled(false);
         self::assertFalse(self::$m->getActive()->isEnabled());
-        self::$m->setActive();
+        self::$m->determineActive();
         self::assertNull(self::$m->getActive());
+    }
+
+    public function test_set_active()
+    {
+        self::assertTrue(self::$m->getActive()->isEnabled());
+        self::assertTrue(self::$m->setActive(0));
+        self::assertTrue(self::$m->getActive()->isEnabled());
+        self::assertFalse(self::$m->setActive(1));
     }
 }
 

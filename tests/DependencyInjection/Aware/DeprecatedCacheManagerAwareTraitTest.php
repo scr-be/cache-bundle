@@ -12,14 +12,14 @@
 
 namespace Scribe\Teavee\ObjectCacheBundle\Tests\DependencyInjection\Aware;
 
-use Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Aware\CacheManagerAwareTrait;
+use Scribe\CacheBundle\DependencyInjection\Aware\CacheManagerAwareTrait;
 use Scribe\WonkaBundle\Utility\TestCase\KernelTestCase;
 use Scribe\Teavee\ObjectCacheBundle\Component\Manager\CacheManager;
 
 /**
  * Class CacheManagerAwareTraitTest.
  */
-class CacheManagerAwareTraitTest extends KernelTestCase
+class DeprecatedCacheManagerAwareTraitTest extends KernelTestCase
 {
     /**
      * @var CacheManager
@@ -36,7 +36,7 @@ class CacheManagerAwareTraitTest extends KernelTestCase
         parent::setUp();
 
         self::$m = self::$staticContainer->get('s.cache');
-        self::$a = $this->getMockBuilder('Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Aware\CacheManagerAwareTrait')
+        self::$a = $this->getMockBuilder('Scribe\CacheBundle\DependencyInjection\Aware\CacheManagerAwareTrait')
             ->getMockForTrait();
     }
 

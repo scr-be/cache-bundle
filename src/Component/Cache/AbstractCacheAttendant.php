@@ -1,24 +1,25 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <oss@scr.be>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Component\Cache;
+namespace Scribe\Teavee\ObjectCacheBundle\Component\Cache;
 
-use Scribe\CacheBundle\DependencyInjection\Aware\KeyGeneratorAwareTrait;
+use Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Aware\KeyGeneratorAwareTrait;
 use Scribe\Wonka\Exception\RuntimeException;
 use Scribe\WonkaBundle\Component\DependencyInjection\Compiler\Attendant\AbstractCompilerAttendant;
 
 /**
- * Class AbstractCacheMethod.
+ * Class AbstractCacheAttendant.
  */
-abstract class AbstractCacheMethod extends AbstractCompilerAttendant implements CacheMethodInterface
+abstract class AbstractCacheAttendant extends AbstractCompilerAttendant implements CacheAttendantInterface
 {
     use KeyGeneratorAwareTrait;
 

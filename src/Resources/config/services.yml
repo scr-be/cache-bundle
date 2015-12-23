@@ -1,72 +1,85 @@
 ---
 
+#
+# This file is part of the Teavee Object Caching Bundle.
+#
+# (c) Scribe Inc.     <oss@scr.be>
+# (c) Rob Frawley 2nd <rmf@scr.be>
+#
+# For the full copyright and license information, please view the LICENSE.md
+# file that was distributed with this source code.
+#
+
 parameters :
 
     # Key Generator
 
-    s.cache.key_generator.class    : Scribe\CacheBundle\Component\Generator\KeyGenerator
+    s.object_cache.key_generator.class    : Scribe\Teavee\ObjectCacheBundle\Component\Generator\KeyGenerator
 
     # Cache Registrar
 
-    s.cache.registrar.class        : Scribe\CacheBundle\DependencyInjection\Compiler\Registrar\CacheCompilerRegistrar
+    s.object_cache.registrar.class        : Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Compiler\Registrar\CacheCompilerRegistrar
 
     # Cache Manager
 
-    s.cache.manager.class          : Scribe\CacheBundle\Component\Manager\CacheManager
+    s.object_cache.manager.class          : Scribe\Teavee\ObjectCacheBundle\Component\Manager\CacheManager
 
-    # Cache Method
+    # Cache Methods (Memcached/Mock)
 
-    s.cache.method_memcached.class : Scribe\CacheBundle\Component\Cache\Memcached\MemcachedCacheMethod
-    s.cache.method_mock.class      : Scribe\CacheBundle\Component\Cache\Mock\MockCacheMethod
+    s.object_cache.attendant_memcached.class : Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached\MemcachedAttendant
+    s.object_cache.attendant_mock.class      : Scribe\Teavee\ObjectCacheBundle\Component\Cache\Mock\MockAttendant
 
 services :
 
     # Key Generator
 
-    s.cache.key_generator :
-        class : %s.cache.key_generator.class%
+    s.object_cache.key_generator :
+        class : "%s.object_cache.key_generator.class%"
         calls :
-            - [ setPrefix,    [ %s.cache.generator.prefix%    ] ]
-            - [ setAlgorithm, [ %s.cache.generator.algorithm% ] ]
+            - [ setPrefix,    [ "%s.object_cache.generator.prefix%"    ] ]
+            - [ setAlgorithm, [ "%s.object_cache.generator.algorithm%" ] ]
 
     # Cache Registrar
 
-    s.cache.registrar :
-        class : %s.cache.registrar.class%
+    s.object_cache.registrar :
+        class : "%s.object_cache.registrar.class%"
 
     # Cache Manager
 
     s.cache :
-        class     : %s.cache.manager.class%
+        class     : "%s.object_cache.manager.class%"
         arguments :
-            - %s.cache.global.enabled%
+            - "%s.object_cache.enabled%"
         calls :
-            - [ setRegistrar, [ '@s.cache.registrar' ] ]
+            - [ setRegistrar, [ "@s.object_cache.registrar" ] ]
 
-    s.cache.chain :
+    s.object_cache :
+        alias : s.cache
+
+    s.object_cache.chain :
         alias : s.cache
 
     # Cache Attendants
 
-    s.cache.method_memcached :
-        class     : %s.cache.method_memcached.class%
+    s.object_cache.attendant_memcached :
+        class     : "%s.object_cache.attendant_memcached.class%"
         arguments :
-            - %s.cache.method.memcached.general.enabled%
-            - %s.cache.method.memcached.general.ttl%
+            - "%s.object_cache.attendant.memcached.general.enabled%"
+            - "%s.object_cache.attendant.memcached.general.ttl%"
         calls :
-            - [ setKeyGenerator, [ '@s.cache.key_generator' ] ]
-            - [ setOptions,      [ %s.cache.method.memcached.options% ] ]
-            - [ setServers,      [ %s.cache.method.memcached.servers% ] ]
+            - [ setKeyGenerator, [ "@s.object_cache.key_generator" ] ]
+            - [ setOptions,      [ "%s.object_cache.attendant.memcached.options%" ] ]
+            - [ setServers,      [ "%s.object_cache.attendant.memcached.servers%" ] ]
         tags  :
-            - { name : s.cache.attendant, priority : %s.cache.method.memcached.general.priority% }
+            - { name : s.object_cache.attendant, priority : "%s.object_cache.attendant.memcached.general.priority%" }
 
-    s.cache.method_mock :
-        class     : %s.cache.method_mock.class%
+    s.object_cache.attendant_mock :
+        class     : "%s.object_cache.attendant_mock.class%"
         arguments :
-            - %s.cache.method.mock.general.enabled%
+            - "%s.object_cache.attendant.mock.general.enabled%"
         calls :
-            - [ setKeyGenerator, [ '@s.cache.key_generator' ] ]
+            - [ setKeyGenerator, [ "@s.object_cache.key_generator" ] ]
         tags  :
-            - { name : s.cache.attendant, priority : %s.cache.method.mock.general.priority% }
+            - { name : s.object_cache.attendant, priority : "%s.object_cache.attendant.mock.general.priority%" }
 
 ...

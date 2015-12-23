@@ -10,4 +10,4 @@ php_conf : timezone
 php_exts : igbinary,memcached
 app_prep : dep-composer
 app_post : ~
-app_path : bin/scribe-cache
+app_path : bin/teavee-object-cache

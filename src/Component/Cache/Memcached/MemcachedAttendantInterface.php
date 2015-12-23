@@ -1,20 +1,21 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <oss@scr.be>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Component\Cache\Memcached;
+namespace Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached;
 
 /**
- * Class MemcachedCacheMethodInterface.
+ * Class MemcachedAttendantInterface.
  */
-interface MemcachedCacheMethodInterface
+interface MemcachedAttendantInterface
 {
     /**
      * Default server port.

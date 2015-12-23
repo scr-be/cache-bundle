@@ -1,9 +1,10 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <source@scribe.software>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -28,7 +29,7 @@ class AppKernel extends Kernel
             new \Symfony\Bundle\MonologBundle\MonologBundle(),
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new \Scribe\WonkaBundle\ScribeWonkaBundle(),
-            new \Scribe\CacheBundle\ScribeCacheBundle(),
+            new \Scribe\Teavee\ObjectCacheBundle\ScribeTeaveeObjectCacheBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'])) {

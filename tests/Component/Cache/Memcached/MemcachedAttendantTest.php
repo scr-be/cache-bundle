@@ -1,28 +1,29 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <source@scribe.software>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Tests\Component\Generator\KeyGenerator;
+namespace Scribe\Teavee\ObjectCacheBundle\Tests\Component\Generator\KeyGenerator;
 
 use Scribe\WonkaBundle\Utility\TestCase\KernelTestCase;
 use Scribe\Wonka\Utility\Serializer\Serializer;
-use Scribe\CacheBundle\Component\Generator\KeyGenerator;
-use Scribe\CacheBundle\Component\Cache\Memcached\MemcachedCacheMethod;
+use Scribe\Teavee\ObjectCacheBundle\Component\Generator\KeyGenerator;
+use Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached\MemcachedAttendant;
 
 /**
- * Class MemcachedCacheMethodTest.
+ * Class MemcachedAttendantTest.
  */
-class MemcachedCacheMethodTest extends KernelTestCase
+class MemcachedAttendantTest extends KernelTestCase
 {
     /**
-     * @var MemcachedCacheMethod
+     * @var MemcachedAttendant
      */
     public static $m;
 
@@ -30,13 +31,15 @@ class MemcachedCacheMethodTest extends KernelTestCase
     {
         parent::setUp();
 
-        self::$m = self::$staticContainer->get('s.cache.method_memcached');
+        self::$m = self::$staticContainer->get('s.object_cache.attendant_memcached');
     }
 
     public function tearDown()
     {
         try {
-            self::$m->flush();
+            if (method_exists(self::$m, 'flush')) {
+                self::$m->flush();
+            }
         } catch (\Exception $e) {
             // do nothing
         }
@@ -47,8 +50,8 @@ class MemcachedCacheMethodTest extends KernelTestCase
     public function test_interface()
     {
         self::assertInstanceOf('Scribe\\WonkaBundle\\Component\\DependencyInjection\\Compiler\\Attendant\\AbstractCompilerAttendant', self::$m);
-        self::assertInstanceOf('Scribe\\CacheBundle\\Component\\Cache\\CacheMethodInterface', self::$m);
-        self::assertInstanceOf('Scribe\\CacheBundle\\Component\\Cache\\Memcached\\MemcachedCacheMethodInterface', self::$m);
+        self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Cache\\CacheAttendantInterface', self::$m);
+        self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Cache\\Memcached\\MemcachedAttendantInterface', self::$m);
     }
 
     public function test_options_default()

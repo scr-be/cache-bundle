@@ -1,26 +1,27 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <oss@scr.be>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Component\Cache\Memcached;
+namespace Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached;
 
 use Memcached;
-use Scribe\CacheBundle\Component\Cache\AbstractCacheMethod;
+use Scribe\Teavee\ObjectCacheBundle\Component\Cache\AbstractCacheAttendant;
 use Scribe\Wonka\Exception\InvalidArgumentException;
 use Scribe\Wonka\Utility\Extension;
 use Scribe\Wonka\Utility\Filter\StringFilter;
 
 /**
- * Class MemcachedCacheMethod.
+ * Class MemcachedAttendant.
  */
-class MemcachedCacheMethod extends AbstractCacheMethod implements MemcachedCacheMethodInterface
+class MemcachedAttendant extends AbstractCacheAttendant implements MemcachedAttendantInterface
 {
     /**
      * Options defined by DI; normalized and loaded upon lazy initialization, {@see setUp()}.
@@ -206,10 +207,6 @@ class MemcachedCacheMethod extends AbstractCacheMethod implements MemcachedCache
      */
     protected function setUpServers()
     {
-        if (0 !== count($this->m->getServerList())) {
-            return $this;
-        }
-
         $normalized = [];
 
         foreach ($this->serverCollection as $name => $options) {

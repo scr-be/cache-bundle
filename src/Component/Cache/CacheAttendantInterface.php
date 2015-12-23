@@ -1,25 +1,26 @@
 <?php
 
 /*
- * This file is part of the Scribe Cache Bundle.
+ * This file is part of the Teavee Object Caching Bundle.
  *
- * (c) Scribe Inc. <oss@scr.be>
+ * (c) Scribe Inc.     <oss@scr.be>
+ * (c) Rob Frawley 2nd <rmf@scr.be>
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Scribe\CacheBundle\Component\Cache;
+namespace Scribe\Teavee\ObjectCacheBundle\Component\Cache;
 
 /**
- * Interface CacheMethodInterface.
+ * Interface CacheAttendantInterface.
  */
-interface CacheMethodInterface
+interface CacheAttendantInterface
 {
     /**
      * @var string
      */
-    const INTERFACE_CACHE_NAME = __CLASS__;
+    const CACHE_ATTENDANT_INTERFACE_FQCN = __CLASS__;
 
     /**
      * Setup the class instance with the required properties.

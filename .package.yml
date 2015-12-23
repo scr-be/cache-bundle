@@ -11,3 +11,5 @@ php_exts : igbinary,memcached
 app_prep : dep-composer
 app_post : ~
 app_path : bin/teavee-object-cache
+pkg_name : teavee-object-cache-bundle
+pkg_desc : "a simple, robust, and extensible\ncache abstraction layer, with support for custom backends through Symfony service tag\nregistration.\n\nImplementations are provided for the following cache handlers.\n\n- Memcached *(requires the *memcached* extension)*\n- Mock *(provides an always-true, fake handler)*"

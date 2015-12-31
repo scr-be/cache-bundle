@@ -29,7 +29,7 @@ class MockAttendantTest extends KernelTestCase
     {
         parent::setUp();
 
-        self::$m = self::$staticContainer->get('s.object_cache.attendant_mock');
+        self::$m = self::$staticContainer->get('s.teavee_object_cache.attendant_mock');
     }
 
     public function test_interface()

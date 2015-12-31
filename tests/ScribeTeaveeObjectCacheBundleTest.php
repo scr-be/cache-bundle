@@ -51,14 +51,14 @@ class ScribeTeaveeObjectCacheBundleTest extends WonkaTestCase
 
     public function test_cache_compiler_pass()
     {
-        static::assertTrue(self::$kernel->getContainer()->has('s.object_cache.registrar'));
-        $registrar = self::$kernel->getContainer()->get('s.object_cache.registrar');
+        static::assertTrue(self::$kernel->getContainer()->has('s.teavee_object_cache.registrar'));
+        $registrar = self::$kernel->getContainer()->get('s.teavee_object_cache.registrar');
 
         static::assertInstanceOf('Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Compiler\Registrar\CacheCompilerRegistrar', $registrar);
         static::assertCount(2, $registrar->getAttendantCollection());
 
-        static::assertTrue(self::$kernel->getContainer()->has('s.object_cache.key_generator'));
-        $g = self::$kernel->getContainer()->get('s.object_cache.key_generator');
+        static::assertTrue(self::$kernel->getContainer()->has('s.teavee_object_cache.key_generator'));
+        $g = self::$kernel->getContainer()->get('s.teavee_object_cache.key_generator');
         foreach ($registrar->getAttendantCollection() as $attendant) {
             static::assertEquals($g, $attendant->getKeyGenerator());
         }

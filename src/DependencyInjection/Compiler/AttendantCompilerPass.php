@@ -24,7 +24,7 @@ class AttendantCompilerPass extends AbstractCompilerPass
      */
     public function getRegistrarSrvName()
     {
-        return 's.object_cache.registrar';
+        return 's.teavee_object_cache.registrar';
     }
 
     /**
@@ -32,7 +32,7 @@ class AttendantCompilerPass extends AbstractCompilerPass
      */
     public function getAttendantTagName()
     {
-        return 's.object_cache.attendant';
+        return 's.teavee_object_cache.attendant';
     }
 }
 

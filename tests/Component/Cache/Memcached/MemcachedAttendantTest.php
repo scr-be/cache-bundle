@@ -31,7 +31,7 @@ class MemcachedAttendantTest extends KernelTestCase
     {
         parent::setUp();
 
-        self::$m = self::$staticContainer->get('s.object_cache.attendant_memcached');
+        self::$m = self::$staticContainer->get('s.teavee_object_cache.attendant_memcached');
     }
 
     public function tearDown()

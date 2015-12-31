@@ -41,8 +41,7 @@
     },
     "autoload" : {
         "psr-4" : {
-            "Scribe\\Teavee\\ObjectCacheBundle\\" : "src/",
-            "Scribe\\CacheBundle\\" : "src-deprecated/"
+            "Scribe\\Teavee\\ObjectCacheBundle\\" : "src/"
         }
     },
     "autoload-dev" : {

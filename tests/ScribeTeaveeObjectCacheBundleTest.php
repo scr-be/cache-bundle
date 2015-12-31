@@ -34,7 +34,9 @@ class ScribeTeaveeObjectCacheBundleTest extends WonkaTestCase
 
     public function tearDown()
     {
-        self::$kernel->shutdown();
+        if (self::$kernel instanceof \AppKernel) {
+            self::$kernel->shutdown();
+        }
     }
 
     public function test_kernel_build_container()

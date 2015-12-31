@@ -47,7 +47,7 @@
     },
     "autoload-dev" : {
         "psr-4" : {
-            "Scribe\\Teavee\\ObjectCachingBundle\\Tests\\" : "tests/"
+            "Scribe\\Teavee\\ObjectCacheBundle\\Tests\\" : "tests/"
         }
     },
     "minimum-stability" : "dev",

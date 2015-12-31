@@ -160,11 +160,11 @@ class Configuration extends AbstractConfiguration
             ->end();
     }
 
-
     /**
      * @param int  $priority
      * @param bool $isMock
-     * 
+     *#
+     *
      * @return ArrayNodeDefinition
      */
     private function getAttendantGeneralNode($priority, $isMock = false)

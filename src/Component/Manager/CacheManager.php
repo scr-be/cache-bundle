@@ -79,12 +79,12 @@ class CacheManager implements CacheManagerInterface
 
     /**
      * @param int $index
-     * 
+     *
      * @return $this
      */
     public function setActive($index)
     {
-         if (null !== ($active = getArrayElement($index, $this->registrar->getAttendantCollection()))) {
+        if (null !== ($active = getArrayElement($index, $this->registrar->getAttendantCollection()))) {
             $this->active = $active;
 
             return true;
@@ -109,7 +109,7 @@ class CacheManager implements CacheManagerInterface
         $this->active = null;
 
         if (!$this->isEnabled()) {
-            return null;
+            return;
         }
 
         foreach ($this->registrar as $attendant) {

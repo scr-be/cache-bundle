@@ -25,7 +25,7 @@ class ScribeTeaveeObjectCacheBundle extends AbstractCompilerAwareBundle
      */
     public function getCompilerPassInstances()
     {
-        return [ new AttendantCompilerPass() ];
+        return [new AttendantCompilerPass()];
     }
 }
 

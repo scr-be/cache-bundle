@@ -16,7 +16,7 @@ use Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Aware\KeyGeneratorAwareT
 
 /**
  * @deprecated v0.3 Moved {@see cribe\Teavee\ObjectCachingBundle\DependencyInjection\Aware\KeyGeneratorAwareTrait}
- * 
+ *#
  * Trait KeyGeneratorAwareTrait.
  */
 trait KeyGeneratorAwareTrait

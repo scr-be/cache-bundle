@@ -16,7 +16,7 @@ use Scribe\Teavee\ObjectCacheBundle\DependencyInjection\Aware\CacheManagerAwareT
 
 /**
  * @deprecated v0.3 Moved {@see cribe\Teavee\ObjectCachingBundle\DependencyInjection\Aware\CacheManagerAwareTrait}
- * 
+ *#
  * Trait CacheManagerAwareTrait.
  */
 trait CacheManagerAwareTrait

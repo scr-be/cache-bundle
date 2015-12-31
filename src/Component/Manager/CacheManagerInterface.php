@@ -51,7 +51,8 @@ interface CacheManagerInterface
 
     /**
      * @param int $index
-     * 
+     *#
+     *
      * @return $this
      */
     public function setActive($index);

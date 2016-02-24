@@ -39,6 +39,9 @@
         "chriskite/phactory"     : "~0.4",
         "fzaninotto/faker"       : "~1.5"
     },
+    "conflict" : {
+        "scribe/mantle-bundle" : "<2.4.0"
+    },
     "autoload" : {
         "psr-4" : {
             "Scribe\\Teavee\\ObjectCacheBundle\\" : "src/"

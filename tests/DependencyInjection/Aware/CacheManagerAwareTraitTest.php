@@ -40,14 +40,14 @@ class CacheManagerAwareTraitTest extends KernelTestCase
             ->getMockForTrait();
     }
 
-    public function test_get_empty_exception()
+    public function testGetEmptyException()
     {
         $this->setExpectedException('Scribe\Wonka\Exception\RuntimeException');
 
         self::$a->getCache();
     }
 
-    public function test_getter_and_setters()
+    public function testGetterAndSetters()
     {
         $a = self::$a;
 

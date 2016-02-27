@@ -12,9 +12,15 @@
 
 namespace Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached;
 
+use Graze\TelnetClient\InterpretAsCommand;
+use Graze\TelnetClient\PromptMatcher;
+use Graze\TelnetClient\TelnetClient;
+use Graze\TelnetClient\TelnetClientBuilder;
+use Graze\TelnetClient\TelnetResponse;
 use Memcached;
 use Scribe\Teavee\ObjectCacheBundle\Component\Cache\AbstractCacheAttendant;
 use Scribe\Wonka\Exception\InvalidArgumentException;
+use Scribe\Wonka\Exception\LogicException;
 use Scribe\Wonka\Utility\Extension;
 use Scribe\Wonka\Utility\Filter\StringFilter;
 
@@ -172,7 +178,7 @@ class MemcachedAttendant extends AbstractCacheAttendant implements MemcachedAtte
      */
     protected function normalizeOptionState($state)
     {
-        if (is_bool($state)) {
+        if (is_bool($state) || is_int($state)) {
             return $state;
         }
 
@@ -340,9 +346,100 @@ class MemcachedAttendant extends AbstractCacheAttendant implements MemcachedAtte
      */
     protected function flushCacheEntries()
     {
-        $this->m->flush();
+        foreach ($this->listKeys() as $k) {
+            $this->delCacheEntry($k);
+        }
 
-        return (bool) $this->isSuccessful();
+        return true;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function listCacheKeys()
+    {
+        $keyList = $this->getMemcacheKeysDirect();
+
+        array_filter($keyList, function($key) {
+            $prefix = $this->keyGenerator->getPrefix();
+            return substr($key, 0, count($prefix)) === $prefix;
+        });
+
+        return $keyList;
+    }
+
+    /**
+     * @return TelnetClient
+     */
+    protected function getMemcacheTelnetClient()
+    {
+        $serverList = [];
+        $serverOpts = array_values($this->serverCollection)[mt_rand(0, count($this->serverCollection)-1)];
+
+        $this->normalizeServer($serverList, 'rand', $serverOpts);
+        return TelnetClient::build($serverList['rand'][0].':'.$serverList['rand'][1], '');
+    }
+
+    /**
+     * @param string $command
+     *
+     * @return TelnetResponse
+     */
+    protected function getMemcacheResponse($command)
+    {
+        $client = $this->getMemcacheTelnetClient();
+        $client->setLineEnding("\r\n");
+
+        return $client->execute($command, 'END');
+    }
+
+    /**
+     * @param string $command
+     * @param string $regex
+     *
+     * @return mixed[]
+     */
+    protected function getMemcacheResponseFiltered($command, $regex)
+    {
+        $response = $this->getMemcacheResponse($command);
+        $return = [];
+
+        if ($response->isError() !== true) {
+            preg_match_all('{'.$regex.'}', $response->getResponseText(), $matches);
+
+            for ($i = 0; $i < count($matches[0]); $i++) {
+                $return[$i] = [$matches[0][$i]];
+
+                for ($j = 1; $j < count($matches); $j++) {
+                    $return[$i][] = $matches[$j][$i];
+                }
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getMemcacheKeysDirect()
+    {
+        $items = [];
+        $slabs = $this->getMemcacheResponseFiltered(
+            'stats items',
+            'STAT items:([0-9]+):number ([0-9]+)'
+        );
+
+        foreach ($slabs as $s) {
+            $items = array_merge($items, $this->getMemcacheResponseFiltered(
+                sprintf('stats cachedump %s %s', $s[1], $s[2]),
+                'ITEM ([^\s]+) \[([0-9]+) b; ([0-9]+) s\]'
+            ));
+        }
+
+        return (array) array_map(function($item) {
+            return (string) $item[1];
+        }, $items);
     }
 }
 

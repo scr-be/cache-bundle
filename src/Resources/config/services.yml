@@ -27,6 +27,7 @@ parameters :
     # Cache Methods (Memcached/Mock)
 
     s.teavee_object_cache.attendant_memcached.class : Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached\MemcachedAttendant
+    s.teavee_object_cache.attendant_redis.class     : Scribe\Teavee\ObjectCacheBundle\Component\Cache\Redis\RedisAttendant
     s.teavee_object_cache.attendant_mock.class      : Scribe\Teavee\ObjectCacheBundle\Component\Cache\Mock\MockAttendant
 
 services :
@@ -72,6 +73,18 @@ services :
             - [ setServers,      [ "%s.teavee_object_cache.attendant.memcached.servers%" ] ]
         tags  :
             - { name : s.teavee_object_cache.attendant, priority : "%s.teavee_object_cache.attendant.memcached.general.priority%" }
+
+    s.teavee_object_cache.attendant_redis :
+        class     : "%s.teavee_object_cache.attendant_redis.class%"
+        arguments :
+            - "%s.teavee_object_cache.attendant.redis.general.enabled%"
+            - "%s.teavee_object_cache.attendant.redis.general.ttl%"
+        calls :
+            - [ setKeyGenerator, [ "@s.teavee_object_cache.key_generator" ] ]
+            - [ setOptions,      [ "%s.teavee_object_cache.attendant.redis.options%" ] ]
+            - [ setServer,       [ "%s.teavee_object_cache.attendant.redis.configs%" ] ]
+        tags  :
+            - { name : s.teavee_object_cache.attendant, priority : "%s.teavee_object_cache.attendant.redis.general.priority%" }
 
     s.teavee_object_cache.attendant_mock :
         class     : "%s.teavee_object_cache.attendant_mock.class%"

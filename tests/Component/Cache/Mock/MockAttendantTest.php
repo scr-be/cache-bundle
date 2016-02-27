@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\Teavee\ObjectCacheBundle\Tests\Component\Generator\KeyGenerator;
+namespace Scribe\Teavee\ObjectCacheBundle\Tests\Component\Cache\Mock;
 
 use Scribe\WonkaBundle\Utility\TestCase\KernelTestCase;
 use Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached\MemcachedAttendant;
@@ -32,32 +32,32 @@ class MockAttendantTest extends KernelTestCase
         self::$m = self::$staticContainer->get('s.teavee_object_cache.attendant_mock');
     }
 
-    public function test_interface()
+    public function testInterface()
     {
         self::assertInstanceOf('Scribe\\WonkaBundle\\Component\\DependencyInjection\\Compiler\\Attendant\\AbstractCompilerAttendant', self::$m);
         self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Cache\\CacheAttendantInterface', self::$m);
     }
 
-    public function test_is_enabled()
+    public function testIsEnabled()
     {
         self::assertFalse(self::$m->isEnabled());
         self::$m->setEnabled(true);
         self::assertTrue(self::$m->isEnabled());
     }
 
-    public function test_is_not_enabled()
+    public function testIsNotEnabled()
     {
         self::assertFalse(self::$m->isEnabled());
         self::$m->setEnabled(false);
         self::assertFalse(self::$m->isEnabled());
     }
 
-    public function test_is_supported()
+    public function testIsSupported()
     {
         self::assertTrue(self::$m->isSupported());
     }
 
-    public function test_basic_caching()
+    public function testBasicCaching()
     {
         $key = ['key', 'string'];
         $val = 'value';
@@ -68,11 +68,13 @@ class MockAttendantTest extends KernelTestCase
         self::assertFalse(self::$m->has(...$key));
         self::assertNull(self::$m->get(...$key));
         self::assertNotEquals($val, self::$m->get(...$key));
+        self::assertEmpty(self::$m->listKeys());
         self::assertTrue(self::$m->del(...$key));
         self::assertTrue(self::$m->flush());
+        self::assertEmpty(self::$m->listKeys());
     }
 
-    public function test_is_not_enabled_exception()
+    public function testIsNotEnabledException()
     {
         self::setExpectedException('Scribe\\Wonka\\Exception\\RuntimeException');
         self::$m->setEnabled(false);

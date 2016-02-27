@@ -214,6 +214,16 @@ abstract class AbstractCacheAttendant extends AbstractCompilerAttendant implemen
     }
 
     /**
+     * @return string[]
+     */
+    final public function listKeys()
+    {
+        $this->initialize();
+
+        return (array) $this->listCacheKeys();
+    }
+
+    /**
      * Lazily initialization of cache method deferred until cache operation.
      *
      * @return $this
@@ -289,6 +299,11 @@ abstract class AbstractCacheAttendant extends AbstractCompilerAttendant implemen
      * @return bool
      */
     abstract protected function flushCacheEntries();
+
+    /**
+     * @return string[]
+     */
+    abstract protected function listCacheKeys();
 }
 
 /* EOF */

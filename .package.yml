@@ -7,7 +7,7 @@ env_make : ~
 env_prep : get-composer
 env_post : ci-coveralls,ci-codacy
 php_conf : timezone
-php_exts : igbinary,memcached
+php_exts : igbinary,memcached,redis
 app_prep : dep-composer
 app_post : ~
 app_path : bin/teavee-object-cache

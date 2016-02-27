@@ -12,6 +12,7 @@
 
 namespace Scribe\Teavee\ObjectCacheBundle\Tests\Component\Generator\Manager;
 
+use Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached\MemcachedAttendant;
 use Scribe\WonkaBundle\Utility\TestCase\KernelTestCase;
 use Scribe\Teavee\ObjectCacheBundle\Component\Manager\CacheManager;
 
@@ -33,17 +34,17 @@ class CacheManagerTest extends KernelTestCase
         self::$m = self::$staticContainer->get('s.cache');
     }
 
-    public function test_interface()
+    public function testInterface()
     {
         self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Manager\\CacheManagerInterface', self::$m);
     }
 
-    public function test_active_cache()
+    public function testActiveCache()
     {
         self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Cache\\Memcached\\MemcachedAttendant', self::$m->getActive());
     }
 
-    public function test_disabled_global()
+    public function testDisabledGlobal()
     {
         self::assertTrue(self::$m->isEnabled());
         self::$m->setEnabled(false);
@@ -51,21 +52,23 @@ class CacheManagerTest extends KernelTestCase
         self::assertNull(self::$m->getActive());
     }
 
-    public function test_disabled_memcached()
+    public function testDisabledMemcached()
     {
         self::assertTrue(self::$m->getActive()->isEnabled());
         self::$m->getActive()->setEnabled(false);
         self::assertFalse(self::$m->getActive()->isEnabled());
         self::$m->determineActive();
-        self::assertNull(self::$m->getActive());
+        self::assertFalse(self::$m->getActive() instanceof MemcachedAttendant);
     }
 
-    public function test_set_active()
+    public function testSetActive()
     {
         self::assertTrue(self::$m->getActive()->isEnabled());
         self::assertTrue(self::$m->setActive(0));
         self::assertTrue(self::$m->getActive()->isEnabled());
-        self::assertFalse(self::$m->setActive(1));
+        self::assertTrue(self::$m->setActive(1));
+        self::assertTrue(self::$m->getActive()->isEnabled());
+        self::assertFalse(self::$m->setActive(2));
     }
 }
 

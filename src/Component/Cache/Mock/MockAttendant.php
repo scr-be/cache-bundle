@@ -77,6 +77,14 @@ class MockAttendant extends AbstractCacheAttendant
     {
         return true;
     }
+
+    /**
+     * @return string[]
+     */
+    protected function listCacheKeys()
+    {
+        return (array) [];
+    }
 }
 
 /* EOF */

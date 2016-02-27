@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Scribe\Teavee\ObjectCacheBundle\Tests\Component\Generator\KeyGenerator;
+namespace Scribe\Teavee\ObjectCacheBundle\Tests\Component\Cache\Memcached;
 
 use Scribe\WonkaBundle\Utility\TestCase\KernelTestCase;
 use Scribe\Wonka\Utility\Serializer\Serializer;
@@ -47,25 +47,48 @@ class MemcachedAttendantTest extends KernelTestCase
         parent::tearDown();
     }
 
-    public function test_interface()
+    public function testListKeys()
+    {
+        $set = [
+            'key1' => 'value1',
+            'key2' => 'value2'
+        ];
+
+        $count = count(self::$m->listKeys());
+
+        foreach ($set as $key => $value) {
+            self::$m->set($value, $key);
+        }
+
+        self::assertTrue(count(self::$m->listKeys()) >= ($count + count($set)));
+
+        sleep(60);
+    }
+
+    public function testInterface()
     {
         self::assertInstanceOf('Scribe\\WonkaBundle\\Component\\DependencyInjection\\Compiler\\Attendant\\AbstractCompilerAttendant', self::$m);
         self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Cache\\CacheAttendantInterface', self::$m);
         self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Cache\\Memcached\\MemcachedAttendantInterface', self::$m);
     }
 
-    public function test_options_default()
+    public function testOptionsDefault()
     {
-        $keys = ['serializer', 'libketama_compatible', 'no_block', 'tcp_nodelay', 'compression', 'compression_type'];
-        $values = ['serializer_php', false, true, true, false, 'compression_fastlz'];
+        $opts = self::$m->getOptions();
+        $keys = [
+            'serializer' => 'serializer_php',
+            'no_block' => false,
+            'compression' => true,
+            'compression_type' => 'compression_fastlz'
+        ];
 
-        foreach ($keys as $i => $k) {
-            self::assertArrayHasKey($k, self::$m->getOptions());
-            self::assertEquals($values[$i], self::$m->getOptions()[$k]);
+        foreach ($keys as $type => $state) {
+            self::assertContains($state, $opts);
+            self::assertEquals($state, $opts[$type]);
         }
     }
 
-    public function test_servers_default()
+    public function testServersDefault()
     {
         $svrs = ['default'];
         $keys = ['host', 'port', 'weight'];
@@ -79,7 +102,7 @@ class MemcachedAttendantTest extends KernelTestCase
         }
     }
 
-    public function test_options_invalid()
+    public function testOptionsInvalid()
     {
         $options = self::$m->getOptions();
         $options['unknown_options'] = true;
@@ -90,7 +113,7 @@ class MemcachedAttendantTest extends KernelTestCase
         self::$m->set('dats', 'value');
     }
 
-    public function test_servers_invalid()
+    public function testServersInvalid()
     {
         $servers['invalid_server'] = [
             'ip' => '127.0.0.1',
@@ -102,12 +125,13 @@ class MemcachedAttendantTest extends KernelTestCase
         self::$m->set('dats', 'value');
     }
 
-    public function test_is_supported()
+    public function testIsSupported()
     {
         self::assertTrue(self::$m->isSupported());
     }
 
-    public function test_basic_caching()
+
+    public function testBasicCaching()
     {
         $dataSet = [
             'a string value',
@@ -148,7 +172,7 @@ class MemcachedAttendantTest extends KernelTestCase
         }
     }
 
-    public function test_ttl_caching()
+    public function testTtlCaching()
     {
         $dataSet = [
             'a string value',

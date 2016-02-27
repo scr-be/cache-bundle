@@ -21,12 +21,12 @@ use Scribe\Teavee\ObjectCacheBundle\Component\Generator\KeyGenerator;
  */
 class KeyGeneratorTest extends WonkaTestCase
 {
-    public function test_interface()
+    public function testInterface()
     {
         self::assertInstanceOf('Scribe\\Teavee\\ObjectCacheBundle\\Component\\Generator\\KeyGeneratorInterface', new KeyGenerator());
     }
 
-    public function test_set_prefix()
+    public function testSetPrefix()
     {
         $g = new KeyGenerator();
         $g->setPrefix('test-prefix');
@@ -34,7 +34,7 @@ class KeyGeneratorTest extends WonkaTestCase
         self::assertEquals('test-prefix', $g->getPrefix());
     }
 
-    public function test_set_algorithm()
+    public function testSetAlgorithm()
     {
         $g = new KeyGenerator();
 
@@ -44,7 +44,7 @@ class KeyGeneratorTest extends WonkaTestCase
         }
     }
 
-    public function test_set_algorithm_invalid()
+    public function testSetAlgorithmInvalid()
     {
         self::setExpectedException('Scribe\\Wonka\\Exception\\InvalidArgumentException');
 
@@ -52,7 +52,7 @@ class KeyGeneratorTest extends WonkaTestCase
         $g->setAlgorithm('invalid-hash-algorithm-name');
     }
 
-    public function test_get_key()
+    public function testGetKey()
     {
         $g = new KeyGenerator();
         $g->getKey('force-key-compilation');
@@ -85,7 +85,7 @@ class KeyGeneratorTest extends WonkaTestCase
         }
     }
 
-    public function test_get_key_invalid()
+    public function testGetKeyInvalid()
     {
         self::setExpectedException('Scribe\\Wonka\\Exception\\RuntimeException');
 

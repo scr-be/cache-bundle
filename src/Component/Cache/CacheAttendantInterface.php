@@ -114,6 +114,11 @@ interface CacheAttendantInterface
     public function flush();
 
     /**
+     * @return mixed[]
+     */
+    public function listKeys();
+
+    /**
      * Get the compiled key string.
      *
      * @param mixed,... $keyValues

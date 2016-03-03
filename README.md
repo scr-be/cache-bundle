@@ -14,8 +14,9 @@ registration.
 
 Implementations are provided for the following cache handlers.
 
-- Memcached *(requires the *memcached* extension)*
-- Mock *(provides an always-true, fake handler)*
+- Memcached (requires the *memcached* extension)
+- Mock (provides an always-true, fake handler)
+- Redis (requires the *redis* extension)
 
 ### Grouping
 

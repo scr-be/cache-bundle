@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Teavee Object Caching Bundle.
+ * This file is part of the Teavee Block Manager Bundle.
  *
  * (c) Scribe Inc.     <oss@scr.be>
  * (c) Rob Frawley 2nd <rmf@scr.be>
@@ -231,7 +231,7 @@ abstract class AbstractCacheAttendant extends AbstractCompilerAttendant implemen
     final protected function initialize()
     {
         if (!$this->enabled) {
-            throw new RuntimeException('Disabled cache method "%s" cannot be initialized.', null, null, $this->getType(true));
+            throw new RuntimeException('Disabled cache method "%s" cannot be initialized.', $this->getType(true));
         }
 
         if ($this->initialized === false) {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Teavee Object Caching Bundle.
+ * This file is part of the Teavee Block Manager Bundle.
  *
  * (c) Scribe Inc.     <oss@scr.be>
  * (c) Rob Frawley 2nd <rmf@scr.be>
@@ -190,7 +190,7 @@ class RedisAttendant extends AbstractCacheAttendant implements RedisAttendantInt
         $constant = sprintf('%s::%s%s', $class, $prefix, strtoupper($name));
 
         if (!defined($constant)) {
-            throw new InvalidArgumentException('Provided name "%s" unresolvable to constant "%s".', null, null, $name, $constant);
+            throw new InvalidArgumentException('Provided name "%s" unresolvable to constant "%s".', $name, $constant);
         }
 
         return constant($constant);
@@ -253,7 +253,7 @@ class RedisAttendant extends AbstractCacheAttendant implements RedisAttendantInt
     protected function getCacheEntry($key)
     {
         if (false === ($data = $this->r->get($key))) {
-            return;
+            return null;
         }
 
         return $data;

@@ -22,8 +22,8 @@
         }
     ],
     "require" : {
-        "php"                          : ">=5.6.4,~5.6|~7.0",
-        "scr-be/wonka-bundle"          : "~0.3",
+        "php"                          : "~5.6|~7.0",
+        "scr-be/wonka-bundle"          : "~0.5",
         "symfony/dependency-injection" : "~2.8|~3.0",
         "graze/telnet-client"          : "~1.0"
     },

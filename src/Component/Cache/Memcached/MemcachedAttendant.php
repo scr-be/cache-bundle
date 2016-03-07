@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Teavee Object Caching Bundle.
+ * This file is part of the Teavee Block Manager Bundle.
  *
  * (c) Scribe Inc.     <oss@scr.be>
  * (c) Rob Frawley 2nd <rmf@scr.be>
@@ -12,10 +12,7 @@
 
 namespace Scribe\Teavee\ObjectCacheBundle\Component\Cache\Memcached;
 
-use Graze\TelnetClient\InterpretAsCommand;
-use Graze\TelnetClient\PromptMatcher;
 use Graze\TelnetClient\TelnetClient;
-use Graze\TelnetClient\TelnetClientBuilder;
 use Graze\TelnetClient\TelnetResponse;
 use Memcached;
 use Scribe\Teavee\ObjectCacheBundle\Component\Cache\AbstractCacheAttendant;
@@ -200,7 +197,7 @@ class MemcachedAttendant extends AbstractCacheAttendant implements MemcachedAtte
         $constant = 'Memcached::'.strtoupper($prefix.$name);
 
         if (!defined($constant)) {
-            throw new InvalidArgumentException('Provided name "%s" unresolvable to Memcached constant "%s".', null, null, $name, $constant);
+            throw new InvalidArgumentException('Provided name "%s" unresolvable to Memcached constant "%s".', $name, $constant);
         }
 
         return constant($constant);
@@ -262,7 +259,7 @@ class MemcachedAttendant extends AbstractCacheAttendant implements MemcachedAtte
         $options['weight'] = (int) (array_key_exists('weight', $options) ? $options['weight'] : self::DEFAULT_WEIGHT);
 
         if (array_keys($options) !== ['host', 'port', 'weight']) {
-            throw new InvalidArgumentException('Memcached server "%s" must declare ordered options "host, port, weight" (has "%s").', null, null, $name, implode(', ', array_keys($options)));
+            throw new InvalidArgumentException('Memcached server "%s" must declare ordered options "host, port, weight" (has "%s").', $name, implode(', ', array_keys($options)));
         }
 
         return array_values($options);
@@ -292,7 +289,7 @@ class MemcachedAttendant extends AbstractCacheAttendant implements MemcachedAtte
         $data = $this->m->get($key);
 
         if (!$this->isSuccessful()) {
-            return;
+            return null;
         }
 
         return $data;

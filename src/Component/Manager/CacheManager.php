@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Teavee Object Caching Bundle.
+ * This file is part of the Teavee Block Manager Bundle.
  *
  * (c) Scribe Inc.     <oss@scr.be>
  * (c) Rob Frawley 2nd <rmf@scr.be>
@@ -109,7 +109,7 @@ class CacheManager implements CacheManagerInterface
         $this->active = null;
 
         if (!$this->isEnabled()) {
-            return;
+            return null;
         }
 
         foreach ($this->registrar as $attendant) {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Teavee Object Caching Bundle.
+ * This file is part of the Teavee Block Manager Bundle.
  *
  * (c) Scribe Inc.     <oss@scr.be>
  * (c) Rob Frawley 2nd <rmf@scr.be>
@@ -86,7 +86,7 @@ class KeyGenerator implements KeyGeneratorInterface
     public function setAlgorithm($algorithm)
     {
         if (!in_array((string) $algorithm, hash_algos())) {
-            throw new InvalidArgumentException('Invalid hash algorithm of "%s" provided to key generator.', null, null, (string) $algorithm);
+            throw new InvalidArgumentException('Invalid hash algorithm of "%s" provided to key generator.', (string) $algorithm);
         }
 
         $this->algorithm = (string) $algorithm;
